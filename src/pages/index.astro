@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout>
+  <main style="max-width: var(--max-width); margin: 0 auto; padding: 4rem 1.5rem;">
+    <div style="position: relative; padding: 3rem 0 4rem; text-align: center;">
+      <span style="position: absolute; top: 30px; left: 15%; color: var(--color-star); font-size: 22px; animation: twinkle 3.4s ease-in-out infinite;">✦</span>
+      <span style="position: absolute; top: 80px; right: 20%; color: var(--color-blue-sky); font-size: 18px; animation: twinkle 4.2s ease-in-out infinite;">✦</span>
+      <span style="position: absolute; bottom: 30px; left: 40%; color: var(--color-coral); font-size: 14px; animation: twinkle 3.8s ease-in-out infinite;">✧</span>
+
+      <p style="font-family: var(--font-hand); font-size: 3.2rem; color: var(--color-star); line-height: 1; margin: 0;">
+        Secret d'étoiles
+      </p>
+      <h1 style="font-family: var(--font-display); font-weight: 500; font-size: clamp(2rem, 4vw, 2.8rem); margin-top: 1rem; line-height: 1.15; color: var(--color-blue-night);">
+        Fondation du projet posée
+      </h1>
+      <p style="font-family: var(--font-body); color: var(--color-text-2); margin-top: 1rem; max-width: 55ch; margin-left: auto; margin-right: auto; font-size: 1.05rem;">
+        Si tu lis ce texte avec les bonnes typos et couleurs, tout est en place. Sacramento, Fredoka et Nunito sont chargées. Les étoiles scintillent doucement.
+      </p>
+    </div>
+
+    <section style="margin-top: 3rem;">
+      <h2 style="font-family: var(--font-display); font-weight: 500; font-size: 1.3rem; margin-bottom: 1rem; color: var(--color-blue-night);">Palette d'accents</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px;">
+        <div style="background: var(--color-blue-sky); height: 90px; border-radius: var(--radius-md); padding: 12px; color: white; font-family: var(--font-display); font-size: 0.95rem;">Bleu ciel</div>
+        <div style="background: var(--color-mint); height: 90px; border-radius: var(--radius-md); padding: 12px; color: white; font-family: var(--font-display); font-size: 0.95rem;">Vert menthe</div>
+        <div style="background: var(--color-star); height: 90px; border-radius: var(--radius-md); padding: 12px; color: white; font-family: var(--font-display); font-size: 0.95rem;">Jaune étoile</div>
+        <div style="background: var(--color-peach); height: 90px; border-radius: var(--radius-md); padding: 12px; color: white; font-family: var(--font-display); font-size: 0.95rem;">Pêche</div>
+        <div style="background: var(--color-coral); height: 90px; border-radius: var(--radius-md); padding: 12px; color: white; font-family: var(--font-display); font-size: 0.95rem;">Corail</div>
+      </div>
+    </section>
+
+    <section style="margin-top: 2.5rem;">
+      <h2 style="font-family: var(--font-display); font-weight: 500; font-size: 1.3rem; margin-bottom: 1rem; color: var(--color-blue-night);">Tints (fonds pastels des cards)</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px;">
+        <div style="background: var(--tint-blue-sky); height: 70px; border-radius: var(--radius-md); padding: 12px; color: var(--color-blue-night); font-family: var(--font-display); font-size: 0.9rem;">Bleu ciel</div>
+        <div style="background: var(--tint-mint); height: 70px; border-radius: var(--radius-md); padding: 12px; color: var(--color-blue-night); font-family: var(--font-display); font-size: 0.9rem;">Vert menthe</div>
+        <div style="background: var(--tint-star); height: 70px; border-radius: var(--radius-md); padding: 12px; color: var(--color-blue-night); font-family: var(--font-display); font-size: 0.9rem;">Jaune</div>
+        <div style="background: var(--tint-peach); height: 70px; border-radius: var(--radius-md); padding: 12px; color: var(--color-blue-night); font-family: var(--font-display); font-size: 0.9rem;">Pêche</div>
+        <div style="background: var(--tint-coral); height: 70px; border-radius: var(--radius-md); padding: 12px; color: var(--color-blue-night); font-family: var(--font-display); font-size: 0.9rem;">Corail</div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

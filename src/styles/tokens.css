@@ -1,0 +1,41 @@
+:root {
+  /* Palette principale */
+  --color-cream: #FDFBF6;
+  --color-cream-warm: #F3EEE1;
+  --color-cream-deep: #EEE7DA;
+  --color-blue-sky: #8FB4CE;
+  --color-mint: #A8CDBA;
+  --color-star: #F0B84C;
+  --color-peach: #E8A87C;
+  --color-coral: #D97A6C;
+  --color-coral-deep: #C6685A;
+  --color-blue-night: #3C5A7A;
+  --color-blue-night-2: #4A6B8E;
+  --color-text-2: #5C7590;
+  --color-text-3: #4E6884;
+  --color-muted: #9AA9B8;
+
+  /* Palette tints (fonds pastels) */
+  --tint-blue-sky: #EAF1F6;
+  --tint-mint: #EBF3EE;
+  --tint-star: #FCF2DC;
+  --tint-peach: #FBEEE3;
+  --tint-coral: #F7E4DF;
+
+  /* Typographies */
+  --font-hand: 'Sacramento', cursive;
+  --font-display: 'Fredoka Variable', system-ui, sans-serif;
+  --font-body: 'Nunito Variable', system-ui, sans-serif;
+
+  /* Rayons */
+  --radius-sm: 14px;
+  --radius: 16px;
+  --radius-md: 22px;
+  --radius-lg: 24px;
+  --radius-xl: 26px;
+  --radius-2xl: 32px;
+  --radius-pill: 999px;
+
+  /* Layout */
+  --max-width: 1160px;
+}
