@@ -1,0 +1,83 @@
+---
+interface Props {
+  density?: 'low' | 'medium' | 'high';
+  variant?: 'hero' | 'section' | 'cta';
+}
+
+const { density = 'medium', variant = 'section' } = Astro.props;
+
+const COUNTS: Record<'low' | 'medium' | 'high', number> = { low: 4, medium: 8, high: 14 };
+const count = COUNTS[density];
+
+const COLORS = [
+  'var(--color-star)',
+  'var(--color-blue-sky)',
+  'var(--color-mint)',
+  'var(--color-coral)',
+  'var(--color-peach)',
+];
+
+const SYMBOLS = ['✦', '✧'];
+
+// Une seed distincte par variante : chaque motif diffère, mais reste identique à chaque build.
+const SEEDS: Record<'hero' | 'section' | 'cta', number> = { hero: 1337, section: 4242, cta: 9001 };
+
+// PRNG déterministe (mulberry32) — pas de Math.random, rendu 100 % stable entre builds.
+function makeRng(seed: number): () => number {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+const rng = makeRng(SEEDS[variant]);
+
+interface Star {
+  top: number;
+  left: number;
+  color: string;
+  size: number;
+  duration: number;
+  delay: number;
+  symbol: string;
+}
+
+const stars: Star[] = Array.from({ length: count }, () => ({
+  top: Math.round(rng() * 100),
+  left: Math.round(rng() * 100),
+  color: COLORS[Math.floor(rng() * COLORS.length)],
+  size: Math.round(12 + rng() * 10), // 12 → 22px
+  duration: Math.round((3 + rng() * 1.5) * 100) / 100, // 3 → 4.5s
+  delay: Math.round(rng() * 2 * 100) / 100, // 0 → 2s
+  symbol: SYMBOLS[Math.floor(rng() * SYMBOLS.length)],
+}));
+---
+<div class="sparkles" aria-hidden="true">
+  {
+    stars.map((s) => (
+      <span
+        class="star"
+        style={`top:${s.top}%; left:${s.left}%; color:${s.color}; font-size:${s.size}px; animation-duration:${s.duration}s; animation-delay:${s.delay}s;`}
+      >
+        {s.symbol}
+      </span>
+    ))
+  }
+</div>
+
+<style>
+  .sparkles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  /* twinkle est défini globalement (global.css) et respecte prefers-reduced-motion. */
+  .star {
+    position: absolute;
+    animation: twinkle infinite ease-in-out;
+  }
+</style>

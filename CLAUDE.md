@@ -45,7 +45,7 @@ Grégory fait le pont entre nous par copier-coller. Tu ne dialogues jamais direc
 
 | Rôle | Choix | Version |
 |---|---|---|
-| Framework | Astro | 5.x |
+| Framework | Astro | 7.x |
 | Style | Tailwind CSS | v4 |
 | Langage | TypeScript strict | — |
 | Package manager | pnpm | 11.x |

@@ -1,0 +1,68 @@
+---
+interface Props {
+  variant?: 'primary' | 'ghost' | 'cream';
+  href?: string;
+  type?: 'button' | 'submit';
+  class?: string;
+}
+
+const { variant = 'primary', href, type = 'button', class: className } = Astro.props;
+
+const classes = ['btn', `btn-${variant}`, className];
+---
+{
+  href ? (
+    <a href={href} class:list={classes}>
+      <slot />
+    </a>
+  ) : (
+    <button type={type} class:list={classes}>
+      <slot />
+    </button>
+  )
+}
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 13px 24px;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+    border: none;
+    text-decoration: none;
+  }
+
+  .btn-primary {
+    background: var(--color-blue-night);
+    color: var(--color-cream);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(60, 90, 122, 0.22);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--color-blue-night);
+    border: 1.5px solid var(--color-blue-night);
+  }
+  .btn-ghost:hover {
+    background: var(--color-blue-night);
+    color: var(--color-cream);
+  }
+
+  .btn-cream {
+    background: var(--color-cream-warm);
+    color: var(--color-blue-night);
+  }
+  .btn-cream:hover {
+    /* Crème légèrement plus soutenu — pas de token dédié (voir rapport Lot A). */
+    background: #ebe3d2;
+  }
+</style>

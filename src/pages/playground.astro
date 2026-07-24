@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import Sparkles from '../components/Sparkles.astro';
+import SectionEyebrow from '../components/SectionEyebrow.astro';
+import ValueCard from '../components/ValueCard.astro';
+import SizeCard from '../components/SizeCard.astro';
+---
+<BaseLayout title="Playground — Secret d'étoiles">
+  <main>
+    <div class="notice">
+      ⚠️ Page de démonstration des composants. À supprimer avant mise en production.
+    </div>
+
+    <section>
+      <SectionEyebrow eyebrow="les briques" title="Composants de base — Lot A" />
+
+      <h3>Buttons</h3>
+      <div class="row">
+        <Button variant="primary">Découvrir la gamme</Button>
+        <Button variant="ghost">Nos engagements</Button>
+        <Button variant="cream">En savoir plus</Button>
+        <Button variant="primary" href="/">Lien primary</Button>
+      </div>
+
+      <h3>Section Eyebrow</h3>
+      <SectionEyebrow eyebrow="notre histoire" title="Née sous une bonne étoile" />
+
+      <h3>Value Cards</h3>
+      <div class="grid">
+        <ValueCard tint="mint" title="Testées dermato" description="Chaque référence est contrôlée pour respecter la peau délicate de bébé." />
+        <ValueCard tint="blue-sky" title="Sans parfum" description="Une composition épurée, sans parfum ajouté ni ingrédient superflu." />
+        <ValueCard tint="star" title="Absorption longue durée" description="Un cœur absorbant qui garde bébé au sec, du coucher au réveil." />
+        <ValueCard tint="peach" title="Protection douce" description="Des barrières anti-fuites souples pour bouger en toute liberté." />
+      </div>
+
+      <h3>Size Cards</h3>
+      <div class="grid">
+        <SizeCard size="S" subtitle="Taille 1-2" weight="3 – 6 kg" count={42} />
+        <SizeCard size="M" subtitle="Taille 3" weight="5 – 10 kg" count={36} />
+        <SizeCard size="L" subtitle="Taille 4" weight="9 – 13 kg" count={32} />
+        <SizeCard size="XL" subtitle="Taille 5" weight="12 – 15 kg" count={28} />
+        <SizeCard size="XXL" subtitle="Taille 6+" weight="+ 15 kg" count={24} />
+      </div>
+
+      <h3>Sparkles (dans un container relatif)</h3>
+      <div class="sparkles-demo">
+        <Sparkles density="medium" variant="section" />
+        <p>Container de démo avec étoiles décoratives derrière ce texte.</p>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  main { max-width: var(--max-width); margin: 0 auto; padding: 3rem 1.5rem; }
+  .notice { background: var(--tint-star); border-radius: var(--radius); padding: 12px 20px; margin-bottom: 3rem; font-family: var(--font-display); font-size: 0.95rem; color: var(--color-blue-night); }
+  section > h3 { font-family: var(--font-display); font-weight: 500; font-size: 1.4rem; color: var(--color-blue-night); margin: 3rem 0 1rem; }
+  .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+  .sparkles-demo { position: relative; background: var(--color-cream-warm); border-radius: var(--radius-lg); padding: 60px 30px; text-align: center; overflow: hidden; }
+  .sparkles-demo p { font-family: var(--font-body); color: var(--color-text-2); position: relative; z-index: 1; }
+</style>

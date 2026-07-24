@@ -51,13 +51,17 @@
 
 - [ ] `SiteHeader.astro` — nav sticky, logo Sacramento, menu Fredoka en pilules, burger mobile
 - [ ] `SiteFooter.astro` — bandeau dégradé arc-en-ciel + 3 colonnes (Nav / Infos / Légales) + baseline
-- [ ] `Button.astro` — variantes primary (bleu nuit), ghost (transparent), cream (fond `#F3EEE1`)
-- [ ] `Sparkles.astro` — étoiles ✦ animées `twinkle`, densité et couleurs configurables, respecte `prefers-reduced-motion`
-- [ ] `SectionEyebrow.astro` — surtitre manuscrit Sacramento jaune `#F0B84C` + titre Fredoka bleu nuit
-- [ ] `ValueCard.astro` — card pastel arrondie avec icône ✦ colorée + titre + description (4 variantes de tint)
-- [ ] `SizeCard.astro` — card produit avec packshot, pastille taille en badge, barre couleur en bas
+- [x] `Button.astro` — variantes primary (bleu nuit), ghost (transparent), cream (fond `#F3EEE1`)
+- [x] `Sparkles.astro` — étoiles ✦ animées `twinkle`, densité et couleurs configurables, respecte `prefers-reduced-motion`
+- [x] `SectionEyebrow.astro` — surtitre manuscrit Sacramento jaune `#F0B84C` + titre Fredoka bleu nuit
+- [x] `ValueCard.astro` — card pastel arrondie avec icône ✦ colorée + titre + description (4 variantes de tint)
+- [x] `SizeCard.astro` — card produit avec packshot, pastille taille en badge, barre couleur en bas
 - [ ] `FaqAccordion.astro` — accordéon avec bouton toggle et animation
 - [ ] `ContactForm.astro` — formulaire nom/email/sujet/message, validation, envoi Web3Forms
+
+> **Lot A (24 juillet 2026)** — 5 composants atomiques livrés : Button, Sparkles, SectionEyebrow, ValueCard, SizeCard. Tous en `<style>` scoped, tokens uniquement (couleurs), TypeScript strict, build OK.
+> Page de démonstration temporaire `src/pages/playground.astro` créée (hors nav) — **à supprimer avant la mise en production**.
+> Restent pour les lots B/C : SiteHeader, SiteFooter, FaqAccordion, ContactForm.
 
 ---
 

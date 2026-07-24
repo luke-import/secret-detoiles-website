@@ -1,0 +1,140 @@
+---
+interface Props {
+  size: 'S' | 'M' | 'L' | 'XL' | 'XXL';
+  subtitle: string;
+  weight: string;
+  count: number;
+  href?: string;
+}
+
+const { size, subtitle, weight, count, href = '/la-gamme' } = Astro.props;
+
+// Correspondance taille → couleur d'accent (cf. CLAUDE.md §11).
+const SIZE_COLORS: Record<'S' | 'M' | 'L' | 'XL' | 'XXL', string> = {
+  S: 'blue-sky',
+  M: 'mint',
+  L: 'star',
+  XL: 'peach',
+  XXL: 'coral',
+};
+
+const color = SIZE_COLORS[size];
+const packshot = `/packshots/taille-${size.toLowerCase()}.png`;
+---
+<a href={href} class="size-card" data-color={color}>
+  <div class="pack">
+    <span class="badge">
+      <span class="badge-size">{size}</span>
+      <span class="badge-subtitle">{subtitle}</span>
+    </span>
+    <img src={packshot} alt={`Couches Secret d'étoiles taille ${size}`} />
+  </div>
+  <div class="bar"></div>
+  <div class="body">
+    <h3 class="title">Taille {size}</h3>
+    <div class="specs">
+      <span>{weight}</span>
+      <span>{subtitle}</span>
+      <span>{count} couches</span>
+    </div>
+  </div>
+</a>
+
+<style>
+  .size-card {
+    display: block;
+    background: #fff;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 10px 26px rgba(60, 90, 122, 0.06);
+    transition: 0.2s;
+  }
+  .size-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 30px rgba(60, 90, 122, 0.12);
+  }
+
+  .pack {
+    position: relative;
+    padding: 26px 26px 8px;
+    display: flex;
+    justify-content: center;
+    min-height: 220px;
+  }
+  .size-card[data-color='blue-sky'] .pack { background: var(--tint-blue-sky); }
+  .size-card[data-color='mint'] .pack { background: var(--tint-mint); }
+  .size-card[data-color='star'] .pack { background: var(--tint-star); }
+  .size-card[data-color='peach'] .pack { background: var(--tint-peach); }
+  .size-card[data-color='coral'] .pack { background: var(--tint-coral); }
+
+  .pack img {
+    max-width: 200px;
+    height: auto;
+    display: block;
+  }
+
+  .badge {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 56px;
+    padding: 8px 12px;
+    border-radius: var(--radius);
+    color: #fff;
+    font-family: var(--font-display);
+    line-height: 1;
+  }
+  .size-card[data-color='blue-sky'] .badge { background: var(--color-blue-sky); }
+  .size-card[data-color='mint'] .badge { background: var(--color-mint); }
+  .size-card[data-color='star'] .badge { background: var(--color-star); }
+  .size-card[data-color='peach'] .badge { background: var(--color-peach); }
+  .size-card[data-color='coral'] .badge { background: var(--color-coral); }
+
+  .badge-size {
+    font-weight: 600;
+    font-size: 1.4rem;
+  }
+  .badge-subtitle {
+    font-size: 0.7rem;
+    font-weight: 500;
+    margin-top: 3px;
+  }
+
+  .bar {
+    height: 6px;
+  }
+  .size-card[data-color='blue-sky'] .bar { background: var(--color-blue-sky); }
+  .size-card[data-color='mint'] .bar { background: var(--color-mint); }
+  .size-card[data-color='star'] .bar { background: var(--color-star); }
+  .size-card[data-color='peach'] .bar { background: var(--color-peach); }
+  .size-card[data-color='coral'] .bar { background: var(--color-coral); }
+
+  .body {
+    padding: 22px 24px;
+  }
+  .title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.35rem;
+    color: var(--color-blue-night);
+    margin: 0;
+  }
+  .specs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    margin-top: 14px;
+  }
+  .specs span {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--color-text-2);
+  }
+</style>
