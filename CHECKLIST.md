@@ -26,22 +26,24 @@
 
 ---
 
-## Phase 1 — Fondation du projet
+## Phase 1 — Fondation du projet ✅
 
-- [ ] Créer le dossier `~/dev/secret-detoiles`
-- [ ] Y placer `CLAUDE.md` et `CHECKLIST.md`
-- [ ] Scaffold Astro 5 (template minimal, TypeScript strict)
-- [ ] Installer Tailwind CSS v4 via l'intégration Astro
-- [ ] Installer Fontsource : `@fontsource/sacramento`, `@fontsource-variable/fredoka`, `@fontsource-variable/nunito`
-- [ ] Créer `src/styles/tokens.css` avec la palette et les typos
-- [ ] Créer `src/layouts/BaseLayout.astro`
-- [ ] Remplacer `src/pages/index.astro` par une page de test avec palette visible
-- [ ] Créer un `README.md` court
-- [ ] Vérifier `.gitignore` (node_modules, dist, .env, .DS_Store)
-- [ ] `git init` + premier commit
-- [ ] Créer le repo GitHub public `luke-import/secret-detoiles-website`
-- [ ] Premier push
-- [ ] Vérifier que `pnpm dev` répond bien en local
+- [x] Créer le dossier `~/dev/secret-detoiles`
+- [x] Y placer `CLAUDE.md` et `CHECKLIST.md`
+- [x] Scaffold Astro 5 (template minimal, TypeScript strict)
+  - Note : `create astro@latest` a installé Astro 7.1.3 (dernière version stable, compatible Node 22). Le template minimal et le fonctionnement sont identiques.
+  - Node mis à jour de v20.20.2 → v22.23.1 (via nvm), pnpm de v10 → v11.17.0 (via Corepack)
+- [x] Installer Tailwind CSS v4 via l'intégration Astro — v4.3.3 installée via `@tailwindcss/vite`
+- [x] Installer Fontsource : `@fontsource/sacramento`, `@fontsource-variable/fredoka`, `@fontsource-variable/nunito` — v5.3.0
+- [x] Créer `src/styles/tokens.css` avec la palette et les typos
+- [x] Créer `src/layouts/BaseLayout.astro`
+- [x] Remplacer `src/pages/index.astro` par une page de test avec palette visible
+- [x] Créer un `README.md` court
+- [x] Vérifier `.gitignore` (node_modules, dist, .env, .DS_Store) — tout présent par défaut
+- [x] `git init` + premier commit — commit `c94ac9a`
+- [x] Créer le repo GitHub public `luke-import/secret-detoiles-website`
+- [x] Premier push — https://github.com/luke-import/secret-detoiles-website
+- [x] Vérifier que `pnpm dev` répond bien en local — HTTP 200, fonts chargées, tokens actifs
 
 ---
 
