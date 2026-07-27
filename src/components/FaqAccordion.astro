@@ -1,0 +1,67 @@
+---
+interface Props {
+  question: string;
+  open?: boolean;
+}
+const { question, open = false } = Astro.props;
+---
+<details class="faq-item" open={open || undefined}>
+  <summary class="question">
+    <span>{question}</span>
+    <span class="chevron" aria-hidden="true">⌄</span>
+  </summary>
+  <div class="answer"><slot /></div>
+</details>
+
+<style>
+  .faq-item {
+    background: var(--color-cream-warm);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .faq-item + .faq-item {
+    margin-top: 12px;
+  }
+  .question {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 22px 26px;
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--color-blue-night);
+    list-style: none;
+  }
+  .question::-webkit-details-marker {
+    display: none;
+  }
+  .question:focus-visible {
+    outline: 2px solid var(--color-coral);
+    outline-offset: -2px;
+  }
+  .chevron {
+    font-size: 1.5rem;
+    color: var(--color-star);
+    transition: transform 0.3s ease;
+    line-height: 1;
+  }
+  .faq-item[open] .chevron {
+    transform: rotate(180deg);
+  }
+  .answer {
+    padding: 0 26px 24px;
+    font-family: var(--font-body);
+    color: var(--color-text-2);
+    line-height: 1.7;
+    font-size: 1rem;
+  }
+  .answer :global(p) {
+    margin: 0;
+  }
+  .answer :global(p) + :global(p) {
+    margin-top: 12px;
+  }
+</style>

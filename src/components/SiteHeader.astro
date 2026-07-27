@@ -33,8 +33,9 @@ const links = [
   conteneur de ses descendants position:fixed. Imbriqué, le menu se calait donc
   sur la barre du header (~68px) au lieu du plein écran → fond transparent.
   Placé en frère du header, son inset:0 couvre bien tout le viewport.
+  inert par défaut = menu inaccessible au clavier/lecteurs d'écran tant qu'il est fermé.
 */}
-<nav id="mobile-menu" class="menu-mobile" aria-label="Navigation principale" data-open="false">
+<nav id="mobile-menu" class="menu-mobile" aria-label="Navigation principale" data-open="false" inert>
   <button class="close" aria-label="Fermer le menu">×</button>
   {links.map((link) => <a href={link.href}>{link.label}</a>)}
   <a href="/contact">Nous contacter</a>
@@ -49,6 +50,9 @@ const links = [
     const setOpen = (open: boolean) => {
       menu.dataset.open = String(open);
       burger.setAttribute('aria-expanded', String(open));
+      // inert quand fermé : sort les liens de l'ordre de tabulation et de l'arbre d'accessibilité.
+      if (open) menu.removeAttribute('inert');
+      else menu.setAttribute('inert', '');
       // Empêche le scroll de la page quand le menu plein écran est ouvert.
       document.body.style.overflow = open ? 'hidden' : '';
     };
@@ -71,7 +75,7 @@ const links = [
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgba(253, 251, 246, 0.88);
+    background: var(--surface-frosted);
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--color-cream-deep);
@@ -187,7 +191,7 @@ const links = [
     }
     .cta-desktop:hover {
       transform: translateY(-2px);
-      box-shadow: 0 10px 24px rgba(60, 90, 122, 0.22);
+      box-shadow: var(--shadow-primary-hover);
     }
     .burger,
     .menu-mobile,

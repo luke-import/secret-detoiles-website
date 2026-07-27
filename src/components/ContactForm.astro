@@ -1,0 +1,180 @@
+---
+// La vraie clé sera fournie via .env local (PUBLIC_WEB3FORMS_KEY). Placeholder sinon.
+const WEB3FORMS_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY || 'YOUR_ACCESS_KEY_HERE';
+---
+<div class="contact-form">
+  <form class="form" novalidate>
+    <input type="hidden" name="access_key" value={WEB3FORMS_KEY} />
+    <input type="hidden" name="from_name" value="Formulaire Secret d'étoiles" />
+    <input type="hidden" name="subject" value="Nouveau message depuis secret-detoiles.fr" />
+    <input type="hidden" name="redirect" value="false" />
+    <input type="checkbox" name="botcheck" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+    <div class="field">
+      <label for="cf-name">Votre nom</label>
+      <input id="cf-name" type="text" name="name" required minlength="2" autocomplete="name" />
+    </div>
+
+    <div class="field">
+      <label for="cf-email">Votre email</label>
+      <input id="cf-email" type="email" name="email" required autocomplete="email" />
+    </div>
+
+    <div class="field">
+      <label for="cf-message">Votre message</label>
+      <textarea id="cf-message" name="message" required rows="6" minlength="10"></textarea>
+    </div>
+
+    <button type="submit" class="submit">Envoyer le message</button>
+  </form>
+
+  <div class="feedback" data-state="idle" hidden></div>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>('.contact-form');
+  const form = root?.querySelector<HTMLFormElement>('.form');
+  const feedback = root?.querySelector<HTMLElement>('.feedback');
+  const submitBtn = form?.querySelector<HTMLButtonElement>('.submit');
+
+  if (form && feedback && submitBtn) {
+    const successMessage = 'Merci pour votre message ! Nous vous répondrons rapidement.';
+    const errorMessage =
+      'Une erreur est survenue. Vérifiez votre connexion et réessayez, ou écrivez-nous directement à bonjour@secret-detoiles.fr';
+
+    const showFeedback = (state: 'success' | 'error', message: string) => {
+      feedback.dataset.state = state;
+      feedback.textContent = message;
+      feedback.hidden = false;
+    };
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      // Honeypot : s'il est coché, c'est un bot. On simule un succès et on sort.
+      const honeypot = form.querySelector<HTMLInputElement>('.honeypot');
+      if (honeypot?.checked) {
+        form.hidden = true;
+        showFeedback('success', successMessage);
+        return;
+      }
+
+      // Validation native (required, minlength, type=email) avant l'envoi.
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const originalLabel = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Envoi…';
+
+      try {
+        const response = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: new FormData(form),
+        });
+
+        if (response.ok) {
+          form.reset();
+          form.hidden = true;
+          showFeedback('success', successMessage);
+        } else {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalLabel;
+          showFeedback('error', errorMessage);
+        }
+      } catch {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalLabel;
+        showFeedback('error', errorMessage);
+      }
+    });
+  }
+</script>
+
+<style>
+  .contact-form {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  label {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: var(--color-blue-night);
+  }
+  input[type='text'],
+  input[type='email'],
+  textarea {
+    background: #fff;
+    border: 1.5px solid var(--color-cream-deep);
+    border-radius: var(--radius-md);
+    padding: 14px 18px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--color-blue-night);
+    transition: border-color 0.2s;
+  }
+  input:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--color-coral);
+  }
+  textarea {
+    resize: vertical;
+    min-height: 140px;
+  }
+  .honeypot {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+  .submit {
+    align-self: flex-start;
+    padding: 13px 28px;
+    background: var(--color-blue-night);
+    color: var(--color-cream);
+    border: none;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .submit:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-primary-hover);
+  }
+  .submit:disabled {
+    opacity: 0.6;
+    cursor: wait;
+    transform: none;
+  }
+  .feedback {
+    padding: 28px;
+    border-radius: var(--radius-lg);
+    text-align: center;
+    font-family: var(--font-body);
+    color: var(--color-blue-night);
+  }
+  .feedback[data-state='success'] {
+    background: var(--tint-mint);
+  }
+  .feedback[data-state='error'] {
+    background: var(--tint-coral);
+  }
+</style>

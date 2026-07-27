@@ -5,6 +5,8 @@ import Sparkles from '../components/Sparkles.astro';
 import SectionEyebrow from '../components/SectionEyebrow.astro';
 import ValueCard from '../components/ValueCard.astro';
 import SizeCard from '../components/SizeCard.astro';
+import FaqAccordion from '../components/FaqAccordion.astro';
+import ContactForm from '../components/ContactForm.astro';
 ---
 <BaseLayout title="Playground — Secret d'étoiles">
   <main>
@@ -48,6 +50,23 @@ import SizeCard from '../components/SizeCard.astro';
         <Sparkles density="medium" variant="section" />
         <p>Container de démo avec étoiles décoratives derrière ce texte.</p>
       </div>
+
+      <h3>FAQ Accordion</h3>
+      <div style="max-width: 700px;">
+        <FaqAccordion question="Vos couches sont-elles hypoallergéniques ?">
+          <p>Oui. Nos couches sont testées sous contrôle dermatologique et formulées sans parfum ni ingrédient irritant, pour respecter la peau sensible des bébés.</p>
+        </FaqAccordion>
+        <FaqAccordion question="À partir de quel âge peut-on utiliser les couches Secret d'étoiles ?" open={true}>
+          <p>Nos couches sont adaptées dès la naissance, avec la taille S conçue pour les bébés de 3 à 6 kg.</p>
+          <p>La gamme complète (S à XXL) vous accompagne jusqu'à l'apprentissage de la propreté.</p>
+        </FaqAccordion>
+        <FaqAccordion question="Où sont fabriquées les couches ?">
+          <p>Nos couches sont fabriquées dans une usine partenaire européenne selon des normes strictes de qualité et de sécurité.</p>
+        </FaqAccordion>
+      </div>
+
+      <h3>Contact Form</h3>
+      <ContactForm />
     </section>
   </main>
 
