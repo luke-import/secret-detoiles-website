@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionEyebrow from '../components/SectionEyebrow.astro';
+import Button from '../components/Button.astro';
+---
+<BaseLayout title="Composition & sécurité — Secret d'étoiles" description="La composition des couches Secret d'étoiles et notre engagement sécurité pour la peau de bébé.">
+  <main class="stub-page">
+    <SectionEyebrow eyebrow="composition & sécurité" title="Zéro compromis, tout en douceur" />
+    <p class="lead">La composition détaillée et nos garanties de sécurité seront très bientôt en ligne.</p>
+    <div class="cta"><Button variant="primary" href="/">Retour à l'accueil</Button></div>
+  </main>
+</BaseLayout>
+
+<style>
+  .stub-page {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 6rem 1.5rem;
+    text-align: center;
+  }
+  .lead {
+    font-family: var(--font-body);
+    font-size: 1.15rem;
+    color: var(--color-text-2);
+    max-width: 55ch;
+    margin: 2rem auto 3rem;
+    line-height: 1.7;
+  }
+  .cta { display: flex; justify-content: center; }
+</style>

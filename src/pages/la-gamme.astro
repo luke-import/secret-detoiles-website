@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionEyebrow from '../components/SectionEyebrow.astro';
+import Button from '../components/Button.astro';
+---
+<BaseLayout title="La gamme — Secret d'étoiles" description="Les 5 tailles de couches Secret d'étoiles, de la naissance à l'apprentissage de la propreté.">
+  <main class="stub-page">
+    <SectionEyebrow eyebrow="la gamme étoilée" title="Les couches enchantées" />
+    <p class="lead">La présentation complète de nos 5 tailles arrive très bientôt. En attendant, retrouvez-les sur la page d'accueil.</p>
+    <div class="cta"><Button variant="primary" href="/">Retour à l'accueil</Button></div>
+  </main>
+</BaseLayout>
+
+<style>
+  .stub-page {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 6rem 1.5rem;
+    text-align: center;
+  }
+  .lead {
+    font-family: var(--font-body);
+    font-size: 1.15rem;
+    color: var(--color-text-2);
+    max-width: 55ch;
+    margin: 2rem auto 3rem;
+    line-height: 1.7;
+  }
+  .cta { display: flex; justify-content: center; }
+</style>

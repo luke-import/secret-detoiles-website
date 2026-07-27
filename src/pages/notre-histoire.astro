@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionEyebrow from '../components/SectionEyebrow.astro';
+import Button from '../components/Button.astro';
+---
+<BaseLayout title="Notre histoire — Secret d'étoiles" description="L'histoire de Secret d'étoiles, une marque née sous une bonne étoile pour accompagner bébé tout en douceur.">
+  <main class="stub-page">
+    <SectionEyebrow eyebrow="notre histoire" title="Née sous une bonne étoile" />
+    <p class="lead">Nous préparons pour vous le récit de la marque et de nos convictions. Cette page sera très bientôt en ligne.</p>
+    <div class="cta"><Button variant="primary" href="/">Retour à l'accueil</Button></div>
+  </main>
+</BaseLayout>
+
+<style>
+  .stub-page {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 6rem 1.5rem;
+    text-align: center;
+  }
+  .lead {
+    font-family: var(--font-body);
+    font-size: 1.15rem;
+    color: var(--color-text-2);
+    max-width: 55ch;
+    margin: 2rem auto 3rem;
+    line-height: 1.7;
+  }
+  .cta { display: flex; justify-content: center; }
+</style>

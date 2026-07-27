@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionEyebrow from '../components/SectionEyebrow.astro';
+import Button from '../components/Button.astro';
+---
+<BaseLayout title="FAQ — Secret d'étoiles" description="Questions fréquentes sur les couches Secret d'étoiles : hypoallergénique, tailles, disponibilité.">
+  <main class="stub-page">
+    <SectionEyebrow eyebrow="vos questions" title="Tout ce que vous voulez savoir" />
+    <p class="lead">Notre foire aux questions sera très bientôt en ligne. En attendant, contactez-nous à bonjour@secret-detoiles.fr.</p>
+    <div class="cta"><Button variant="primary" href="/">Retour à l'accueil</Button></div>
+  </main>
+</BaseLayout>
+
+<style>
+  .stub-page {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 6rem 1.5rem;
+    text-align: center;
+  }
+  .lead {
+    font-family: var(--font-body);
+    font-size: 1.15rem;
+    color: var(--color-text-2);
+    max-width: 55ch;
+    margin: 2rem auto 3rem;
+    line-height: 1.7;
+  }
+  .cta { display: flex; justify-content: center; }
+</style>

@@ -229,10 +229,9 @@ secret-detoiles/
 - **Cloudflare** : dash.cloudflare.com (hébergement Pages, Web Analytics, futur OAuth Decap CMS)
 
 ### Répartition des secrets
-Les secrets (FTP OVH, tokens API) vont dans **GitHub → Settings → Secrets and variables → Actions**. Jamais dans le code, jamais dans un `.env` commité.
+Les variables et secrets sont gérés dans **Cloudflare Pages → Settings → Environment variables**, avec équivalent local via `.env` (non commité). Jamais de secret dans le code source.
 Secrets prévus :
 - Les variables d'environnement (`PUBLIC_WEB3FORMS_KEY`, etc.) sont gérées dans **Cloudflare Pages → Settings → Environment variables**. Le fichier `.env` local sert uniquement au développement.
-- `WEB3FORMS_ACCESS_KEY` — pour le formulaire contact (non secret critique, peut être dans le code côté client)
 
 ---
 
