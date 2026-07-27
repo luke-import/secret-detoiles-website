@@ -96,17 +96,19 @@
 
 ---
 
-## Phase 5 — Pages narratives (5 pages)
+## Phase 5 — Pages narratives (5 pages) ✅
 
 - [x] `notre-histoire.astro` — narratif "Née sous une bonne étoile" + 3 chiffres clés (5 tailles / 0 parfum / 🇫🇷 France) + CTA Voir la gamme
 - [x] `nos-valeurs.astro` — 4 engagements en ValueCard (dermato, sans parfum, absorption, protection douce)
 - [x] `composition-securite.astro` — 2 blocs (matières / ce qu'elles ne contiennent pas) + bloc "testées dermato"
-- [ ] `faq.astro` — 6 questions/réponses en FaqAccordion (voir HTML Claude Design pour les textes de départ)
-- [ ] `contact.astro` — 1 seule carte "Écrivez-nous" avec email `bonjour@secret-detoiles.fr` + ContactForm + bloc "Où trouver nos couches" avec placeholders pour logos revendeurs (pas de tel ni adresse)
+- [x] `faq.astro` — 6 questions/réponses en FaqAccordion (voir HTML Claude Design pour les textes de départ)
+- [x] `contact.astro` — 1 seule carte "Écrivez-nous" avec email `bonjour@secret-detoiles.fr` + ContactForm + bloc "Où trouver nos couches" avec placeholders pour logos revendeurs (pas de tel ni adresse)
 
 > **Phase 5 — Lot A (27 juillet 2026)** — 3 pages narratives réelles livrées (Notre histoire, Nos valeurs, Composition & sécurité). Chaque page : mini-hero + 2-4 sections (fonds crème / crème-warm alternés) + CTA de transition vers la page suivante. Composants réutilisés (SectionEyebrow, ValueCard, Button).
 > Écarts assumés vs libellés d'origine (contenu validé dans le prompt Lot A) : *Notre histoire* propose 3 ValueCard « convictions » + CTA → Nos valeurs (pas de « 3 chiffres clés » ni « Voir la gamme ») ; *Nos valeurs* présente les 4 engagements en **sections éditoriales numérotées** (grand chiffre + texte), pas en ValueCard.
 > Reste pour le Lot B : faq, contact.
+
+> **Phase 5 — Lot B (27 juillet 2026)** — Phase 5 terminée ✅. FAQ (6 questions en FaqAccordion, la 2ᵉ ouverte par défaut) + Contact (hero, gros email Sacramento cliquable, ContactForm, bloc « où nous trouver » sans logos revendeurs — pas de partenariat confirmé). Composants FaqAccordion et ContactForm réutilisés tels quels.
 
 ---
 

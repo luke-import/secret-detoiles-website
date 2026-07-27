@@ -1,30 +1,69 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionEyebrow from '../components/SectionEyebrow.astro';
+import FaqAccordion from '../components/FaqAccordion.astro';
 import Button from '../components/Button.astro';
 ---
-<BaseLayout title="FAQ — Secret d'étoiles" description="Questions fréquentes sur les couches Secret d'étoiles : hypoallergénique, tailles, disponibilité.">
-  <main class="stub-page">
-    <SectionEyebrow eyebrow="vos questions" title="Tout ce que vous voulez savoir" />
-    <p class="lead">Notre foire aux questions sera très bientôt en ligne. En attendant, contactez-nous à bonjour@secret-detoiles.fr.</p>
-    <div class="cta"><Button variant="primary" href="/">Retour à l'accueil</Button></div>
+<BaseLayout title="FAQ — Secret d'étoiles" description="Questions fréquentes sur les couches Secret d'étoiles : composition, sécurité, tailles, disponibilité.">
+  <main>
+    <section class="page-hero">
+      <div class="page-hero-inner">
+        <SectionEyebrow eyebrow="vos questions" title="Tout ce que vous voulez savoir" />
+        <p class="lead">Les réponses aux questions que vous vous posez le plus souvent. Vous ne trouvez pas votre bonheur ? Écrivez-nous.</p>
+      </div>
+    </section>
+
+    <section class="faq-section">
+      <div class="faq-inner">
+        <FaqAccordion question="Vos couches sont-elles hypoallergéniques ?">
+          <p>Oui. Nos couches sont testées sous contrôle dermatologique par un laboratoire indépendant, sans parfum ni lotion, avec un adhésif hypoallergénique. Elles conviennent aux peaux les plus sensibles, dès la naissance.</p>
+        </FaqAccordion>
+        <FaqAccordion question="À partir de quel âge peut-on utiliser les couches Secret d'étoiles ?" open={true}>
+          <p>Nos couches sont adaptées dès la naissance, avec la taille S conçue pour les bébés de 3 à 6 kg.</p>
+          <p>La gamme complète (S à XXL) vous accompagne jusqu'à l'apprentissage de la propreté, autour de 15 kg et plus.</p>
+        </FaqAccordion>
+        <FaqAccordion question="Que contiennent vos couches, exactement ?">
+          <p>Nos couches sont composées de 6 matières principales : un voile en polypropylène, un cœur absorbant SAP, de la cellulose, une couche extérieure en polyéthylène, des élastomères pour l'ajustement, et un adhésif hypoallergénique. Aucun parfum, aucune lotion, aucun latex, aucun phtalate. La composition détaillée est disponible sur notre page dédiée.</p>
+        </FaqAccordion>
+        <FaqAccordion question="Où sont fabriquées les couches ?">
+          <p>Nos couches sont fabriquées dans une usine partenaire européenne, sélectionnée pour la qualité de son savoir-faire et le respect strict des normes de sécurité européennes.</p>
+        </FaqAccordion>
+        <FaqAccordion question="Comment choisir la bonne taille pour bébé ?">
+          <p>Le choix de la taille se fait principalement selon le poids de bébé. Notre grille : S (3-6 kg), M (5-10 kg), L (9-13 kg), XL (12-15 kg), XXL (+15 kg). En cas de doute entre deux tailles, mieux vaut choisir la plus grande pour éviter les fuites.</p>
+        </FaqAccordion>
+        <FaqAccordion question="Où puis-je acheter les couches Secret d'étoiles ?">
+          <p>Nos couches seront prochainement disponibles chez nos revendeurs partenaires. Écrivez-nous à bonjour@secret-detoiles.fr pour connaître le point de vente le plus proche de chez vous.</p>
+        </FaqAccordion>
+      </div>
+    </section>
+
+    <section class="cta-transition">
+      <p class="cta-lead">Une autre question ? Nous vous répondons rapidement.</p>
+      <Button variant="primary" href="/contact">Nous contacter</Button>
+    </section>
   </main>
 </BaseLayout>
 
 <style>
-  .stub-page {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding: 6rem 1.5rem;
-    text-align: center;
-  }
+  .page-hero { background: var(--color-cream); padding: 5rem 1.5rem; }
+  .page-hero-inner { max-width: 720px; margin: 0 auto; text-align: center; }
   .lead {
     font-family: var(--font-body);
-    font-size: 1.15rem;
+    font-size: 1.2rem;
     color: var(--color-text-2);
     max-width: 55ch;
-    margin: 2rem auto 3rem;
+    margin: 1.5rem auto 0;
     line-height: 1.7;
   }
-  .cta { display: flex; justify-content: center; }
+
+  .faq-section { background: var(--color-cream-warm); padding: 5rem 1.5rem; }
+  .faq-inner { max-width: 780px; margin: 0 auto; }
+
+  .cta-transition { background: var(--color-cream); padding: 4rem 1.5rem; text-align: center; }
+  .cta-lead {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    color: var(--color-text-2);
+    margin-bottom: 20px;
+  }
 </style>
