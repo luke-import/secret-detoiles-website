@@ -1,0 +1,171 @@
+---
+// Pied de page global — aucun prop, contenu statique.
+---
+<footer class="site-footer" role="contentinfo">
+  <div class="rainbow" aria-hidden="true"></div>
+
+  <div class="main container">
+    <div class="col brand">
+      <a href="/" class="logo" aria-label="Secret d'étoiles — accueil">secret d'étoiles</a>
+      <p>Un cocon de tendresse pour bébé, tout en douceur.</p>
+    </div>
+
+    <div class="col">
+      <h4>Explorer</h4>
+      <ul>
+        <li><a href="/">Accueil</a></li>
+        <li><a href="/notre-histoire">Notre histoire</a></li>
+        <li><a href="/la-gamme">La gamme</a></li>
+        <li><a href="/nos-valeurs">Nos valeurs</a></li>
+      </ul>
+    </div>
+
+    <div class="col">
+      <h4>Informations</h4>
+      <ul>
+        <li><a href="/composition-securite">Composition &amp; sécurité</a></li>
+        <li><a href="/faq">FAQ</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </div>
+
+    <div class="col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:bonjour@secret-detoiles.fr">bonjour@secret-detoiles.fr</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="bottom container">
+    <p class="copy">© 2026 Secret d'étoiles. Tous droits réservés.</p>
+    <nav class="legal" aria-label="Liens légaux">
+      <ul>
+        <li><a href="/mentions-legales">Mentions légales</a></li>
+        <li><a href="/confidentialite">Confidentialité</a></li>
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--color-cream-warm);
+    color: var(--color-blue-night);
+    margin-top: 5rem;
+  }
+
+  .rainbow {
+    height: 6px;
+    background: linear-gradient(
+      90deg,
+      var(--color-blue-sky),
+      var(--color-mint),
+      var(--color-star),
+      var(--color-peach),
+      var(--color-coral)
+    );
+  }
+
+  .container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .main {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: 60px 24px 40px;
+  }
+
+  .col h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--color-blue-night);
+    margin-bottom: 16px;
+  }
+  .col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .col a {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--color-text-2);
+    text-decoration: none;
+    transition: 0.2s;
+  }
+  .col a:hover {
+    color: var(--color-coral);
+  }
+
+  .brand .logo {
+    font-family: var(--font-hand);
+    font-size: 2.4rem;
+    color: var(--color-star);
+    line-height: 1;
+    display: block;
+    margin-bottom: 12px;
+    text-decoration: none;
+  }
+  .brand p {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--color-text-2);
+    line-height: 1.6;
+    max-width: 32ch;
+  }
+
+  .bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px;
+    border-top: 1px solid var(--color-cream-deep);
+    align-items: center;
+  }
+  .copy {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: var(--color-text-3);
+    margin: 0;
+  }
+  .legal ul {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .legal a {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: var(--color-text-3);
+    text-decoration: none;
+    transition: 0.2s;
+  }
+  .legal a:hover {
+    color: var(--color-coral);
+  }
+
+  @media (min-width: 700px) {
+    .main {
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 60px;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .bottom {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+</style>
