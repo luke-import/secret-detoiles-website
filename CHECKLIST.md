@@ -66,6 +66,7 @@
 > **Lot B (27 juillet 2026)** — SiteHeader (sticky, logo Sacramento, menu desktop + burger/overlay mobile avec JS : toggle, Échap, clic lien, blocage du scroll body) et SiteFooter (bande arc-en-ciel + 4 colonnes + mentions légales) livrés. Intégrés dans `BaseLayout.astro` (header avant le `<slot />`, footer après) → présents sur toutes les pages. Aucun style inline dans les composants, tokens uniquement, build OK.
 > Hygiène : `.nvmrc` (22.23.1) ajouté, token `--color-cream-hover` créé et branché dans `Button.astro`.
 > Reste pour le lot C : FaqAccordion, ContactForm.
+> Correctif (27 juillet 2026) — menu mobile au fond transparent : le `backdrop-filter` du `.site-header` en faisait le bloc conteneur du menu `position:fixed`, qui se calait sur la barre (~68px) au lieu du plein écran. Menu sorti du `<header>` (rendu frère) + `z-index:60` → fond opaque plein écran.
 
 ---
 

@@ -24,20 +24,26 @@ const links = [
       <span></span>
       <span></span>
     </button>
-
-    <nav id="mobile-menu" class="menu-mobile" aria-label="Navigation principale" data-open="false">
-      <button class="close" aria-label="Fermer le menu">×</button>
-      {links.map((link) => <a href={link.href}>{link.label}</a>)}
-      <a href="/contact">Nous contacter</a>
-    </nav>
   </div>
 </header>
 
+{/*
+  Le menu mobile est volontairement HORS du <header>. Le header porte
+  backdrop-filter (blur) ; or un élément avec backdrop-filter devient le bloc
+  conteneur de ses descendants position:fixed. Imbriqué, le menu se calait donc
+  sur la barre du header (~68px) au lieu du plein écran → fond transparent.
+  Placé en frère du header, son inset:0 couvre bien tout le viewport.
+*/}
+<nav id="mobile-menu" class="menu-mobile" aria-label="Navigation principale" data-open="false">
+  <button class="close" aria-label="Fermer le menu">×</button>
+  {links.map((link) => <a href={link.href}>{link.label}</a>)}
+  <a href="/contact">Nous contacter</a>
+</nav>
+
 <script>
-  const header = document.querySelector<HTMLElement>('.site-header');
-  const burger = header?.querySelector<HTMLButtonElement>('.burger');
-  const menu = header?.querySelector<HTMLElement>('#mobile-menu');
-  const closeBtn = header?.querySelector<HTMLButtonElement>('.close');
+  const burger = document.querySelector<HTMLButtonElement>('.burger');
+  const menu = document.querySelector<HTMLElement>('#mobile-menu');
+  const closeBtn = menu?.querySelector<HTMLButtonElement>('.close');
 
   if (burger && menu && closeBtn) {
     const setOpen = (open: boolean) => {
@@ -116,6 +122,7 @@ const links = [
   .menu-mobile {
     position: fixed;
     inset: 0;
+    z-index: 60;
     background: var(--color-cream);
     padding: 100px 24px 24px;
     display: flex;
