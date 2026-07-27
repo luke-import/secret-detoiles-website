@@ -72,15 +72,18 @@
 
 ---
 
-## Phase 3 — Page d'accueil
+## Phase 3 — Page d'accueil ✅
 
-- [ ] Hero avec dégradé linéaire crème → bleu ciel léger + Sparkles animées
-- [ ] Titre bicolor : eyebrow Sacramento "tout en tendresse" + h1 Fredoka + baseline Nunito
-- [ ] CTA primary "Découvrir la gamme" + CTA ghost "Nos engagements"
-- [ ] Section trust cards — 4 cards pastel (dermato, sans parfum, absorption, protection) chacune avec sa couleur
-- [ ] Section "Un cocon de douceur" — image maman/bébé (placeholder au début) + texte + CTA vers Nos valeurs
-- [ ] Grille "Une taille pour chaque étoile" — 5 cards des tailles S/M/L/XL/XXL cliquables vers La gamme
-- [ ] CTA final grande bannière bleu nuit avec dégradé + Sparkles + baseline "chaque nuit, un peu de magie"
+- [x] Hero avec dégradé linéaire crème → bleu ciel léger + Sparkles animées
+- [x] Titre bicolor : eyebrow Sacramento "tout en tendresse" + h1 Fredoka + baseline Nunito
+- [x] CTA primary "Découvrir la gamme" + CTA ghost "Nos engagements"
+- [x] Section trust cards — 4 cards pastel (dermato, sans parfum, absorption, protection) chacune avec sa couleur
+- [x] Section "Un cocon de douceur" — image maman/bébé (placeholder au début) + texte + CTA vers Nos valeurs
+- [x] Grille "Une taille pour chaque étoile" — 5 cards des tailles S/M/L/XL/XXL cliquables vers La gamme
+- [x] CTA final grande bannière bleu nuit avec dégradé + Sparkles + baseline "chaque nuit, un peu de magie"
+
+> **Phase 3 terminée ✅ (27 juillet 2026)** — `index.astro` refondue en 5 sections : hero (Sparkles `high`) · engagements (4 ValueCard) · bloc marque (placeholder photo maman & bébé) · gamme (5 SizeCard) · CTA final (Sparkles `cta`). Composants réutilisés tels quels.
+> Écarts assumés vs texte d'origine : le CTA du bloc marque pointe vers **Notre histoire** (et non « Nos valeurs »), et la baseline du CTA final est « **un peu de magie dans le quotidien de bébé** » — formulations validées dans le prompt Phase 3. La CHECKLIST ne contenait ni « wave décorative » ni « Pants/Lingettes » (déjà hors périmètre « couches uniquement ») → aucun item obsolète à marquer [-].
 
 ---
 
