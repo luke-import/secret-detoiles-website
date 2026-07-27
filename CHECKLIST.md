@@ -87,12 +87,15 @@
 
 ---
 
-## Phase 4 — Page La gamme
+## Phase 4 — Page La gamme ✅
 
-- [ ] Header de page avec eyebrow "la gamme" + titre "Les couches enchantées"
-- [ ] Grille des 5 cards produit (SizeCard) avec packshots réels
-- [ ] Bloc "Comment choisir sa taille ?" — tableau interactif (Taille · Poids · Nombre par paquet)
-- [ ] Note de bas : "Les tailles et poids sont donnés à titre indicatif..."
+- [x] Header de page avec eyebrow "la gamme" + titre "Les couches enchantées"
+- [x] Grille des 5 cards produit (SizeCard) avec packshots réels
+- [x] Bloc "Comment choisir sa taille ?" — tableau interactif (Taille · Poids · Nombre par paquet)
+- [x] Note de bas : "Les tailles et poids sont donnés à titre indicatif..."
+
+> **Phase 4 terminée ✅ (27 juillet 2026)** — `la-gamme.astro` refondue en 6 sections : hero (Sparkles) · tableau de correspondance des 5 tailles (+ note indicative) · **simulateur de poids côté client** (saisie kg → taille recommandée, gestion des cas hors-gamme) · les 5 tailles en blocs détaillés alternés (packshot + arguments spécifiques) · teaser composition · CTA contact.
+> Écart assumé vs libellé d'origine : les « 5 cards SizeCard » sont remplacées par des **blocs détaillés riches** (`article.size-detail` : packshot + titre + description + specs), plus adaptés à une page produit approfondie. Le tableau + le simulateur couvrent le « Comment choisir sa taille ». Note indicative ajoutée sous le tableau (pour l'item « Note de bas »).
 
 ---
 

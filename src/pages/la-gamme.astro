@@ -1,30 +1,528 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import SectionEyebrow from '../components/SectionEyebrow.astro';
 import Button from '../components/Button.astro';
+import SectionEyebrow from '../components/SectionEyebrow.astro';
+import Sparkles from '../components/Sparkles.astro';
+
+const sizes = [
+  {
+    size: 'S',
+    color: 'blue-sky',
+    tag: 'Taille S · Taille 1-2',
+    title: 'Les premières douceurs',
+    desc: "La taille S accompagne les tout premiers jours de bébé. Ultra-douce, ajustée aux petites morphologies, elle enveloppe sans jamais serrer. Une couche pensée pour respecter la peau fragile du nouveau-né.",
+    specs: ['3 – 6 kg', '42 couches', 'Dès la naissance'],
+  },
+  {
+    size: 'M',
+    color: 'mint',
+    tag: 'Taille M · Taille 3',
+    title: 'La taille des premiers mois',
+    desc: "La taille M épouse les mouvements des bébés qui commencent à se retourner, à s'asseoir, à explorer. Un ajustement précis, des attaches faciles à repositionner, une absorption fiable pour les longues nuits.",
+    specs: ['5 – 10 kg', '36 couches', '1 à 6 mois'],
+  },
+  {
+    size: 'L',
+    color: 'star',
+    tag: 'Taille L · Taille 4',
+    title: "L'étoile filante",
+    desc: "Quand bébé commence à ramper puis à marcher, la taille L offre la liberté de mouvement dont il a besoin. Les élastiques épousent chaque déplacement, la protection reste fiable même au cœur des grandes aventures.",
+    specs: ['9 – 13 kg', '32 couches', '6 à 18 mois'],
+  },
+  {
+    size: 'XL',
+    color: 'peach',
+    tag: 'Taille XL · Taille 5',
+    title: 'Les grandes découvertes',
+    desc: "La taille XL accompagne les journées bien remplies des tout-petits : jeux, câlins, siestes et petites bêtises. Une absorption longue durée pour ne jamais interrompre l'imagination.",
+    specs: ['12 – 15 kg', '28 couches', '18 mois et +'],
+  },
+  {
+    size: 'XXL',
+    color: 'coral',
+    tag: 'Taille XXL · Taille 6+',
+    title: 'Les grands rêveurs',
+    desc: "La dernière étape avant l'apprentissage de la propreté. La taille XXL offre confort et sérénité pendant les nuits où bébé grandit encore. Un dernier cocon avant l'autonomie.",
+    specs: ['+ 15 kg', '24 couches', '2 ans et +'],
+  },
+];
 ---
-<BaseLayout title="La gamme — Secret d'étoiles" description="Les 5 tailles de couches Secret d'étoiles, de la naissance à l'apprentissage de la propreté.">
-  <main class="stub-page">
-    <SectionEyebrow eyebrow="la gamme étoilée" title="Les couches enchantées" />
-    <p class="lead">La présentation complète de nos 5 tailles arrive très bientôt. En attendant, retrouvez-les sur la page d'accueil.</p>
-    <div class="cta"><Button variant="primary" href="/">Retour à l'accueil</Button></div>
+<BaseLayout title="La gamme — Les couches enchantées Secret d'étoiles" description="Découvrez les 5 tailles de couches Secret d'étoiles, de la naissance à l'apprentissage de la propreté. Trouvez la taille idéale pour bébé.">
+  <main>
+    <!-- SECTION 1 — HERO -->
+    <section class="gamme-hero">
+      <Sparkles density="medium" variant="section" />
+      <div class="gamme-hero-inner">
+        <SectionEyebrow eyebrow="la gamme étoilée" title="Les couches enchantées" />
+        <p class="hero-lead">Cinq tailles, une même exigence : du confort et une protection douce, jour après jour, pour accompagner bébé de la naissance à ses premiers pas.</p>
+      </div>
+    </section>
+
+    <!-- SECTION 2 — TABLEAU DE CORRESPONDANCE -->
+    <section class="gamme-table">
+      <SectionEyebrow eyebrow="d'un coup d'œil" title="Trouvez votre taille" />
+      <div class="table-container">
+        <table class="sizes-table">
+          <thead>
+            <tr>
+              <th>Taille</th>
+              <th>Poids de bébé</th>
+              <th>Couches par paquet</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-color="blue-sky"><td><span class="tag">S</span></td><td>3 – 6 kg</td><td>42 couches</td></tr>
+            <tr data-color="mint"><td><span class="tag">M</span></td><td>5 – 10 kg</td><td>36 couches</td></tr>
+            <tr data-color="star"><td><span class="tag">L</span></td><td>9 – 13 kg</td><td>32 couches</td></tr>
+            <tr data-color="peach"><td><span class="tag">XL</span></td><td>12 – 15 kg</td><td>28 couches</td></tr>
+            <tr data-color="coral"><td><span class="tag">XXL</span></td><td>+ 15 kg</td><td>24 couches</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note">Les tailles et poids sont donnés à titre indicatif. Chaque bébé est unique : fiez-vous aussi à son confort et à l'ajustement de la couche.</p>
+    </section>
+
+    <!-- SECTION 3 — SIMULATEUR -->
+    <section class="gamme-simulator">
+      <SectionEyebrow eyebrow="un doute ?" title="Trouvez la taille de bébé" />
+      <p class="sim-lead">Indiquez le poids de bébé, nous vous recommandons la meilleure taille.</p>
+      <div class="sim-container">
+        <div class="simulator">
+          <label for="baby-weight" class="sim-label">Poids de bébé</label>
+          <div class="sim-input-wrapper">
+            <input id="baby-weight" type="number" min="0" max="30" step="0.1" placeholder="Ex. 7,5" />
+            <span class="sim-unit">kg</span>
+          </div>
+          <div class="sim-result" data-state="idle">Entrez le poids pour découvrir la taille recommandée.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4 — LES 5 TAILLES EN DÉTAIL -->
+    <section class="gamme-detail">
+      <SectionEyebrow eyebrow="chaque taille en détail" title="Une taille pour chaque étape" />
+      <div class="detail-list">
+        {sizes.map((s) => (
+          <article class="size-detail" data-color={s.color}>
+            <div class="detail-image">
+              <img
+                src={`/packshots/taille-${s.size.toLowerCase()}.png`}
+                alt={`Couches Secret d'étoiles taille ${s.size}`}
+                loading="lazy"
+              />
+            </div>
+            <div class="detail-content">
+              <span class="detail-tag" data-color={s.color}>{s.tag}</span>
+              <h3 class="detail-title">{s.title}</h3>
+              <p class="detail-desc">{s.desc}</p>
+              <div class="detail-specs">
+                {s.specs.map((spec) => <span class="spec">{spec}</span>)}
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <!-- SECTION 5 — TEASER COMPOSITION -->
+    <section class="gamme-compo">
+      <SectionEyebrow eyebrow="et à l'intérieur ?" title="Une composition transparente" />
+      <p class="compo-lead">6 matières soigneusement sélectionnées. Zéro parfum, zéro lotion, zéro compromis. La liste complète est à votre disposition.</p>
+      <Button variant="primary" href="/composition-securite">Découvrir la composition</Button>
+    </section>
+
+    <!-- SECTION 6 — CTA FINAL -->
+    <section class="gamme-cta">
+      <p class="cta-lead">Envie de savoir où trouver nos couches ?</p>
+      <Button variant="primary" href="/contact">Nous contacter</Button>
+    </section>
   </main>
 </BaseLayout>
 
+<script>
+  const input = document.querySelector<HTMLInputElement>('#baby-weight');
+  const result = document.querySelector<HTMLElement>('.sim-result');
+
+  if (input && result) {
+    const idleText = 'Entrez le poids pour découvrir la taille recommandée.';
+
+    const update = () => {
+      // Virgule → point pour parseFloat (saisie française).
+      const raw = input.value.replace(',', '.').trim();
+      const weight = parseFloat(raw);
+
+      if (raw === '' || Number.isNaN(weight)) {
+        result.dataset.state = 'idle';
+        result.textContent = idleText;
+        return;
+      }
+
+      if (weight < 0 || weight > 30) {
+        result.dataset.state = 'out';
+        result.textContent = 'Ce poids semble hors gamme. Écrivez-nous : bonjour@secret-detoiles.fr';
+        return;
+      }
+
+      if (weight < 3) {
+        result.dataset.state = 'out';
+        result.textContent = 'Le poids semble faible. Consultez notre équipe : bonjour@secret-detoiles.fr';
+        return;
+      }
+
+      let size = 'XXL';
+      let detail = 'Poids idéal pour la taille XXL · +15 kg';
+      if (weight <= 6) {
+        size = 'S';
+        detail = 'Poids idéal pour la taille S · 3–6 kg';
+      } else if (weight <= 10) {
+        size = 'M';
+        detail = 'Poids idéal pour la taille M · 5–10 kg';
+      } else if (weight <= 13) {
+        size = 'L';
+        detail = 'Poids idéal pour la taille L · 9–13 kg';
+      } else if (weight <= 15) {
+        size = 'XL';
+        detail = 'Poids idéal pour la taille XL · 12–15 kg';
+      }
+
+      result.dataset.state = 'match';
+      result.innerHTML = `<div class="match-inner"><span class="match-size">Taille ${size}</span><span class="match-detail">${detail}</span></div>`;
+    };
+
+    input.addEventListener('input', update);
+  }
+</script>
+
 <style>
-  .stub-page {
+  /* ===== SECTION 1 — HERO ===== */
+  .gamme-hero {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    padding: 5rem 1.5rem;
+    background: linear-gradient(180deg, var(--color-cream) 60%, var(--tint-mint) 100%);
+  }
+  .gamme-hero-inner {
+    position: relative;
+    z-index: 1;
     max-width: var(--max-width);
     margin: 0 auto;
-    padding: 6rem 1.5rem;
-    text-align: center;
   }
-  .lead {
+  .hero-lead {
     font-family: var(--font-body);
     font-size: 1.15rem;
     color: var(--color-text-2);
     max-width: 55ch;
-    margin: 2rem auto 3rem;
+    margin: 2rem auto 0;
     line-height: 1.7;
   }
-  .cta { display: flex; justify-content: center; }
+
+  /* ===== SECTION 2 — TABLEAU ===== */
+  .gamme-table {
+    background: var(--color-cream);
+    padding: 5rem 1.5rem;
+  }
+  .table-container {
+    max-width: 800px;
+    margin: 3rem auto 0;
+    overflow-x: auto;
+  }
+  .sizes-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 12px;
+  }
+  .sizes-table thead th {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-3);
+    text-align: left;
+    padding: 0 20px 12px;
+  }
+  .sizes-table tbody tr {
+    background: #fff;
+    transition: transform 0.2s;
+  }
+  .sizes-table tbody tr:hover {
+    transform: translateX(4px);
+  }
+  .sizes-table tbody td {
+    padding: 22px 20px;
+    font-family: var(--font-body);
+    color: var(--color-text-2);
+    font-size: 1rem;
+    border-top: 1px solid var(--color-cream-deep);
+    border-bottom: 1px solid var(--color-cream-deep);
+  }
+  .sizes-table tbody td:first-child {
+    border-left: 1px solid var(--color-cream-deep);
+    border-top-left-radius: var(--radius-md);
+    border-bottom-left-radius: var(--radius-md);
+  }
+  .sizes-table tbody td:last-child {
+    border-right: 1px solid var(--color-cream-deep);
+    border-top-right-radius: var(--radius-md);
+    border-bottom-right-radius: var(--radius-md);
+  }
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    height: 44px;
+    border-radius: var(--radius);
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: #fff;
+    font-size: 1.05rem;
+  }
+  .sizes-table tbody tr[data-color='blue-sky'] .tag { background: var(--color-blue-sky); }
+  .sizes-table tbody tr[data-color='mint'] .tag { background: var(--color-mint); }
+  .sizes-table tbody tr[data-color='star'] .tag { background: var(--color-star); }
+  .sizes-table tbody tr[data-color='peach'] .tag { background: var(--color-peach); }
+  .sizes-table tbody tr[data-color='coral'] .tag { background: var(--color-coral); }
+  .table-note {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    text-align: center;
+    max-width: 55ch;
+    margin: 20px auto 0;
+    line-height: 1.6;
+  }
+
+  /* ===== SECTION 3 — SIMULATEUR ===== */
+  .gamme-simulator {
+    background: var(--color-cream-warm);
+    padding: 5rem 1.5rem;
+  }
+  .sim-lead {
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    color: var(--color-text-2);
+    text-align: center;
+    max-width: 55ch;
+    margin: 1rem auto 0;
+    line-height: 1.6;
+  }
+  .sim-container {
+    max-width: 640px;
+    margin: 3rem auto 0;
+    text-align: center;
+  }
+  .simulator {
+    background: #fff;
+    border-radius: var(--radius-xl);
+    padding: 3rem 2rem;
+  }
+  .sim-label {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1rem;
+    color: var(--color-blue-night);
+    margin-bottom: 16px;
+  }
+  .sim-input-wrapper {
+    position: relative;
+    max-width: 240px;
+    margin: 0 auto 2rem;
+  }
+  .sim-input-wrapper input {
+    width: 100%;
+    padding: 16px 60px 16px 20px;
+    font-family: var(--font-body);
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--color-blue-night);
+    background: var(--color-cream);
+    border: 1.5px solid var(--color-cream-deep);
+    border-radius: var(--radius-md);
+    text-align: center;
+    transition: border-color 0.2s;
+  }
+  .sim-input-wrapper input:focus {
+    outline: none;
+    border-color: var(--color-coral);
+  }
+  .sim-unit {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--font-body);
+    color: var(--color-text-2);
+    font-size: 1rem;
+    pointer-events: none;
+  }
+  .sim-result {
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    border-radius: var(--radius-lg);
+    font-family: var(--font-body);
+    color: var(--color-text-2);
+    font-size: 1rem;
+    transition: background 0.3s;
+  }
+  .sim-result[data-state='idle'] { background: var(--color-cream); }
+  .sim-result[data-state='match'] { background: var(--tint-mint); }
+  /* Éléments injectés côté client → :global pour échapper au scope Astro. */
+  .sim-result[data-state='match'] :global(.match-inner) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .sim-result[data-state='match'] :global(.match-size) {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 2rem;
+    color: var(--color-blue-night);
+    line-height: 1;
+  }
+  .sim-result[data-state='match'] :global(.match-detail) {
+    font-family: var(--font-body);
+    color: var(--color-text-2);
+    font-size: 0.95rem;
+  }
+  .sim-result[data-state='out'] {
+    background: var(--tint-coral);
+    color: var(--color-blue-night);
+  }
+
+  /* ===== SECTION 4 — DÉTAIL DES 5 TAILLES ===== */
+  .gamme-detail {
+    background: var(--color-cream);
+    padding: 5rem 1.5rem;
+  }
+  .detail-list {
+    max-width: var(--max-width);
+    margin: 3rem auto 0;
+  }
+  .size-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    margin-bottom: 5rem;
+  }
+  .size-detail:last-child {
+    margin-bottom: 0;
+  }
+  .detail-image {
+    border-radius: var(--radius-2xl);
+    padding: 40px;
+    min-height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .size-detail[data-color='blue-sky'] .detail-image { background: var(--tint-blue-sky); }
+  .size-detail[data-color='mint'] .detail-image { background: var(--tint-mint); }
+  .size-detail[data-color='star'] .detail-image { background: var(--tint-star); }
+  .size-detail[data-color='peach'] .detail-image { background: var(--tint-peach); }
+  .size-detail[data-color='coral'] .detail-image { background: var(--tint-coral); }
+  .detail-image img {
+    max-width: 260px;
+    height: auto;
+    display: block;
+  }
+  .detail-tag {
+    display: inline-flex;
+    gap: 12px;
+    align-items: center;
+    padding: 8px 16px;
+    border-radius: var(--radius-pill);
+    color: var(--color-blue-night);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 16px;
+  }
+  .detail-tag[data-color='blue-sky'] { background: var(--tint-blue-sky); }
+  .detail-tag[data-color='mint'] { background: var(--tint-mint); }
+  .detail-tag[data-color='star'] { background: var(--tint-star); }
+  .detail-tag[data-color='peach'] { background: var(--tint-peach); }
+  .detail-tag[data-color='coral'] { background: var(--tint-coral); }
+  .detail-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    color: var(--color-blue-night);
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+  .detail-desc {
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    color: var(--color-text-2);
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+  .detail-specs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .spec {
+    padding: 8px 16px;
+    background: #fff;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--color-blue-night);
+  }
+
+  /* ===== SECTION 5 — TEASER COMPOSITION ===== */
+  .gamme-compo {
+    background: var(--color-cream-warm);
+    padding: 5rem 1.5rem;
+    text-align: center;
+  }
+  .compo-lead {
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    color: var(--color-text-2);
+    max-width: 55ch;
+    margin: 2rem auto 32px;
+    line-height: 1.7;
+  }
+
+  /* ===== SECTION 6 — CTA FINAL ===== */
+  .gamme-cta {
+    background: var(--color-cream);
+    padding: 4rem 1.5rem;
+    text-align: center;
+  }
+  .cta-lead {
+    font-family: var(--font-body);
+    font-size: 1.15rem;
+    color: var(--color-text-2);
+    margin-bottom: 24px;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (min-width: 900px) {
+    .size-detail {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .size-detail:nth-child(even) {
+      grid-template-columns: 1.2fr 1fr;
+    }
+    .size-detail:nth-child(even) .detail-content {
+      order: 1;
+    }
+    .size-detail:nth-child(even) .detail-image {
+      order: 2;
+    }
+  }
 </style>
