@@ -3,9 +3,20 @@ import { defineConfig } from 'astro/config';
 
 import tailwindcss from '@tailwindcss/vite';
 
+import sitemap from '@astrojs/sitemap';
+
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://secret-detoiles.fr',
+
   vite: {
     plugins: [tailwindcss()]
-  }
+  },
+
+  integrations: [
+    sitemap({
+      // Exclut la page de démo interne du sitemap (cf. Disallow /playground dans robots.txt).
+      filter: (page) => !page.includes('/playground'),
+    }),
+  ]
 });

@@ -127,16 +127,20 @@
 
 ## Phase 7 — SEO / Accessibilité / Perf
 
-- [ ] Installer `@astrojs/sitemap` (gratuit) — sitemap.xml auto
-- [ ] `robots.txt`
-- [ ] Meta OG + Twitter Cards par page
-- [ ] Favicon complet (SVG + PNG + Apple touch)
+- [x] Installer `@astrojs/sitemap` (gratuit) — sitemap.xml auto
+- [x] `robots.txt`
+- [x] Meta OG + Twitter Cards par page
+- [x] Favicon complet (SVG + PNG + Apple touch)
 - [ ] `alt` sur toutes les images (vide si décoratif)
 - [ ] Contraste WCAG AA vérifié
 - [ ] Focus visible sur tous les éléments interactifs
 - [ ] `prefers-reduced-motion` respecté
 - [ ] Lighthouse — viser 100/100/100/100
 - [ ] Test Google Rich Results
+
+> **Phase 7 — Lot A (27 juillet 2026)** — SEO technique livré : `@astrojs/sitemap` installé (`site` = https://secret-detoiles.fr, `/playground` exclu via `filter`), `robots.txt`, BaseLayout enrichi (title/description + canonical + Open Graph + Twitter Card + `theme-color`), JSON-LD Organization sur la home uniquement, favicon SVG « étoile » de la marque, image OG placeholder `og/default.svg`. Home + playground : props meta explicites (playground en `noindex`).
+> ⚠️ Favicon : seul le **SVG** est en place (suffit sur navigateurs modernes). `favicon-32.png` et `apple-touch-icon.png` sont **référencés mais pas encore générés** (404 silencieux) → à produire en Phase 6, comme le vrai PNG 1200×630 de l'image OG.
+> Restent pour le Lot B : alt images, contraste WCAG AA, focus visible, prefers-reduced-motion, Lighthouse, test Rich Results.
 
 ---
 
