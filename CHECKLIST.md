@@ -47,7 +47,7 @@
 
 ---
 
-## Phase 2 — Composants de base
+## Phase 2 — Composants de base ✅
 
 - [x] `SiteHeader.astro` — nav sticky, logo Sacramento, menu Fredoka en pilules, burger mobile
 - [x] `SiteFooter.astro` — bandeau dégradé arc-en-ciel + 3 colonnes (Nav / Infos / Légales) + baseline
@@ -56,8 +56,8 @@
 - [x] `SectionEyebrow.astro` — surtitre manuscrit Sacramento jaune `#F0B84C` + titre Fredoka bleu nuit
 - [x] `ValueCard.astro` — card pastel arrondie avec icône ✦ colorée + titre + description (4 variantes de tint)
 - [x] `SizeCard.astro` — card produit avec packshot, pastille taille en badge, barre couleur en bas
-- [ ] `FaqAccordion.astro` — accordéon avec bouton toggle et animation
-- [ ] `ContactForm.astro` — formulaire nom/email/sujet/message, validation, envoi Web3Forms
+- [x] `FaqAccordion.astro` — accordéon avec bouton toggle et animation
+- [x] `ContactForm.astro` — formulaire nom/email/sujet/message, validation, envoi Web3Forms
 
 > **Lot A (24 juillet 2026)** — 5 composants atomiques livrés : Button, Sparkles, SectionEyebrow, ValueCard, SizeCard. Tous en `<style>` scoped, tokens uniquement (couleurs), TypeScript strict, build OK.
 > Page de démonstration temporaire `src/pages/playground.astro` créée (hors nav) — **à supprimer avant la mise en production**.
@@ -66,6 +66,8 @@
 > **Lot B (27 juillet 2026)** — SiteHeader (sticky, logo Sacramento, menu desktop + burger/overlay mobile avec JS : toggle, Échap, clic lien, blocage du scroll body) et SiteFooter (bande arc-en-ciel + 4 colonnes + mentions légales) livrés. Intégrés dans `BaseLayout.astro` (header avant le `<slot />`, footer après) → présents sur toutes les pages. Aucun style inline dans les composants, tokens uniquement, build OK.
 > Hygiène : `.nvmrc` (22.23.1) ajouté, token `--color-cream-hover` créé et branché dans `Button.astro`.
 > Reste pour le lot C : FaqAccordion, ContactForm.
+
+> **Lot C (27 juillet 2026)** — Phase 2 terminée ✅. FaqAccordion (`<details>` natif, chevron animé) + ContactForm (Web3Forms, honeypot, validation `checkValidity()`, états loading/succès/erreur) livrés. Cleanup : tokens `--surface-frosted` / `--shadow-primary-hover`, `inert` sur le menu mobile. `.env.example` ajouté.
 > Correctif (27 juillet 2026) — menu mobile au fond transparent : le `backdrop-filter` du `.site-header` en faisait le bloc conteneur du menu `position:fixed`, qui se calait sur la barre (~68px) au lieu du plein écran. Menu sorti du `<header>` (rendu frère) + `z-index:60` → fond opaque plein écran.
 
 ---
@@ -150,18 +152,20 @@ Objectif : permettre à Grégory de modifier tous les textes et images du site d
 
 ---
 
-## Phase 10 — Déploiement OVH via GitHub Actions
+## Phase 10 — Déploiement Cloudflare Pages
 
-- [ ] Récupérer les identifiants FTP OVH depuis l'espace client (host `ftp.cluster0XX.hosting.ovh.net`, user, mot de passe)
-- [ ] Stocker `OVH_FTP_HOST`, `OVH_FTP_USER`, `OVH_FTP_PASSWORD` dans GitHub Settings → Secrets → Actions
-- [ ] Créer `.github/workflows/deploy.yml` : pnpm install → pnpm build → upload `dist/` en SFTP
-- [ ] Configurer la workflow pour ne se déclencher que sur push vers `main`
-- [ ] Premier déploiement automatique réussi (build vert dans l'onglet Actions de GitHub)
-- [ ] Vérifier que https://secret-detoiles.fr affiche bien le site (SSL Let's Encrypt auto-activé par OVH)
-- [ ] Configurer redirection www.secret-detoiles.fr → secret-detoiles.fr (via espace OVH)
-- [ ] Test perf sur URL de prod (Lighthouse + PageSpeed)
-- [ ] Créer un compte Cloudflare (gratuit) — utile pour Analytics et OAuth Decap
-- [ ] Activer Cloudflare Web Analytics (mode "sans proxy", juste le snippet JS ajouté au site)
+- [ ] Créer un compte Cloudflare (gratuit) sur dash.cloudflare.com
+- [ ] Depuis le dashboard : Workers & Pages → Create → Pages → Connect to Git → sélectionner `luke-import/secret-detoiles-website`
+- [ ] Config build : framework preset **Astro** (détecté auto), build command `pnpm build`, dossier de sortie `dist`
+- [ ] Ajouter les variables d'env dans Cloudflare Pages : `PUBLIC_WEB3FORMS_KEY` (clé Web3Forms obtenue sur web3forms.com)
+- [ ] Premier déploiement automatique : vérifier que l'URL `.pages.dev` fonctionne
+- [ ] Ajouter le domaine custom `secret-detoiles.fr` dans Cloudflare Pages → Custom domains
+- [ ] Cloudflare va indiquer 2 records DNS (CNAME/AAAA) à créer chez OVH
+- [ ] Se connecter à manager.ovhcloud.com → Domaines → secret-detoiles.fr → Zone DNS → modifier les records selon les indications Cloudflare
+- [ ] Attendre propagation DNS (10 min à 24h) + génération SSL Let's Encrypt auto par Cloudflare
+- [ ] Vérifier que https://secret-detoiles.fr affiche bien le site avec le cadenas SSL
+- [ ] Activer Cloudflare Web Analytics dans le dashboard Cloudflare Pages
+- [ ] Tester la perf sur URL de prod (Lighthouse + PageSpeed Insights) — objectif 100/100/100/100
 
 ---
 

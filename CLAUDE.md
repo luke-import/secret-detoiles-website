@@ -52,8 +52,8 @@ Grégory fait le pont entre nous par copier-coller. Tu ne dialogues jamais direc
 | Node | 22.x LTS | v22.23.1 |
 | Fonts | Fontsource (auto-hébergées) | Sacramento, Fredoka Variable, Nunito Variable |
 | CMS | Decap CMS (édition texte/images uniquement, périmètre verrouillé) | — |
-| Hébergement | OVH Web Hosting gratuit (inclus avec le domaine, 100 Mo, SSL) | — |
-| Déploiement | GitHub Actions → SFTP OVH automatique | — |
+| Hébergement | Cloudflare Pages (gratuit, CDN mondial, bande passante illimitée, SSL auto) | — |
+| Déploiement | Git push sur main → Cloudflare Pages build & deploy auto | — |
 | Analytics | Cloudflare Web Analytics (gratuit, RGPD, aucun cookie, via snippet JS) | — |
 | Formulaire contact | Web3Forms (gratuit illimité, endpoint API simple) | — |
 | Nom de domaine | **secret-detoiles.fr** (OVH, ~10€/an au renouvellement) | — |
@@ -225,13 +225,13 @@ secret-detoiles/
 
 ### Repos et infrastructure
 - **Repo GitHub** : github.com/luke-import/secret-detoiles-website (public)
-- **Espace client OVH** : manager.ovhcloud.com (Web Cloud → Hébergements)
-- **Cloudflare** : à créer plus tard pour Web Analytics + Workers OAuth Decap
+- **Espace client OVH** : manager.ovhcloud.com (uniquement pour le domaine et l'email — plus d'hébergement)
+- **Cloudflare** : dash.cloudflare.com (hébergement Pages, Web Analytics, futur OAuth Decap CMS)
 
 ### Répartition des secrets
 Les secrets (FTP OVH, tokens API) vont dans **GitHub → Settings → Secrets and variables → Actions**. Jamais dans le code, jamais dans un `.env` commité.
 Secrets prévus :
-- `OVH_FTP_HOST`, `OVH_FTP_USER`, `OVH_FTP_PASSWORD` — pour le déploiement automatique
+- Les variables d'environnement (`PUBLIC_WEB3FORMS_KEY`, etc.) sont gérées dans **Cloudflare Pages → Settings → Environment variables**. Le fichier `.env` local sert uniquement au développement.
 - `WEB3FORMS_ACCESS_KEY` — pour le formulaire contact (non secret critique, peut être dans le code côté client)
 
 ---
