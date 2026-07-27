@@ -1,30 +1,80 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionEyebrow from '../components/SectionEyebrow.astro';
+import ValueCard from '../components/ValueCard.astro';
 import Button from '../components/Button.astro';
 ---
-<BaseLayout title="Notre histoire — Secret d'étoiles" description="L'histoire de Secret d'étoiles, une marque née sous une bonne étoile pour accompagner bébé tout en douceur.">
-  <main class="stub-page">
-    <SectionEyebrow eyebrow="notre histoire" title="Née sous une bonne étoile" />
-    <p class="lead">Nous préparons pour vous le récit de la marque et de nos convictions. Cette page sera très bientôt en ligne.</p>
-    <div class="cta"><Button variant="primary" href="/">Retour à l'accueil</Button></div>
+<BaseLayout title="Notre histoire — Secret d'étoiles" description="L'histoire de Secret d'étoiles, une marque née pour accompagner les tout-petits avec douceur, du premier jour à leurs premiers pas.">
+  <main>
+    <section class="page-hero">
+      <div class="page-hero-inner">
+        <SectionEyebrow eyebrow="notre histoire" title="Née sous une bonne étoile" />
+        <p class="lead">L'histoire d'une marque qui célèbre la magie des premiers instants et l'infinie douceur de l'enfance.</p>
+      </div>
+    </section>
+
+    <section class="recit">
+      <div class="recit-inner">
+        <SectionEyebrow eyebrow="l'origine" title="Un petit secret gardé sous les étoiles" center={false} />
+        <div class="recit-body">
+          <p class="recit-p">Secret d'étoiles est née d'un désir simple : offrir aux tout-petits une couche à la hauteur de leur douceur. Une marque pensée par des parents, pour des parents.</p>
+          <p class="recit-p">Nous avons choisi de nous concentrer sur ce qui compte vraiment : la sécurité, le confort, et une composition irréprochable. Pas de superflu, pas de compromis.</p>
+          <p class="recit-p">Depuis nos débuts, chaque couche est conçue comme une petite bulle de tendresse : une matière douce, une absorption fiable, une protection qui ne se voit pas mais qui se sent.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="convictions">
+      <SectionEyebrow eyebrow="nos convictions" title="Ce en quoi nous croyons" />
+      <div class="convictions-grid">
+        <ValueCard tint="mint" title="La douceur avant tout" description="Parce que la peau de bébé mérite ce qu'il y a de plus délicat." />
+        <ValueCard tint="blue-sky" title="Zéro compromis" description="Une composition maîtrisée, contrôlée à chaque étape, sans concession sur la sécurité." />
+        <ValueCard tint="coral" title="L'amour du détail" description="Chaque petite touche compte : une texture, une odeur neutre, un ajustement précis." />
+      </div>
+    </section>
+
+    <section class="cta-transition">
+      <Button variant="primary" href="/nos-valeurs">Découvrir nos engagements</Button>
+    </section>
   </main>
 </BaseLayout>
 
 <style>
-  .stub-page {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding: 6rem 1.5rem;
-    text-align: center;
-  }
+  .page-hero { background: var(--color-cream); padding: 5rem 1.5rem; }
+  .page-hero-inner { max-width: 720px; margin: 0 auto; text-align: center; }
   .lead {
     font-family: var(--font-body);
-    font-size: 1.15rem;
+    font-size: 1.2rem;
     color: var(--color-text-2);
     max-width: 55ch;
-    margin: 2rem auto 3rem;
+    margin: 1.5rem auto 0;
     line-height: 1.7;
   }
-  .cta { display: flex; justify-content: center; }
+
+  .recit { background: var(--color-cream-warm); padding: 5rem 1.5rem; }
+  .recit-inner { max-width: 780px; margin: 0 auto; }
+  .recit-body { margin-top: 2rem; }
+  .recit-p {
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    color: var(--color-text-2);
+    line-height: 1.8;
+    margin-bottom: 20px;
+  }
+  .recit-p:last-child { margin-bottom: 0; }
+
+  .convictions { background: var(--color-cream); padding: 5rem 1.5rem; }
+  .convictions-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    max-width: var(--max-width);
+    margin: 3rem auto 0;
+  }
+
+  .cta-transition { background: var(--color-cream-warm); padding: 4rem 1.5rem; text-align: center; }
+
+  @media (min-width: 900px) {
+    .convictions-grid { grid-template-columns: repeat(3, 1fr); }
+  }
 </style>

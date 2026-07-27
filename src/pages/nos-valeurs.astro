@@ -2,29 +2,138 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionEyebrow from '../components/SectionEyebrow.astro';
 import Button from '../components/Button.astro';
+
+const engagements = [
+  {
+    num: '1',
+    tint: 'mint',
+    bg: 'cream',
+    eyebrow: 'engagement 01',
+    title: 'Testées sous contrôle dermatologique',
+    p1: "Chaque référence Secret d'étoiles passe entre les mains de dermatologues indépendants avant d'arriver dans votre panier. Nous vérifions que la matière ne provoque aucune irritation, même sur les peaux les plus sensibles.",
+    p2: "C'est la garantie d'une couche qui respecte votre bébé, jour après jour, sans compromis.",
+  },
+  {
+    num: '2',
+    tint: 'blue-sky',
+    bg: 'cream-warm',
+    eyebrow: 'engagement 02',
+    title: 'Sans parfum, sans lotion',
+    p1: "Nous avons fait le choix d'exclure tout parfum et toute lotion de nos couches. Ces ingrédients n'apportent aucun bénéfice à bébé, et peuvent au contraire déclencher des réactions cutanées.",
+    p2: 'Une couche épurée, avec le strict nécessaire pour protéger et rassurer. Rien de plus, rien de moins.',
+  },
+  {
+    num: '3',
+    tint: 'star',
+    bg: 'cream',
+    eyebrow: 'engagement 03',
+    title: 'Une absorption qui tient parole',
+    p1: 'Un cœur absorbant conçu pour retenir le liquide et garder la surface au sec pendant plusieurs heures. Nos couches accompagnent bébé du coucher au réveil, sans irritation ni gêne.',
+    p2: 'Un secret bien gardé pour des nuits sereines, pour bébé comme pour les parents.',
+  },
+  {
+    num: '4',
+    tint: 'peach',
+    bg: 'cream-warm',
+    eyebrow: 'engagement 04',
+    title: 'Une protection tout en souplesse',
+    p1: 'Des barrières anti-fuites élastiques qui épousent les mouvements de bébé sans jamais le contraindre. Une taille ajustable, des attaches faciles à repositionner.',
+    p2: 'Parce que la protection ne doit jamais rimer avec restriction.',
+  },
+];
 ---
-<BaseLayout title="Nos valeurs — Secret d'étoiles" description="Testées dermato, sans parfum, absorption longue durée : nos 4 engagements pour bébé.">
-  <main class="stub-page">
-    <SectionEyebrow eyebrow="nos engagements" title="Une promesse tenue à chaque change" />
-    <p class="lead">Nos 4 engagements présentés en détail seront très bientôt en ligne.</p>
-    <div class="cta"><Button variant="primary" href="/">Retour à l'accueil</Button></div>
+<BaseLayout title="Nos valeurs — Secret d'étoiles" description="Testées dermato, sans parfum, absorption longue durée, protection douce : nos 4 engagements pour bébé.">
+  <main>
+    <section class="page-hero">
+      <div class="page-hero-inner">
+        <SectionEyebrow eyebrow="nos engagements" title="Une promesse tenue à chaque change" />
+        <p class="lead">Quatre convictions fortes qui guident chacune de nos couches, du premier jour à l'apprentissage de la propreté.</p>
+      </div>
+    </section>
+
+    {engagements.map((eng) => (
+      <section class="engagement" data-bg={eng.bg}>
+        <div class="engagement-inner">
+          <div class="eng-num" data-tint={eng.tint} aria-hidden="true">{eng.num}</div>
+          <div class="eng-content">
+            <p class="eng-eyebrow">{eng.eyebrow}</p>
+            <h2 class="eng-title">{eng.title}</h2>
+            <p class="eng-p">{eng.p1}</p>
+            <p class="eng-p">{eng.p2}</p>
+          </div>
+        </div>
+      </section>
+    ))}
+
+    <section class="cta-transition">
+      <Button variant="primary" href="/composition-securite">Découvrir la composition</Button>
+    </section>
   </main>
 </BaseLayout>
 
 <style>
-  .stub-page {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding: 6rem 1.5rem;
-    text-align: center;
-  }
+  .page-hero { background: var(--color-cream); padding: 5rem 1.5rem; }
+  .page-hero-inner { max-width: 720px; margin: 0 auto; text-align: center; }
   .lead {
     font-family: var(--font-body);
-    font-size: 1.15rem;
+    font-size: 1.2rem;
     color: var(--color-text-2);
     max-width: 55ch;
-    margin: 2rem auto 3rem;
+    margin: 1.5rem auto 0;
     line-height: 1.7;
   }
-  .cta { display: flex; justify-content: center; }
+
+  .engagement { padding: 5rem 1.5rem; }
+  .engagement[data-bg='cream'] { background: var(--color-cream); }
+  .engagement[data-bg='cream-warm'] { background: var(--color-cream-warm); }
+  .engagement-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  .eng-num {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(4rem, 10vw, 8rem);
+    line-height: 1;
+  }
+  .eng-num[data-tint='mint'] { color: var(--color-mint); }
+  .eng-num[data-tint='blue-sky'] { color: var(--color-blue-sky); }
+  .eng-num[data-tint='star'] { color: var(--color-star); }
+  .eng-num[data-tint='peach'] { color: var(--color-peach); }
+  .eng-eyebrow {
+    font-family: var(--font-hand);
+    font-size: 2rem;
+    color: var(--color-coral);
+    line-height: 1;
+  }
+  .eng-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+    color: var(--color-blue-night);
+    line-height: 1.2;
+    margin: 4px 0 20px;
+  }
+  .eng-p {
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    color: var(--color-text-2);
+    line-height: 1.75;
+    margin-bottom: 16px;
+  }
+  .eng-p:last-child { margin-bottom: 0; }
+
+  .cta-transition { background: var(--color-cream); padding: 4rem 1.5rem; text-align: center; }
+
+  @media (min-width: 800px) {
+    .engagement-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+  }
 </style>

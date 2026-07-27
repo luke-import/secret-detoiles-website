@@ -1,30 +1,159 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionEyebrow from '../components/SectionEyebrow.astro';
+import ValueCard from '../components/ValueCard.astro';
 import Button from '../components/Button.astro';
+
+const excludes = ['Parfum', 'Lotion', 'Chlore élémentaire', 'Phtalates', 'Allergènes cosmétiques', 'Latex'];
 ---
-<BaseLayout title="Composition & sécurité — Secret d'étoiles" description="La composition des couches Secret d'étoiles et notre engagement sécurité pour la peau de bébé.">
-  <main class="stub-page">
-    <SectionEyebrow eyebrow="composition & sécurité" title="Zéro compromis, tout en douceur" />
-    <p class="lead">La composition détaillée et nos garanties de sécurité seront très bientôt en ligne.</p>
-    <div class="cta"><Button variant="primary" href="/">Retour à l'accueil</Button></div>
+<BaseLayout title="Composition & sécurité — Secret d'étoiles" description="La composition détaillée des couches Secret d'étoiles : matières, garanties de sécurité, tests dermatologiques.">
+  <main>
+    <section class="page-hero">
+      <div class="page-hero-inner">
+        <SectionEyebrow eyebrow="composition & sécurité" title="Zéro compromis, tout en douceur" />
+        <p class="lead">Une composition transparente, choisie pour respecter la peau délicate de bébé. Voici tout ce que nos couches contiennent, et surtout ce qu'elles ne contiennent pas.</p>
+      </div>
+    </section>
+
+    <section class="contient">
+      <SectionEyebrow eyebrow="ce qu'elles contiennent" title="Des matières sélectionnées avec soin" />
+      <p class="sub-lead">6 composants principaux, choisis pour leur qualité et leur douceur.</p>
+      <div class="compo-grid">
+        <ValueCard tint="mint" title="Voile en polypropylène" description="Une couche extérieure douce et respirante, en contact direct avec la peau." />
+        <ValueCard tint="blue-sky" title="Cœur absorbant SAP" description="Un polymère super-absorbant qui piège l'humidité pour garder bébé au sec." />
+        <ValueCard tint="star" title="Cellulose" description="Une pulpe naturelle qui apporte volume et confort au cœur de la couche." />
+        <ValueCard tint="peach" title="Polyéthylène" description="Une barrière étanche extérieure, souple et légère." />
+        <ValueCard tint="coral" title="Élastomère" description="Des élastiques doux qui épousent les mouvements sans compresser." />
+        <ValueCard tint="mint" title="Adhésif hypoallergénique" description="Des attaches sûres, repositionnables, testées pour la peau sensible." />
+      </div>
+    </section>
+
+    <section class="exclut">
+      <SectionEyebrow eyebrow="notre exigence" title="Et surtout, ce qu'elles ne contiennent pas" />
+      <div class="pills">
+        {excludes.map((item) => (
+          <span class="pill"><span class="pill-x" aria-hidden="true">✕</span>{item}</span>
+        ))}
+      </div>
+    </section>
+
+    <section class="dermato">
+      <div class="dermato-inner">
+        <div class="dermato-icon" aria-hidden="true">✦</div>
+        <p class="dermato-eyebrow">notre garantie</p>
+        <h2 class="dermato-title">Testées, contrôlées, approuvées</h2>
+        <p class="dermato-p">Chaque référence Secret d'étoiles est testée par un dermatologue indépendant. Nos couches sont classées « hypoallergéniques » et adaptées aux peaux sensibles dès la naissance.</p>
+      </div>
+    </section>
+
+    <section class="cta-transition">
+      <Button variant="primary" href="/faq">Consulter la FAQ</Button>
+    </section>
   </main>
 </BaseLayout>
 
 <style>
-  .stub-page {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding: 6rem 1.5rem;
-    text-align: center;
-  }
+  .page-hero { background: var(--color-cream); padding: 5rem 1.5rem; }
+  .page-hero-inner { max-width: 720px; margin: 0 auto; text-align: center; }
   .lead {
     font-family: var(--font-body);
-    font-size: 1.15rem;
+    font-size: 1.2rem;
     color: var(--color-text-2);
     max-width: 55ch;
-    margin: 2rem auto 3rem;
+    margin: 1.5rem auto 0;
     line-height: 1.7;
   }
-  .cta { display: flex; justify-content: center; }
+
+  .contient { background: var(--color-cream-warm); padding: 5rem 1.5rem; }
+  .sub-lead {
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    color: var(--color-text-2);
+    text-align: center;
+    max-width: 55ch;
+    margin: 1rem auto 0;
+    line-height: 1.6;
+  }
+  .compo-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    max-width: var(--max-width);
+    margin: 3rem auto 0;
+  }
+
+  .exclut { background: var(--color-cream); padding: 5rem 1.5rem; }
+  .pills {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    max-width: 800px;
+    margin: 3rem auto 0;
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: var(--radius-pill);
+    background: #fff;
+    border: 1.5px solid var(--color-cream-deep);
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--color-blue-night);
+    font-size: 1rem;
+  }
+  .pill-x { color: var(--color-coral); }
+
+  .dermato { background: var(--color-cream-warm); padding: 5rem 1.5rem; }
+  .dermato-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    background: var(--tint-mint);
+    border-radius: var(--radius-2xl);
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+  .dermato-icon {
+    width: 80px;
+    height: 80px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    color: var(--color-mint);
+    margin: 0 auto 20px;
+  }
+  .dermato-eyebrow {
+    font-family: var(--font-hand);
+    font-size: 2rem;
+    color: var(--color-coral);
+    line-height: 1;
+  }
+  .dermato-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+    color: var(--color-blue-night);
+    line-height: 1.2;
+    margin: 4px 0 16px;
+  }
+  .dermato-p {
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    color: var(--color-text-2);
+    line-height: 1.7;
+  }
+
+  .cta-transition { background: var(--color-cream); padding: 4rem 1.5rem; text-align: center; }
+
+  @media (min-width: 700px) {
+    .compo-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 1000px) {
+    .compo-grid { grid-template-columns: repeat(3, 1fr); }
+  }
 </style>
