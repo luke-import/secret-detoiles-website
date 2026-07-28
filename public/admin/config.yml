@@ -34,7 +34,7 @@ collections:
       - name: accueil
         label: "Accueil"
         file: "src/content/pages/accueil.yaml"
-        format: "yml"
+        format: "yaml"
         fields:
           - label: "SEO"
             name: seo
@@ -67,7 +67,7 @@ collections:
       - name: notre_histoire
         label: "Notre histoire"
         file: "src/content/pages/notre-histoire.yaml"
-        format: "yml"
+        format: "yaml"
         fields:
           - label: "SEO"
             name: seo
@@ -88,7 +88,7 @@ collections:
       - name: la_gamme
         label: "La gamme"
         file: "src/content/pages/la-gamme.yaml"
-        format: "yml"
+        format: "yaml"
         fields:
           - label: "SEO"
             name: seo
@@ -109,7 +109,7 @@ collections:
       - name: nos_valeurs
         label: "Nos valeurs"
         file: "src/content/pages/nos-valeurs.yaml"
-        format: "yml"
+        format: "yaml"
         fields:
           - label: "SEO"
             name: seo
@@ -130,7 +130,7 @@ collections:
       - name: composition_securite
         label: "Composition & sécurité"
         file: "src/content/pages/composition-securite.yaml"
-        format: "yml"
+        format: "yaml"
         fields:
           - label: "SEO"
             name: seo
@@ -151,7 +151,7 @@ collections:
       - name: faq
         label: "FAQ"
         file: "src/content/pages/faq.yaml"
-        format: "yml"
+        format: "yaml"
         fields:
           - label: "SEO"
             name: seo
@@ -172,7 +172,7 @@ collections:
       - name: contact
         label: "Contact"
         file: "src/content/pages/contact.yaml"
-        format: "yml"
+        format: "yaml"
         fields:
           - label: "SEO"
             name: seo
