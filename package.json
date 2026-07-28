@@ -11,7 +11,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "optimize:packshots": "node scripts/optimize-packshots.js",
-    "cms": "npx @staticcms/proxy-server",
+    "cms": "npx decap-server",
     "dev:cms": "concurrently --names \"astro,cms\" --prefix-colors \"cyan,magenta\" \"pnpm dev\" \"pnpm cms\""
   },
   "dependencies": {
@@ -24,9 +24,9 @@
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
-    "@staticcms/proxy-server": "^4.0.4",
     "concurrently": "^10.0.4",
     "decap-cms-app": "^3.15.1",
+    "decap-server": "^3.10.0",
     "sharp": "^0.35.3"
   }
 }
