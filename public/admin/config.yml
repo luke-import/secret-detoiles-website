@@ -1,0 +1,181 @@
+# Mode local : proxy Node.js qui lit/écrit les fichiers du disque
+# Sera remplacé par backend: git-gateway ou github en production (Étape 3)
+backend:
+  name: proxy
+  proxy_url: http://localhost:8081/api/v1
+  branch: main
+
+# Dossier des uploads d'images (packshots, photo maman/bébé, etc.)
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+# Locale de l'interface Decap
+locale: fr
+
+# Style du CMS : léger
+site_url: https://secret-detoiles.fr
+display_url: https://secret-detoiles.fr
+logo_url: /favicon.svg
+
+# Collections : une par page, toutes verrouillées
+collections:
+  - name: pages
+    label: "Pages du site"
+    label_singular: "Page"
+    delete: false
+    create: false
+    editor:
+      preview: false
+    files:
+      # ─────────────────────────────────────────────
+      # ACCUEIL
+      # ─────────────────────────────────────────────
+      - name: accueil
+        label: "Accueil"
+        file: "src/content/pages/accueil.yaml"
+        fields:
+          - label: "SEO"
+            name: seo
+            widget: object
+            fields:
+              - { label: "Titre onglet (SEO)", name: title, widget: string, hint: "Apparaît dans l'onglet du navigateur et Google" }
+              - { label: "Description (SEO)", name: description, widget: text, hint: "Résumé pour Google et les réseaux sociaux" }
+          - label: "Hero (grande bannière en haut)"
+            name: hero
+            widget: object
+            fields:
+              - { label: "Surtitre manuscrit", name: eyebrow, widget: string }
+              - { label: "Titre principal", name: title, widget: string }
+              - { label: "Sous-titre", name: lead, widget: text }
+              - label: "Bouton principal"
+                name: cta_primary
+                widget: object
+                fields:
+                  - { label: "Texte du bouton", name: label, widget: string }
+                  - { label: "Lien du bouton", name: href, widget: string }
+              - label: "Bouton secondaire"
+                name: cta_secondary
+                widget: object
+                fields:
+                  - { label: "Texte du bouton", name: label, widget: string }
+                  - { label: "Lien du bouton", name: href, widget: string }
+      # ─────────────────────────────────────────────
+      # NOTRE HISTOIRE
+      # ─────────────────────────────────────────────
+      - name: notre_histoire
+        label: "Notre histoire"
+        file: "src/content/pages/notre-histoire.yaml"
+        fields:
+          - label: "SEO"
+            name: seo
+            widget: object
+            fields:
+              - { label: "Titre onglet (SEO)", name: title, widget: string }
+              - { label: "Description (SEO)", name: description, widget: text }
+          - label: "Hero"
+            name: hero
+            widget: object
+            fields:
+              - { label: "Surtitre manuscrit", name: eyebrow, widget: string }
+              - { label: "Titre principal", name: title, widget: string }
+              - { label: "Sous-titre", name: lead, widget: text }
+      # ─────────────────────────────────────────────
+      # LA GAMME
+      # ─────────────────────────────────────────────
+      - name: la_gamme
+        label: "La gamme"
+        file: "src/content/pages/la-gamme.yaml"
+        fields:
+          - label: "SEO"
+            name: seo
+            widget: object
+            fields:
+              - { label: "Titre onglet (SEO)", name: title, widget: string }
+              - { label: "Description (SEO)", name: description, widget: text }
+          - label: "Hero"
+            name: hero
+            widget: object
+            fields:
+              - { label: "Surtitre manuscrit", name: eyebrow, widget: string }
+              - { label: "Titre principal", name: title, widget: string }
+              - { label: "Sous-titre", name: lead, widget: text }
+      # ─────────────────────────────────────────────
+      # NOS VALEURS
+      # ─────────────────────────────────────────────
+      - name: nos_valeurs
+        label: "Nos valeurs"
+        file: "src/content/pages/nos-valeurs.yaml"
+        fields:
+          - label: "SEO"
+            name: seo
+            widget: object
+            fields:
+              - { label: "Titre onglet (SEO)", name: title, widget: string }
+              - { label: "Description (SEO)", name: description, widget: text }
+          - label: "Hero"
+            name: hero
+            widget: object
+            fields:
+              - { label: "Surtitre manuscrit", name: eyebrow, widget: string }
+              - { label: "Titre principal", name: title, widget: string }
+              - { label: "Sous-titre", name: lead, widget: text }
+      # ─────────────────────────────────────────────
+      # COMPOSITION & SÉCURITÉ
+      # ─────────────────────────────────────────────
+      - name: composition_securite
+        label: "Composition & sécurité"
+        file: "src/content/pages/composition-securite.yaml"
+        fields:
+          - label: "SEO"
+            name: seo
+            widget: object
+            fields:
+              - { label: "Titre onglet (SEO)", name: title, widget: string }
+              - { label: "Description (SEO)", name: description, widget: text }
+          - label: "Hero"
+            name: hero
+            widget: object
+            fields:
+              - { label: "Surtitre manuscrit", name: eyebrow, widget: string }
+              - { label: "Titre principal", name: title, widget: string }
+              - { label: "Sous-titre", name: lead, widget: text }
+      # ─────────────────────────────────────────────
+      # FAQ
+      # ─────────────────────────────────────────────
+      - name: faq
+        label: "FAQ"
+        file: "src/content/pages/faq.yaml"
+        fields:
+          - label: "SEO"
+            name: seo
+            widget: object
+            fields:
+              - { label: "Titre onglet (SEO)", name: title, widget: string }
+              - { label: "Description (SEO)", name: description, widget: text }
+          - label: "Hero"
+            name: hero
+            widget: object
+            fields:
+              - { label: "Surtitre manuscrit", name: eyebrow, widget: string }
+              - { label: "Titre principal", name: title, widget: string }
+              - { label: "Sous-titre", name: lead, widget: text }
+      # ─────────────────────────────────────────────
+      # CONTACT
+      # ─────────────────────────────────────────────
+      - name: contact
+        label: "Contact"
+        file: "src/content/pages/contact.yaml"
+        fields:
+          - label: "SEO"
+            name: seo
+            widget: object
+            fields:
+              - { label: "Titre onglet (SEO)", name: title, widget: string }
+              - { label: "Description (SEO)", name: description, widget: text }
+          - label: "Hero"
+            name: hero
+            widget: object
+            fields:
+              - { label: "Surtitre manuscrit", name: eyebrow, widget: string }
+              - { label: "Titre principal", name: title, widget: string }
+              - { label: "Sous-titre", name: lead, widget: text }

@@ -155,11 +155,13 @@ Objectif : permettre à Grégory de modifier tous les textes et images du site d
 - [ ] Créer un compte Cloudflare (gratuit) pour héberger le OAuth handler
 - [ ] Déployer un Cloudflare Worker OAuth pour Decap CMS (gratuit, 100k requêtes/jour)
 - [ ] Créer une OAuth App GitHub dans les settings du compte luke-import
-- [ ] Créer le dossier `public/admin/` avec `index.html` (loader Decap) et `config.yml`
-- [ ] Configurer `config.yml` avec les collections figées (une entrée par page, champs texte + image uniquement, pas de "create" ni "delete")
+- [x] Créer le dossier `public/admin/` avec `index.html` (loader Decap) et `config.yml`
+- [x] Configurer `config.yml` avec les collections figées (une entrée par page, champs texte + image uniquement, pas de "create" ni "delete")
 - [x] Migrer tous les textes des pages dans `src/content/` (Content Collections d'Astro)
 
 > **Phase 8 — Étape 1 : migration contenu (28 juillet 2026)** — Les 7 pages lisent leur contenu depuis `src/content/pages/*.yaml` via une collection Astro (glob loader + `getEntry`). Config à **`src/content.config.ts`** (⚠️ pas `src/content/config.ts` : Astro 7 refuse l'ancien chemin *legacy*). Rendu **strictement identique** vérifié : diff du texte visible normalisé avant/après = 0 sur les 7 pages. Restent en dur (volontaire) : le tableau de référence + le simulateur de `/la-gamme` (données produit + logique JS), les props des SizeCard de la home, les aria-labels/alt, le JSON-LD. Reste pour l'Étape 2 : `public/admin/` (Decap) + Worker OAuth Cloudflare.
+
+> **Phase 8 — Étape 2 : interface Decap locale (28 juillet 2026)** — Choix CMS confirmé : **Decap CMS**. `public/admin/index.html` (loader Decap CDN v3) + `config.yml` **verrouillé** (`create: false`, `delete: false`, 7 pages en collection `files`, widgets texte). Proxy local via `@staticcms/proxy-server` ; script `pnpm dev:cms` lance Astro + proxy en parallèle (`concurrently`). Vérifié en API : le proxy répond (`type: local_fs`) et **lit** les YAML. Champs limités à **SEO + Hero** pour ce « hello world » — à enrichir en Étape 2b. Guide dev : `docs/CMS.md`. NB local : ouvrir `/admin/index.html` (le dev Astro ne résout pas `/admin/` ; en prod si). **Étape 3 (OAuth GitHub) reportée après le déploiement Cloudflare (Phase 10).**
 - [ ] Tester le flow complet : connexion GitHub → modification texte → publication → build automatique → mise en ligne
 - [ ] Guide illustré pour Grégory (captures d'écran de l'interface admin, comment modifier un texte, une image, un PDF)
 
