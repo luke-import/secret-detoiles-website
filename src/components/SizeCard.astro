@@ -19,7 +19,7 @@ const SIZE_COLORS: Record<'S' | 'M' | 'L' | 'XL' | 'XXL', string> = {
 };
 
 const color = SIZE_COLORS[size];
-const packshot = `/packshots/taille-${size.toLowerCase()}.png`;
+const packshot = `/packshots/taille-${size.toLowerCase()}.webp`;
 ---
 <a href={href} class="size-card" data-color={color}>
   <div class="pack">
@@ -27,7 +27,7 @@ const packshot = `/packshots/taille-${size.toLowerCase()}.png`;
       <span class="badge-size">{size}</span>
       <span class="badge-subtitle">{subtitle}</span>
     </span>
-    <img src={packshot} alt={`Couches Secret d'étoiles taille ${size}`} />
+    <img src={packshot} alt={`Couches Secret d'étoiles taille ${size}`} loading="lazy" />
   </div>
   <div class="bar"></div>
   <div class="body">

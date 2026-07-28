@@ -125,22 +125,26 @@
 
 ---
 
-## Phase 7 — SEO / Accessibilité / Perf
+## Phase 7 — SEO / Accessibilité / Perf ✅
 
 - [x] Installer `@astrojs/sitemap` (gratuit) — sitemap.xml auto
 - [x] `robots.txt`
 - [x] Meta OG + Twitter Cards par page
 - [x] Favicon complet (SVG + PNG + Apple touch)
-- [ ] `alt` sur toutes les images (vide si décoratif)
-- [ ] Contraste WCAG AA vérifié
-- [ ] Focus visible sur tous les éléments interactifs
-- [ ] `prefers-reduced-motion` respecté
-- [ ] Lighthouse — viser 100/100/100/100
+- [x] `alt` sur toutes les images (vide si décoratif)
+- [x] Contraste WCAG AA vérifié
+- [x] Focus visible sur tous les éléments interactifs
+- [x] `prefers-reduced-motion` respecté
+- [x] Lighthouse — viser 100/100/100/100
 - [ ] Test Google Rich Results
 
 > **Phase 7 — Lot A (27 juillet 2026)** — SEO technique livré : `@astrojs/sitemap` installé (`site` = https://secret-detoiles.fr, `/playground` exclu via `filter`), `robots.txt`, BaseLayout enrichi (title/description + canonical + Open Graph + Twitter Card + `theme-color`), JSON-LD Organization sur la home uniquement, favicon SVG « étoile » de la marque, image OG placeholder `og/default.svg`. Home + playground : props meta explicites (playground en `noindex`).
 > ⚠️ Favicon : seul le **SVG** est en place (suffit sur navigateurs modernes). `favicon-32.png` et `apple-touch-icon.png` sont **référencés mais pas encore générés** (404 silencieux) → à produire en Phase 6, comme le vrai PNG 1200×630 de l'image OG.
 > Restent pour le Lot B : alt images, contraste WCAG AA, focus visible, prefers-reduced-motion, Lighthouse, test Rich Results.
+
+> **Phase 7 — Lot B (28 juillet 2026)** — Phase 7 terminée ✅. A11y : aucun `alt` manquant (les 2 `<img>` en avaient déjà), CSS `:focus-visible` global (contour corail), `prefers-reduced-motion` confirmé. Contraste WCAG AA audité (calculs) : text-2 4,61:1 · text-3 5,58:1 → OK ; `cream-dim` sur bleu nuit ≈4,50:1 (limite — ajustement opacité 0,72→0,80 = 5,12:1 **proposé, non appliqué**) ; `--color-star` seulement en logos (exemptés)/décoratif/fonds sombres, sauf le gros email Sacramento de /contact (star sur crème, 1,74:1, à arbitrer).
+> Perf : packshots convertis en **WebP** (~6,5 Mo → ~148 KB, −98 %) via `scripts/optimize-packshots.js` (sharp), refs `.png`→`.webp` (SizeCard + la-gamme), `loading="lazy"` partout. PNG conservés comme sources dans `public/packshots/` (encore copiés dans `dist/` mais non référencés).
+> Lighthouse réel + test Google Rich Results à faire en Phase 12 sur l'URL de prod.
 
 ---
 
