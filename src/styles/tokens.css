@@ -5,7 +5,7 @@
   --color-cream-deep: #EEE7DA;
   --color-cream-hover: #EBE3D2;
   /* Textes et séparateurs sur fond sombre (footer, CTA bleu nuit, futures zones dark) */
-  --color-cream-dim: rgba(253, 251, 246, 0.72);
+  --color-cream-dim: rgba(253, 251, 246, 0.80);
   --color-cream-faint: rgba(253, 251, 246, 0.15);
   --surface-frosted: rgba(253, 251, 246, 0.88);
   --shadow-primary-hover: 0 10px 24px rgba(60, 90, 122, 0.22);

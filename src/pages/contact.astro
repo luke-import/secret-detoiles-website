@@ -12,10 +12,6 @@ import ContactForm from '../components/ContactForm.astro';
       </div>
     </section>
 
-    <section class="email-section">
-      <a href="mailto:bonjour@secret-detoiles.fr" class="big-email">bonjour@secret-detoiles.fr</a>
-    </section>
-
     <section class="form-section">
       <div class="form-inner">
         <SectionEyebrow eyebrow="ou via le formulaire" title="Envoyez-nous un message" />
@@ -44,18 +40,7 @@ import ContactForm from '../components/ContactForm.astro';
     line-height: 1.7;
   }
 
-  .email-section { background: var(--color-cream); padding: 3rem 1.5rem 0; text-align: center; }
-  .big-email {
-    font-family: var(--font-hand);
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    color: var(--color-star);
-    text-decoration: none;
-    display: inline-block;
-    transition: color 0.2s;
-  }
-  .big-email:hover { color: var(--color-coral); }
-
-  .form-section { background: var(--color-cream); padding: 3rem 1.5rem 5rem; }
+  .form-section { background: var(--color-cream); padding: 5rem 1.5rem; }
   .form-inner { max-width: 720px; margin: 0 auto; }
   .form-wrap { margin-top: 3rem; }
 
