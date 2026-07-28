@@ -2,56 +2,22 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionEyebrow from '../components/SectionEyebrow.astro';
 import Button from '../components/Button.astro';
+import { getEntry } from 'astro:content';
 
-const engagements = [
-  {
-    num: '1',
-    tint: 'mint',
-    bg: 'cream',
-    eyebrow: 'engagement 01',
-    title: 'Testées sous contrôle dermatologique',
-    p1: "Chaque référence Secret d'étoiles passe entre les mains de dermatologues indépendants avant d'arriver dans votre panier. Nous vérifions que la matière ne provoque aucune irritation, même sur les peaux les plus sensibles.",
-    p2: "C'est la garantie d'une couche qui respecte votre bébé, jour après jour, sans compromis.",
-  },
-  {
-    num: '2',
-    tint: 'blue-sky',
-    bg: 'cream-warm',
-    eyebrow: 'engagement 02',
-    title: 'Sans parfum, sans lotion',
-    p1: "Nous avons fait le choix d'exclure tout parfum et toute lotion de nos couches. Ces ingrédients n'apportent aucun bénéfice à bébé, et peuvent au contraire déclencher des réactions cutanées.",
-    p2: 'Une couche épurée, avec le strict nécessaire pour protéger et rassurer. Rien de plus, rien de moins.',
-  },
-  {
-    num: '3',
-    tint: 'star',
-    bg: 'cream',
-    eyebrow: 'engagement 03',
-    title: 'Une absorption qui tient parole',
-    p1: 'Un cœur absorbant conçu pour retenir le liquide et garder la surface au sec pendant plusieurs heures. Nos couches accompagnent bébé du coucher au réveil, sans irritation ni gêne.',
-    p2: 'Un secret bien gardé pour des nuits sereines, pour bébé comme pour les parents.',
-  },
-  {
-    num: '4',
-    tint: 'peach',
-    bg: 'cream-warm',
-    eyebrow: 'engagement 04',
-    title: 'Une protection tout en souplesse',
-    p1: 'Des barrières anti-fuites élastiques qui épousent les mouvements de bébé sans jamais le contraindre. Une taille ajustable, des attaches faciles à repositionner.',
-    p2: 'Parce que la protection ne doit jamais rimer avec restriction.',
-  },
-];
+const page = await getEntry('pages', 'nos-valeurs');
+if (!page) throw new Error('Page introuvable dans la collection');
+const { data } = page;
 ---
-<BaseLayout title="Nos valeurs — Secret d'étoiles" description="Testées dermato, sans parfum, absorption longue durée, protection douce : nos 4 engagements pour bébé.">
+<BaseLayout title={data.seo.title} description={data.seo.description}>
   <main>
     <section class="page-hero">
       <div class="page-hero-inner">
-        <SectionEyebrow eyebrow="nos engagements" title="Une promesse tenue à chaque change" />
-        <p class="lead">Quatre convictions fortes qui guident chacune de nos couches, du premier jour à l'apprentissage de la propreté.</p>
+        <SectionEyebrow eyebrow={data.hero.eyebrow} title={data.hero.title} />
+        <p class="lead">{data.hero.lead}</p>
       </div>
     </section>
 
-    {engagements.map((eng) => (
+    {data.engagements.map((eng) => (
       <section class="engagement" data-bg={eng.bg}>
         <div class="engagement-inner">
           <div class="eng-num" data-tint={eng.tint} aria-hidden="true">{eng.num}</div>
@@ -66,7 +32,7 @@ const engagements = [
     ))}
 
     <section class="cta-transition">
-      <Button variant="primary" href="/composition-securite">Découvrir la composition</Button>
+      <Button variant="primary" href={data.cta.href}>{data.cta.label}</Button>
     </section>
   </main>
 </BaseLayout>

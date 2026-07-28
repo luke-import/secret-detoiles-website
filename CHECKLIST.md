@@ -157,7 +157,9 @@ Objectif : permettre à Grégory de modifier tous les textes et images du site d
 - [ ] Créer une OAuth App GitHub dans les settings du compte luke-import
 - [ ] Créer le dossier `public/admin/` avec `index.html` (loader Decap) et `config.yml`
 - [ ] Configurer `config.yml` avec les collections figées (une entrée par page, champs texte + image uniquement, pas de "create" ni "delete")
-- [ ] Migrer tous les textes des pages dans `src/content/` (Content Collections d'Astro)
+- [x] Migrer tous les textes des pages dans `src/content/` (Content Collections d'Astro)
+
+> **Phase 8 — Étape 1 : migration contenu (28 juillet 2026)** — Les 7 pages lisent leur contenu depuis `src/content/pages/*.yaml` via une collection Astro (glob loader + `getEntry`). Config à **`src/content.config.ts`** (⚠️ pas `src/content/config.ts` : Astro 7 refuse l'ancien chemin *legacy*). Rendu **strictement identique** vérifié : diff du texte visible normalisé avant/après = 0 sur les 7 pages. Restent en dur (volontaire) : le tableau de référence + le simulateur de `/la-gamme` (données produit + logique JS), les props des SizeCard de la home, les aria-labels/alt, le JSON-LD. Reste pour l'Étape 2 : `public/admin/` (Decap) + Worker OAuth Cloudflare.
 - [ ] Tester le flow complet : connexion GitHub → modification texte → publication → build automatique → mise en ligne
 - [ ] Guide illustré pour Grégory (captures d'écran de l'interface admin, comment modifier un texte, une image, un PDF)
 

@@ -1,0 +1,42 @@
+seo:
+  title: "Nos valeurs — Secret d'étoiles"
+  description: "Testées dermato, sans parfum, absorption longue durée, protection douce : nos 4 engagements pour bébé."
+
+hero:
+  eyebrow: "nos engagements"
+  title: "Une promesse tenue à chaque change"
+  lead: "Quatre convictions fortes qui guident chacune de nos couches, du premier jour à l'apprentissage de la propreté."
+
+engagements:
+  - num: "1"
+    tint: "mint"
+    bg: "cream"
+    eyebrow: "engagement 01"
+    title: "Testées sous contrôle dermatologique"
+    p1: "Chaque référence Secret d'étoiles passe entre les mains de dermatologues indépendants avant d'arriver dans votre panier. Nous vérifions que la matière ne provoque aucune irritation, même sur les peaux les plus sensibles."
+    p2: "C'est la garantie d'une couche qui respecte votre bébé, jour après jour, sans compromis."
+  - num: "2"
+    tint: "blue-sky"
+    bg: "cream-warm"
+    eyebrow: "engagement 02"
+    title: "Sans parfum, sans lotion"
+    p1: "Nous avons fait le choix d'exclure tout parfum et toute lotion de nos couches. Ces ingrédients n'apportent aucun bénéfice à bébé, et peuvent au contraire déclencher des réactions cutanées."
+    p2: "Une couche épurée, avec le strict nécessaire pour protéger et rassurer. Rien de plus, rien de moins."
+  - num: "3"
+    tint: "star"
+    bg: "cream"
+    eyebrow: "engagement 03"
+    title: "Une absorption qui tient parole"
+    p1: "Un cœur absorbant conçu pour retenir le liquide et garder la surface au sec pendant plusieurs heures. Nos couches accompagnent bébé du coucher au réveil, sans irritation ni gêne."
+    p2: "Un secret bien gardé pour des nuits sereines, pour bébé comme pour les parents."
+  - num: "4"
+    tint: "peach"
+    bg: "cream-warm"
+    eyebrow: "engagement 04"
+    title: "Une protection tout en souplesse"
+    p1: "Des barrières anti-fuites élastiques qui épousent les mouvements de bébé sans jamais le contraindre. Une taille ajustable, des attaches faciles à repositionner."
+    p2: "Parce que la protection ne doit jamais rimer avec restriction."
+
+cta:
+  label: "Découvrir la composition"
+  href: "/composition-securite"

@@ -1,0 +1,59 @@
+seo:
+  title: "Secret d'étoiles — Les couches enchantées, tout en douceur"
+  description: "Des couches douces, testées sous contrôle dermatologique, sans parfum. Un cocon de tendresse pour accompagner bébé, du premier jour à ses premiers pas."
+
+hero:
+  eyebrow: "tout en tendresse"
+  title: "Un cocon de douceur pour bébé"
+  lead: "Des couches pensées avec bienveillance, testées sous contrôle dermatologique, sans parfum. Pour accompagner bébé de la naissance à ses premiers pas, tout en douceur."
+  cta_primary:
+    label: "Découvrir la gamme"
+    href: "/la-gamme"
+  cta_secondary:
+    label: "Nos engagements"
+    href: "/nos-valeurs"
+
+engagements:
+  eyebrow: "nos engagements"
+  title: "Une promesse tenue à chaque change"
+  cards:
+    - tint: "mint"
+      title: "Testées dermato"
+      description: "Chaque référence contrôlée en laboratoire dermatologique pour respecter la peau délicate de bébé."
+    - tint: "blue-sky"
+      title: "Sans parfum"
+      description: "Une composition épurée, sans parfum ajouté ni ingrédient superflu."
+    - tint: "star"
+      title: "Absorption longue durée"
+      description: "Un cœur absorbant qui garde bébé au sec, du coucher au réveil."
+    - tint: "peach"
+      title: "Protection douce et fiable"
+      description: "Des barrières anti-fuites souples pour bouger en toute liberté."
+
+marque:
+  image_note: "Emplacement photo maman & bébé"
+  image_sub: "à remplacer en Phase 6"
+  eyebrow: "un cocon de douceur"
+  title: "Née sous une bonne étoile"
+  paragraphs:
+    - "Secret d'étoiles est née d'une conviction simple : les premiers mois de bébé sont précieux. Ils méritent qu'on les entoure de tendresse."
+    - "Chaque couche est pensée comme un petit cocon protecteur : douce sur la peau, fiable au fil des heures, discrète au quotidien. Une promesse tenue, sans compromis."
+  cta:
+    label: "Découvrir notre histoire"
+    href: "/notre-histoire"
+
+gamme:
+  eyebrow: "la gamme étoilée"
+  title: "Une taille pour chaque étoile"
+  lead: "De la naissance à l'apprentissage de la propreté, une couche pour chaque étape."
+  cta:
+    label: "Voir toute la gamme"
+    href: "/la-gamme"
+
+cta_final:
+  eyebrow: "prêt à embarquer ?"
+  title: "Un peu de magie dans le quotidien de bébé"
+  lead: "Retrouvez bientôt les couches Secret d'étoiles chez vos revendeurs partenaires."
+  cta:
+    label: "Nous contacter"
+    href: "/contact"

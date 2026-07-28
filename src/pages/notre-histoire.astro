@@ -3,38 +3,41 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionEyebrow from '../components/SectionEyebrow.astro';
 import ValueCard from '../components/ValueCard.astro';
 import Button from '../components/Button.astro';
+import { getEntry } from 'astro:content';
+
+const page = await getEntry('pages', 'notre-histoire');
+if (!page) throw new Error('Page introuvable dans la collection');
+const { data } = page;
 ---
-<BaseLayout title="Notre histoire — Secret d'étoiles" description="L'histoire de Secret d'étoiles, une marque née pour accompagner les tout-petits avec douceur, du premier jour à leurs premiers pas.">
+<BaseLayout title={data.seo.title} description={data.seo.description}>
   <main>
     <section class="page-hero">
       <div class="page-hero-inner">
-        <SectionEyebrow eyebrow="notre histoire" title="Née sous une bonne étoile" />
-        <p class="lead">L'histoire d'une marque qui célèbre la magie des premiers instants et l'infinie douceur de l'enfance.</p>
+        <SectionEyebrow eyebrow={data.hero.eyebrow} title={data.hero.title} />
+        <p class="lead">{data.hero.lead}</p>
       </div>
     </section>
 
     <section class="recit">
       <div class="recit-inner">
-        <SectionEyebrow eyebrow="l'origine" title="Un petit secret gardé sous les étoiles" center={false} />
+        <SectionEyebrow eyebrow={data.recit.eyebrow} title={data.recit.title} center={false} />
         <div class="recit-body">
-          <p class="recit-p">Secret d'étoiles est née d'un désir simple : offrir aux tout-petits une couche à la hauteur de leur douceur. Une marque pensée par des parents, pour des parents.</p>
-          <p class="recit-p">Nous avons choisi de nous concentrer sur ce qui compte vraiment : la sécurité, le confort, et une composition irréprochable. Pas de superflu, pas de compromis.</p>
-          <p class="recit-p">Depuis nos débuts, chaque couche est conçue comme une petite bulle de tendresse : une matière douce, une absorption fiable, une protection qui ne se voit pas mais qui se sent.</p>
+          {data.recit.paragraphs.map((paragraph) => <p class="recit-p">{paragraph}</p>)}
         </div>
       </div>
     </section>
 
     <section class="convictions">
-      <SectionEyebrow eyebrow="nos convictions" title="Ce en quoi nous croyons" />
+      <SectionEyebrow eyebrow={data.convictions.eyebrow} title={data.convictions.title} />
       <div class="convictions-grid">
-        <ValueCard tint="mint" title="La douceur avant tout" description="Parce que la peau de bébé mérite ce qu'il y a de plus délicat." />
-        <ValueCard tint="blue-sky" title="Zéro compromis" description="Une composition maîtrisée, contrôlée à chaque étape, sans concession sur la sécurité." />
-        <ValueCard tint="coral" title="L'amour du détail" description="Chaque petite touche compte : une texture, une odeur neutre, un ajustement précis." />
+        {data.convictions.cards.map((card) => (
+          <ValueCard tint={card.tint} title={card.title} description={card.description} />
+        ))}
       </div>
     </section>
 
     <section class="cta-transition">
-      <Button variant="primary" href="/nos-valeurs">Découvrir nos engagements</Button>
+      <Button variant="primary" href={data.cta.href}>{data.cta.label}</Button>
     </section>
   </main>
 </BaseLayout>

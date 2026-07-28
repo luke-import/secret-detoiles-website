@@ -3,64 +3,26 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Button from '../components/Button.astro';
 import SectionEyebrow from '../components/SectionEyebrow.astro';
 import Sparkles from '../components/Sparkles.astro';
+import { getEntry } from 'astro:content';
 
-const sizes = [
-  {
-    size: 'S',
-    color: 'blue-sky',
-    tag: 'Taille S · Taille 1-2',
-    title: 'Les premières douceurs',
-    desc: "La taille S accompagne les tout premiers jours de bébé. Ultra-douce, ajustée aux petites morphologies, elle enveloppe sans jamais serrer. Une couche pensée pour respecter la peau fragile du nouveau-né.",
-    specs: ['3 – 6 kg', '42 couches', 'Dès la naissance'],
-  },
-  {
-    size: 'M',
-    color: 'mint',
-    tag: 'Taille M · Taille 3',
-    title: 'La taille des premiers mois',
-    desc: "La taille M épouse les mouvements des bébés qui commencent à se retourner, à s'asseoir, à explorer. Un ajustement précis, des attaches faciles à repositionner, une absorption fiable pour les longues nuits.",
-    specs: ['5 – 10 kg', '36 couches', '1 à 6 mois'],
-  },
-  {
-    size: 'L',
-    color: 'star',
-    tag: 'Taille L · Taille 4',
-    title: "L'étoile filante",
-    desc: "Quand bébé commence à ramper puis à marcher, la taille L offre la liberté de mouvement dont il a besoin. Les élastiques épousent chaque déplacement, la protection reste fiable même au cœur des grandes aventures.",
-    specs: ['9 – 13 kg', '32 couches', '6 à 18 mois'],
-  },
-  {
-    size: 'XL',
-    color: 'peach',
-    tag: 'Taille XL · Taille 5',
-    title: 'Les grandes découvertes',
-    desc: "La taille XL accompagne les journées bien remplies des tout-petits : jeux, câlins, siestes et petites bêtises. Une absorption longue durée pour ne jamais interrompre l'imagination.",
-    specs: ['12 – 15 kg', '28 couches', '18 mois et +'],
-  },
-  {
-    size: 'XXL',
-    color: 'coral',
-    tag: 'Taille XXL · Taille 6+',
-    title: 'Les grands rêveurs',
-    desc: "La dernière étape avant l'apprentissage de la propreté. La taille XXL offre confort et sérénité pendant les nuits où bébé grandit encore. Un dernier cocon avant l'autonomie.",
-    specs: ['+ 15 kg', '24 couches', '2 ans et +'],
-  },
-];
+const page = await getEntry('pages', 'la-gamme');
+if (!page) throw new Error('Page introuvable dans la collection');
+const { data } = page;
 ---
-<BaseLayout title="La gamme — Les couches enchantées Secret d'étoiles" description="Découvrez les 5 tailles de couches Secret d'étoiles, de la naissance à l'apprentissage de la propreté. Trouvez la taille idéale pour bébé.">
+<BaseLayout title={data.seo.title} description={data.seo.description}>
   <main>
     <!-- SECTION 1 — HERO -->
     <section class="gamme-hero">
       <Sparkles density="medium" variant="section" />
       <div class="gamme-hero-inner">
-        <SectionEyebrow eyebrow="la gamme étoilée" title="Les couches enchantées" />
-        <p class="hero-lead">Cinq tailles, une même exigence : du confort et une protection douce, jour après jour, pour accompagner bébé de la naissance à ses premiers pas.</p>
+        <SectionEyebrow eyebrow={data.hero.eyebrow} title={data.hero.title} />
+        <p class="hero-lead">{data.hero.lead}</p>
       </div>
     </section>
 
     <!-- SECTION 2 — TABLEAU DE CORRESPONDANCE -->
     <section class="gamme-table">
-      <SectionEyebrow eyebrow="d'un coup d'œil" title="Trouvez votre taille" />
+      <SectionEyebrow eyebrow={data.table.eyebrow} title={data.table.title} />
       <div class="table-container">
         <table class="sizes-table">
           <thead>
@@ -79,16 +41,16 @@ const sizes = [
           </tbody>
         </table>
       </div>
-      <p class="table-note">Les tailles et poids sont donnés à titre indicatif. Chaque bébé est unique : fiez-vous aussi à son confort et à l'ajustement de la couche.</p>
+      <p class="table-note">{data.table.note}</p>
     </section>
 
     <!-- SECTION 3 — SIMULATEUR -->
     <section class="gamme-simulator">
-      <SectionEyebrow eyebrow="un doute ?" title="Trouvez la taille de bébé" />
-      <p class="sim-lead">Indiquez le poids de bébé, nous vous recommandons la meilleure taille.</p>
+      <SectionEyebrow eyebrow={data.simulator.eyebrow} title={data.simulator.title} />
+      <p class="sim-lead">{data.simulator.lead}</p>
       <div class="sim-container">
         <div class="simulator">
-          <label for="baby-weight" class="sim-label">Poids de bébé</label>
+          <label for="baby-weight" class="sim-label">{data.simulator.label}</label>
           <div class="sim-input-wrapper">
             <input id="baby-weight" type="number" min="0" max="30" step="0.1" placeholder="Ex. 7,5" />
             <span class="sim-unit">kg</span>
@@ -100,9 +62,9 @@ const sizes = [
 
     <!-- SECTION 4 — LES 5 TAILLES EN DÉTAIL -->
     <section class="gamme-detail">
-      <SectionEyebrow eyebrow="chaque taille en détail" title="Une taille pour chaque étape" />
+      <SectionEyebrow eyebrow={data.detail.eyebrow} title={data.detail.title} />
       <div class="detail-list">
-        {sizes.map((s) => (
+        {data.detail.items.map((s) => (
           <article class="size-detail" data-color={s.color}>
             <div class="detail-image">
               <img
@@ -126,15 +88,15 @@ const sizes = [
 
     <!-- SECTION 5 — TEASER COMPOSITION -->
     <section class="gamme-compo">
-      <SectionEyebrow eyebrow="et à l'intérieur ?" title="Une composition transparente" />
-      <p class="compo-lead">6 matières soigneusement sélectionnées. Zéro parfum, zéro lotion, zéro compromis. La liste complète est à votre disposition.</p>
-      <Button variant="primary" href="/composition-securite">Découvrir la composition</Button>
+      <SectionEyebrow eyebrow={data.compo.eyebrow} title={data.compo.title} />
+      <p class="compo-lead">{data.compo.lead}</p>
+      <Button variant="primary" href={data.compo.cta.href}>{data.compo.cta.label}</Button>
     </section>
 
     <!-- SECTION 6 — CTA FINAL -->
     <section class="gamme-cta">
-      <p class="cta-lead">Envie de savoir où trouver nos couches ?</p>
-      <Button variant="primary" href="/contact">Nous contacter</Button>
+      <p class="cta-lead">{data.cta_final.lead}</p>
+      <Button variant="primary" href={data.cta_final.cta.href}>{data.cta_final.cta.label}</Button>
     </section>
   </main>
 </BaseLayout>

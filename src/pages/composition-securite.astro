@@ -3,35 +3,35 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionEyebrow from '../components/SectionEyebrow.astro';
 import ValueCard from '../components/ValueCard.astro';
 import Button from '../components/Button.astro';
+import { getEntry } from 'astro:content';
 
-const excludes = ['Parfum', 'Lotion', 'Chlore élémentaire', 'Phtalates', 'Allergènes cosmétiques', 'Latex'];
+const page = await getEntry('pages', 'composition-securite');
+if (!page) throw new Error('Page introuvable dans la collection');
+const { data } = page;
 ---
-<BaseLayout title="Composition & sécurité — Secret d'étoiles" description="La composition détaillée des couches Secret d'étoiles : matières, garanties de sécurité, tests dermatologiques.">
+<BaseLayout title={data.seo.title} description={data.seo.description}>
   <main>
     <section class="page-hero">
       <div class="page-hero-inner">
-        <SectionEyebrow eyebrow="composition & sécurité" title="Zéro compromis, tout en douceur" />
-        <p class="lead">Une composition transparente, choisie pour respecter la peau délicate de bébé. Voici tout ce que nos couches contiennent, et surtout ce qu'elles ne contiennent pas.</p>
+        <SectionEyebrow eyebrow={data.hero.eyebrow} title={data.hero.title} />
+        <p class="lead">{data.hero.lead}</p>
       </div>
     </section>
 
     <section class="contient">
-      <SectionEyebrow eyebrow="ce qu'elles contiennent" title="Des matières sélectionnées avec soin" />
-      <p class="sub-lead">6 composants principaux, choisis pour leur qualité et leur douceur.</p>
+      <SectionEyebrow eyebrow={data.contient.eyebrow} title={data.contient.title} />
+      <p class="sub-lead">{data.contient.sub_lead}</p>
       <div class="compo-grid">
-        <ValueCard tint="mint" title="Voile en polypropylène" description="Une couche extérieure douce et respirante, en contact direct avec la peau." />
-        <ValueCard tint="blue-sky" title="Cœur absorbant SAP" description="Un polymère super-absorbant qui piège l'humidité pour garder bébé au sec." />
-        <ValueCard tint="star" title="Cellulose" description="Une pulpe naturelle qui apporte volume et confort au cœur de la couche." />
-        <ValueCard tint="peach" title="Polyéthylène" description="Une barrière étanche extérieure, souple et légère." />
-        <ValueCard tint="coral" title="Élastomère" description="Des élastiques doux qui épousent les mouvements sans compresser." />
-        <ValueCard tint="mint" title="Adhésif hypoallergénique" description="Des attaches sûres, repositionnables, testées pour la peau sensible." />
+        {data.contient.cards.map((card) => (
+          <ValueCard tint={card.tint} title={card.title} description={card.description} />
+        ))}
       </div>
     </section>
 
     <section class="exclut">
-      <SectionEyebrow eyebrow="notre exigence" title="Et surtout, ce qu'elles ne contiennent pas" />
+      <SectionEyebrow eyebrow={data.exclut.eyebrow} title={data.exclut.title} />
       <div class="pills">
-        {excludes.map((item) => (
+        {data.exclut.items.map((item) => (
           <span class="pill"><span class="pill-x" aria-hidden="true">✕</span>{item}</span>
         ))}
       </div>
@@ -40,14 +40,14 @@ const excludes = ['Parfum', 'Lotion', 'Chlore élémentaire', 'Phtalates', 'Alle
     <section class="dermato">
       <div class="dermato-inner">
         <div class="dermato-icon" aria-hidden="true">✦</div>
-        <p class="dermato-eyebrow">notre garantie</p>
-        <h2 class="dermato-title">Testées, contrôlées, approuvées</h2>
-        <p class="dermato-p">Chaque référence Secret d'étoiles est testée par un dermatologue indépendant. Nos couches sont classées « hypoallergéniques » et adaptées aux peaux sensibles dès la naissance.</p>
+        <p class="dermato-eyebrow">{data.dermato.eyebrow}</p>
+        <h2 class="dermato-title">{data.dermato.title}</h2>
+        <p class="dermato-p">{data.dermato.paragraph}</p>
       </div>
     </section>
 
     <section class="cta-transition">
-      <Button variant="primary" href="/faq">Consulter la FAQ</Button>
+      <Button variant="primary" href={data.cta.href}>{data.cta.label}</Button>
     </section>
   </main>
 </BaseLayout>

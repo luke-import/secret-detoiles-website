@@ -2,19 +2,24 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionEyebrow from '../components/SectionEyebrow.astro';
 import ContactForm from '../components/ContactForm.astro';
+import { getEntry } from 'astro:content';
+
+const page = await getEntry('pages', 'contact');
+if (!page) throw new Error('Page introuvable dans la collection');
+const { data } = page;
 ---
-<BaseLayout title="Contact — Secret d'étoiles" description="Contactez l'équipe Secret d'étoiles : écrivez-nous à bonjour@secret-detoiles.fr ou via notre formulaire.">
+<BaseLayout title={data.seo.title} description={data.seo.description}>
   <main>
     <section class="page-hero">
       <div class="page-hero-inner">
-        <SectionEyebrow eyebrow="écrivez-nous" title="On adore vous lire" />
-        <p class="lead">Une question, une remarque, une envie de discuter ? Cette adresse est la vôtre. Nous vous répondons personnellement et rapidement.</p>
+        <SectionEyebrow eyebrow={data.hero.eyebrow} title={data.hero.title} />
+        <p class="lead">{data.hero.lead}</p>
       </div>
     </section>
 
     <section class="form-section">
       <div class="form-inner">
-        <SectionEyebrow eyebrow="ou via le formulaire" title="Envoyez-nous un message" />
+        <SectionEyebrow eyebrow={data.form.eyebrow} title={data.form.title} />
         <div class="form-wrap">
           <ContactForm />
         </div>
@@ -22,8 +27,8 @@ import ContactForm from '../components/ContactForm.astro';
     </section>
 
     <section class="trouver">
-      <SectionEyebrow eyebrow="où nous trouver" title="Bientôt chez vos revendeurs partenaires" />
-      <p class="lead">Nos couches seront prochainement disponibles chez une sélection de revendeurs. Contactez-nous par email pour connaître le point de vente le plus proche.</p>
+      <SectionEyebrow eyebrow={data.trouver.eyebrow} title={data.trouver.title} />
+      <p class="lead">{data.trouver.lead}</p>
     </section>
   </main>
 </BaseLayout>

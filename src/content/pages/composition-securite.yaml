@@ -1,0 +1,52 @@
+seo:
+  title: "Composition & sécurité — Secret d'étoiles"
+  description: "La composition détaillée des couches Secret d'étoiles : matières, garanties de sécurité, tests dermatologiques."
+
+hero:
+  eyebrow: "composition & sécurité"
+  title: "Zéro compromis, tout en douceur"
+  lead: "Une composition transparente, choisie pour respecter la peau délicate de bébé. Voici tout ce que nos couches contiennent, et surtout ce qu'elles ne contiennent pas."
+
+contient:
+  eyebrow: "ce qu'elles contiennent"
+  title: "Des matières sélectionnées avec soin"
+  sub_lead: "6 composants principaux, choisis pour leur qualité et leur douceur."
+  cards:
+    - tint: "mint"
+      title: "Voile en polypropylène"
+      description: "Une couche extérieure douce et respirante, en contact direct avec la peau."
+    - tint: "blue-sky"
+      title: "Cœur absorbant SAP"
+      description: "Un polymère super-absorbant qui piège l'humidité pour garder bébé au sec."
+    - tint: "star"
+      title: "Cellulose"
+      description: "Une pulpe naturelle qui apporte volume et confort au cœur de la couche."
+    - tint: "peach"
+      title: "Polyéthylène"
+      description: "Une barrière étanche extérieure, souple et légère."
+    - tint: "coral"
+      title: "Élastomère"
+      description: "Des élastiques doux qui épousent les mouvements sans compresser."
+    - tint: "mint"
+      title: "Adhésif hypoallergénique"
+      description: "Des attaches sûres, repositionnables, testées pour la peau sensible."
+
+exclut:
+  eyebrow: "notre exigence"
+  title: "Et surtout, ce qu'elles ne contiennent pas"
+  items:
+    - "Parfum"
+    - "Lotion"
+    - "Chlore élémentaire"
+    - "Phtalates"
+    - "Allergènes cosmétiques"
+    - "Latex"
+
+dermato:
+  eyebrow: "notre garantie"
+  title: "Testées, contrôlées, approuvées"
+  paragraph: "Chaque référence Secret d'étoiles est testée par un dermatologue indépendant. Nos couches sont classées « hypoallergéniques » et adaptées aux peaux sensibles dès la naissance."
+
+cta:
+  label: "Consulter la FAQ"
+  href: "/faq"

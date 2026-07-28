@@ -5,34 +5,35 @@ import SectionEyebrow from '../components/SectionEyebrow.astro';
 import ValueCard from '../components/ValueCard.astro';
 import SizeCard from '../components/SizeCard.astro';
 import Sparkles from '../components/Sparkles.astro';
+import { getEntry } from 'astro:content';
+
+const page = await getEntry('pages', 'accueil');
+if (!page) throw new Error('Page introuvable dans la collection');
+const { data } = page;
 ---
-<BaseLayout
-  title="Secret d'étoiles — Les couches enchantées, tout en douceur"
-  description="Des couches douces, testées sous contrôle dermatologique, sans parfum. Un cocon de tendresse pour accompagner bébé, du premier jour à ses premiers pas."
->
+<BaseLayout title={data.seo.title} description={data.seo.description}>
   <main>
     <!-- SECTION 1 — HERO -->
     <section class="hero">
       <Sparkles density="high" variant="hero" />
       <div class="hero-inner">
-        <p class="hero-eyebrow">tout en tendresse</p>
-        <h1 class="hero-title">Un cocon de douceur pour bébé</h1>
-        <p class="hero-lead">Des couches pensées avec bienveillance, testées sous contrôle dermatologique, sans parfum. Pour accompagner bébé de la naissance à ses premiers pas, tout en douceur.</p>
+        <p class="hero-eyebrow">{data.hero.eyebrow}</p>
+        <h1 class="hero-title">{data.hero.title}</h1>
+        <p class="hero-lead">{data.hero.lead}</p>
         <div class="hero-ctas">
-          <Button variant="primary" href="/la-gamme">Découvrir la gamme</Button>
-          <Button variant="ghost" href="/nos-valeurs">Nos engagements</Button>
+          <Button variant="primary" href={data.hero.cta_primary.href}>{data.hero.cta_primary.label}</Button>
+          <Button variant="ghost" href={data.hero.cta_secondary.href}>{data.hero.cta_secondary.label}</Button>
         </div>
       </div>
     </section>
 
     <!-- SECTION 2 — ENGAGEMENTS -->
     <section class="engagements">
-      <SectionEyebrow eyebrow="nos engagements" title="Une promesse tenue à chaque change" />
+      <SectionEyebrow eyebrow={data.engagements.eyebrow} title={data.engagements.title} />
       <div class="engagements-grid">
-        <ValueCard tint="mint" title="Testées dermato" description="Chaque référence contrôlée en laboratoire dermatologique pour respecter la peau délicate de bébé." />
-        <ValueCard tint="blue-sky" title="Sans parfum" description="Une composition épurée, sans parfum ajouté ni ingrédient superflu." />
-        <ValueCard tint="star" title="Absorption longue durée" description="Un cœur absorbant qui garde bébé au sec, du coucher au réveil." />
-        <ValueCard tint="peach" title="Protection douce et fiable" description="Des barrières anti-fuites souples pour bouger en toute liberté." />
+        {data.engagements.cards.map((card) => (
+          <ValueCard tint={card.tint} title={card.title} description={card.description} />
+        ))}
       </div>
     </section>
 
@@ -44,16 +45,15 @@ import Sparkles from '../components/Sparkles.astro';
           <span class="marque-star marque-star-2" aria-hidden="true">✦</span>
           <span class="marque-star marque-star-3" aria-hidden="true">✧</span>
           <div class="marque-image-icon"><span>📷</span></div>
-          <p class="marque-image-note">Emplacement photo maman & bébé</p>
-          <p class="marque-image-sub">à remplacer en Phase 6</p>
+          <p class="marque-image-note">{data.marque.image_note}</p>
+          <p class="marque-image-sub">{data.marque.image_sub}</p>
         </div>
         <div class="marque-content">
-          <p class="marque-eyebrow">un cocon de douceur</p>
-          <h2 class="marque-title">Née sous une bonne étoile</h2>
-          <p class="marque-p">Secret d'étoiles est née d'une conviction simple : les premiers mois de bébé sont précieux. Ils méritent qu'on les entoure de tendresse.</p>
-          <p class="marque-p">Chaque couche est pensée comme un petit cocon protecteur : douce sur la peau, fiable au fil des heures, discrète au quotidien. Une promesse tenue, sans compromis.</p>
+          <p class="marque-eyebrow">{data.marque.eyebrow}</p>
+          <h2 class="marque-title">{data.marque.title}</h2>
+          {data.marque.paragraphs.map((paragraph) => <p class="marque-p">{paragraph}</p>)}
           <div class="marque-cta">
-            <Button variant="ghost" href="/notre-histoire">Découvrir notre histoire</Button>
+            <Button variant="ghost" href={data.marque.cta.href}>{data.marque.cta.label}</Button>
           </div>
         </div>
       </div>
@@ -61,8 +61,8 @@ import Sparkles from '../components/Sparkles.astro';
 
     <!-- SECTION 4 — LA GAMME -->
     <section class="gamme">
-      <SectionEyebrow eyebrow="la gamme étoilée" title="Une taille pour chaque étoile" />
-      <p class="gamme-lead">De la naissance à l'apprentissage de la propreté, une couche pour chaque étape.</p>
+      <SectionEyebrow eyebrow={data.gamme.eyebrow} title={data.gamme.title} />
+      <p class="gamme-lead">{data.gamme.lead}</p>
       <div class="gamme-grid">
         <SizeCard size="S" subtitle="Taille 1-2" weight="3 – 6 kg" count={42} />
         <SizeCard size="M" subtitle="Taille 3" weight="5 – 10 kg" count={36} />
@@ -71,7 +71,7 @@ import Sparkles from '../components/Sparkles.astro';
         <SizeCard size="XXL" subtitle="Taille 6+" weight="+ 15 kg" count={24} />
       </div>
       <div class="gamme-cta">
-        <Button variant="primary" href="/la-gamme">Voir toute la gamme</Button>
+        <Button variant="primary" href={data.gamme.cta.href}>{data.gamme.cta.label}</Button>
       </div>
     </section>
 
@@ -80,10 +80,10 @@ import Sparkles from '../components/Sparkles.astro';
       <div class="cta-final-inner">
         <Sparkles density="medium" variant="cta" />
         <div class="cta-final-content">
-          <p class="cta-final-eyebrow">prêt à embarquer ?</p>
-          <h2 class="cta-final-title">Un peu de magie dans le quotidien de bébé</h2>
-          <p class="cta-final-lead">Retrouvez bientôt les couches Secret d'étoiles chez vos revendeurs partenaires.</p>
-          <Button variant="cream" href="/contact">Nous contacter</Button>
+          <p class="cta-final-eyebrow">{data.cta_final.eyebrow}</p>
+          <h2 class="cta-final-title">{data.cta_final.title}</h2>
+          <p class="cta-final-lead">{data.cta_final.lead}</p>
+          <Button variant="cream" href={data.cta_final.cta.href}>{data.cta_final.cta.label}</Button>
         </div>
       </div>
     </section>

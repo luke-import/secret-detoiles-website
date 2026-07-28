@@ -1,0 +1,34 @@
+seo:
+  title: "Notre histoire — Secret d'étoiles"
+  description: "L'histoire de Secret d'étoiles, une marque née pour accompagner les tout-petits avec douceur, du premier jour à leurs premiers pas."
+
+hero:
+  eyebrow: "notre histoire"
+  title: "Née sous une bonne étoile"
+  lead: "L'histoire d'une marque qui célèbre la magie des premiers instants et l'infinie douceur de l'enfance."
+
+recit:
+  eyebrow: "l'origine"
+  title: "Un petit secret gardé sous les étoiles"
+  paragraphs:
+    - "Secret d'étoiles est née d'un désir simple : offrir aux tout-petits une couche à la hauteur de leur douceur. Une marque pensée par des parents, pour des parents."
+    - "Nous avons choisi de nous concentrer sur ce qui compte vraiment : la sécurité, le confort, et une composition irréprochable. Pas de superflu, pas de compromis."
+    - "Depuis nos débuts, chaque couche est conçue comme une petite bulle de tendresse : une matière douce, une absorption fiable, une protection qui ne se voit pas mais qui se sent."
+
+convictions:
+  eyebrow: "nos convictions"
+  title: "Ce en quoi nous croyons"
+  cards:
+    - tint: "mint"
+      title: "La douceur avant tout"
+      description: "Parce que la peau de bébé mérite ce qu'il y a de plus délicat."
+    - tint: "blue-sky"
+      title: "Zéro compromis"
+      description: "Une composition maîtrisée, contrôlée à chaque étape, sans concession sur la sécurité."
+    - tint: "coral"
+      title: "L'amour du détail"
+      description: "Chaque petite touche compte : une texture, une odeur neutre, un ajustement précis."
+
+cta:
+  label: "Découvrir nos engagements"
+  href: "/nos-valeurs"

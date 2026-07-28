@@ -1,0 +1,17 @@
+seo:
+  title: "Contact — Secret d'étoiles"
+  description: "Contactez l'équipe Secret d'étoiles : écrivez-nous à bonjour@secret-detoiles.fr ou via notre formulaire."
+
+hero:
+  eyebrow: "écrivez-nous"
+  title: "On adore vous lire"
+  lead: "Une question, une remarque, une envie de discuter ? Cette adresse est la vôtre. Nous vous répondons personnellement et rapidement."
+
+form:
+  eyebrow: "ou via le formulaire"
+  title: "Envoyez-nous un message"
+
+trouver:
+  eyebrow: "où nous trouver"
+  title: "Bientôt chez vos revendeurs partenaires"
+  lead: "Nos couches seront prochainement disponibles chez une sélection de revendeurs. Contactez-nous par email pour connaître le point de vente le plus proche."
