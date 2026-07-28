@@ -1,42 +1,41 @@
-# Utiliser le CMS localement
+# Utiliser le CMS
 
-Le CMS Decap permet d'éditer les textes du site via une interface graphique.
+Le CMS Decap permet à Grégory d'éditer les textes du site via une interface
+graphique accessible sur /admin, sans jamais toucher au code.
 
-## Lancer le CMS en local
+## Accès
 
-Dans un terminal :
+- URL locale (dev) : http://localhost:4321/admin/index.html
+- URL production : https://secret-detoiles.fr/admin/index.html
 
-    pnpm dev:cms
+## Se connecter
 
-Cela lance en parallèle :
-- Le serveur Astro sur http://localhost:4321
-- Le proxy CMS sur http://localhost:8081
+1. Cliquer "Login with GitHub"
+2. Autoriser l'application "Secret d'étoiles CMS"
+3. Éditer les textes dans l'interface, cliquer "Save"
+4. Chaque "Save" = 1 commit sur la branche `main` du repo
+5. Cloudflare Pages redéploie automatiquement en 1-2 minutes
 
-## Accéder à l'admin
+## Note importante — dev local
 
-Ouvrir **http://localhost:4321/admin/index.html** dans un navigateur.
+Le CMS ne peut fonctionner à 100% en local (localhost) qu'après un premier
+déploiement en production. La raison : l'OAuth GitHub redirige vers
+https://api.netlify.com/auth/done, qui elle-même redirige vers l'origine
+appelante. Depuis localhost, cette dernière étape peut échouer.
 
-> ⚠️ En local, mettre l'URL complète `/admin/index.html` : le serveur de dev
-> Astro ne résout pas un dossier (`/admin/`) vers son `index.html`. En production
-> (Cloudflare Pages), `/admin/` fonctionnera directement.
+Pour tester le CMS avant la production : soit passer par ngrok/cloudflared
+pour exposer localhost sur une URL publique temporaire, soit attendre le
+premier déploiement Cloudflare Pages (Phase 10) et tester directement là.
 
-Cliquer sur "Login" (aucun mot de passe requis en mode local).
+## Prérequis pour éditer
 
-Éditer les textes, cliquer "Save" — les modifications sont écrites directement
-dans les fichiers `src/content/pages/*.yaml`.
+- Avoir un compte GitHub avec accès en écriture au repo
+  luke-import/secret-detoiles-website
+- Autoriser l'app OAuth "Secret d'étoiles CMS" la première fois
 
-## Publier les modifications
+## Comportement
 
-Après édition, ouvrir un terminal et faire :
-
-    git add src/content/pages/
-    git commit -m "content: modifications via CMS local"
-    git push
-
-Le déploiement Cloudflare Pages redéploiera automatiquement le site.
-
-## Note pour la production
-
-En production (Étape 3, à venir), le CMS sera connecté à GitHub via OAuth.
-Il ne sera plus nécessaire de lancer le proxy local — les modifications
-seront committées directement sur GitHub depuis l'interface web.
+- Chaque "Save" dans le CMS = 1 commit auto sur GitHub
+- Le déploiement Cloudflare Pages se déclenche à chaque commit
+- Le site est mis à jour en 1-2 minutes après le "Save"
+- Aucun mot de passe à gérer, l'auth se fait via GitHub

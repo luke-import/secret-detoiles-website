@@ -10,9 +10,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "optimize:packshots": "node scripts/optimize-packshots.js",
-    "cms": "npx decap-server",
-    "dev:cms": "concurrently --names \"astro,cms\" --prefix-colors \"cyan,magenta\" \"pnpm dev\" \"pnpm cms\""
+    "optimize:packshots": "node scripts/optimize-packshots.js"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
@@ -24,9 +22,7 @@
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
-    "concurrently": "^10.0.4",
     "decap-cms-app": "^3.15.1",
-    "decap-server": "^3.10.0",
     "sharp": "^0.35.3"
   }
 }
