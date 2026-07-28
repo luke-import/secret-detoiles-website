@@ -169,12 +169,14 @@ Objectif : permettre à Grégory de modifier tous les textes et images du site d
 
 ---
 
-## Phase 9 — Conformité légale (RGPD, mentions)
+## Phase 9 — Conformité légale (RGPD, mentions) ✅
 
-- [ ] Page mentions légales
-- [ ] Page politique de confidentialité
-- [ ] Bandeau cookies uniquement si un tracker introduit des cookies (Cloudflare Web Analytics = pas de cookies, donc pas nécessaire a priori)
-- [ ] Formulaire contact conforme (info collecte, droit d'accès)
+- [x] Page mentions légales
+- [x] Page politique de confidentialité
+- [-] Bandeau cookies : **non nécessaire — aucun cookie déposé** (Cloudflare Web Analytics fonctionne sans cookie)
+- [x] Formulaire contact conforme (info collecte, droit d'accès) — déjà OK depuis Phase 2
+
+> **Phase 9 — Conformité légale (28 juillet 2026)** — Deux pages créées : `src/pages/mentions-legales.astro` (éditeur Luke Import, hébergeur Cloudflare, propriété intellectuelle, responsabilité, liens externes, droit applicable) et `src/pages/confidentialite.astro` (RGPD : responsable de traitement, données collectées via formulaire Web3Forms + Cloudflare Web Analytics sans cookie, finalité, durée de conservation, droits, CNIL). Textes juridiques **figés** (fournis par le chef de projet, non paraphrasés). `BaseLayout` + `SectionEyebrow`, CSS scoped, tokens uniquement, wrapper `.legal-page` (max 780px). Les liens du footer (`/mentions-legales`, `/confidentialite`) pointaient déjà correctement → aucune modification du footer. `pnpm build` = **10 pages** (0 erreur) ; les 2 URLs renvoient **200** ; contenu vérifié (Anthony Ah-Tune / SIRET / Cloudflare présents). NB structure : titre de hero via `SectionEyebrow` (`<h2>`, sans `<h1>`), cohérent avec les 6 autres pages de contenu du site.
 
 ---
 
