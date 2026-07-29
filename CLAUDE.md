@@ -257,11 +257,11 @@ Conséquences pour l'architecture :
 ### Correspondance des 5 tailles
 | Taille | Sous-titre | Poids | Nb par paquet | Couleur d'accent | Fond tint | Packshot |
 |---|---|---|---|---|---|---|
-| **S** | Taille 1-2 | 3 – 6 kg | 42 couches | `--color-blue-sky` `#8FB4CE` | `--tint-blue-sky` `#EAF1F6` | `/packshots/taille-s.png` |
-| **M** | Taille 3 | 5 – 10 kg | 36 couches | `--color-mint` `#A8CDBA` | `--tint-mint` `#EBF3EE` | `/packshots/taille-m.png` |
-| **L** | Taille 4 | 9 – 13 kg | 32 couches | `--color-star` `#F0B84C` | `--tint-star` `#FCF2DC` | `/packshots/taille-l.png` |
-| **XL** | Taille 5 | 12 – 15 kg | 28 couches | `--color-peach` `#E8A87C` | `--tint-peach` `#FBEEE3` | `/packshots/taille-xl.png` |
-| **XXL** | Taille 6+ | + 15 kg | 24 couches | `--color-coral` `#D97A6C` | `--tint-coral` `#F7E4DF` | `/packshots/taille-xxl.png` |
+| **S** | Taille 1-2 | 3 – 6 kg | 42 couches | `--color-blue-sky` `#8FB4CE` | `--tint-blue-sky` `#EAF1F6` | `/packshots/taille-s.webp` |
+| **M** | Taille 3 | 5 – 10 kg | 36 couches | `--color-mint` `#A8CDBA` | `--tint-mint` `#EBF3EE` | `/packshots/taille-m.webp` |
+| **L** | Taille 4 | 9 – 13 kg | 32 couches | `--color-star` `#F0B84C` | `--tint-star` `#FCF2DC` | `/packshots/taille-l.webp` |
+| **XL** | Taille 5 | 12 – 15 kg | 28 couches | `--color-peach` `#E8A87C` | `--tint-peach` `#FBEEE3` | `/packshots/taille-xl.webp` |
+| **XXL** | Taille 6+ | + 15 kg | 24 couches | `--color-coral` `#D97A6C` | `--tint-coral` `#F7E4DF` | `/packshots/taille-xxl.webp` |
 
 ### Contact affiché sur le site
 - **Email** : `bonjour@secret-detoiles.fr` (seule coordonnée affichée publiquement)
