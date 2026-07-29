@@ -17,13 +17,23 @@ const { data } = page;
     <section class="hero">
       <Sparkles density="high" variant="hero" />
       <div class="hero-inner">
-        <p class="hero-eyebrow">{data.hero.eyebrow}</p>
-        <h1 class="hero-title">{data.hero.title}</h1>
-        <p class="hero-lead">{data.hero.lead}</p>
-        <div class="hero-ctas">
-          <Button variant="primary" href={data.hero.cta_primary.href}>{data.hero.cta_primary.label}</Button>
-          <Button variant="ghost" href={data.hero.cta_secondary.href}>{data.hero.cta_secondary.label}</Button>
+        <div class="hero-text">
+          <p class="hero-eyebrow">{data.hero.eyebrow}</p>
+          <h1 class="hero-title">{data.hero.title}</h1>
+          <p class="hero-lead">{data.hero.lead}</p>
+          <div class="hero-ctas">
+            <Button variant="primary" href={data.hero.cta_primary.href}>{data.hero.cta_primary.label}</Button>
+            <Button variant="ghost" href={data.hero.cta_secondary.href}>{data.hero.cta_secondary.label}</Button>
+          </div>
         </div>
+        <img
+          class="hero-packshot"
+          src="/packshots/taille-m.webp"
+          alt="Paquet de couches Secret d'étoiles taille M"
+          width="800"
+          height="800"
+          fetchpriority="high"
+        />
       </div>
     </section>
 
@@ -129,6 +139,19 @@ const { data } = page;
     gap: 12px;
     justify-content: center;
     flex-wrap: wrap;
+  }
+  /* Packshot flottant : sous les boutons en mobile, colonne droite en ≥900px */
+  .hero-packshot {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    margin: 40px auto 0;
+    animation: floaty 5s ease-in-out infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-packshot {
+      animation: none;
+    }
   }
 
   /* ===== SECTION 2 — ENGAGEMENTS ===== */
@@ -277,6 +300,25 @@ const { data } = page;
   }
 
   @media (min-width: 900px) {
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 48px;
+      align-items: center;
+      text-align: left;
+    }
+    .hero-lead {
+      margin-left: 0;
+      margin-right: 0;
+    }
+    .hero-ctas {
+      justify-content: flex-start;
+    }
+    .hero-packshot {
+      max-width: 400px;
+      margin: 0;
+      justify-self: center;
+    }
     .marque-inner {
       display: grid;
       grid-template-columns: 1fr 1fr;
