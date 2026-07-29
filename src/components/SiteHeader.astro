@@ -11,7 +11,9 @@ const links = [
 ---
 <header class="site-header" role="banner">
   <div class="inner container">
-    <a href="/" class="logo" aria-label="Secret d'étoiles — accueil">secret d'étoiles</a>
+    <a href="/" class="logo" aria-label="Secret d'étoiles — accueil">
+      <img src="/uploads/logo-navbar.svg" alt="Secret d'étoiles" width="180" height="40" />
+    </a>
 
     <nav class="menu-desktop" aria-label="Navigation principale">
       {links.map((link) => <a href={link.href}>{link.label}</a>)}
@@ -91,11 +93,14 @@ const links = [
   }
 
   .logo {
-    font-family: var(--font-hand);
-    font-size: 2rem;
-    color: var(--color-star);
-    line-height: 1;
+    display: block;
     text-decoration: none;
+  }
+  .logo img {
+    display: block;
+    height: auto;
+    max-height: 40px;
+    width: auto;
   }
 
   .menu-desktop {

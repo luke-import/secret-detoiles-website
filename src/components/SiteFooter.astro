@@ -6,7 +6,9 @@
 
   <div class="main container">
     <div class="col brand">
-      <a href="/" class="logo" aria-label="Secret d'étoiles — accueil">secret d'étoiles</a>
+      <a href="/" class="logo" aria-label="Secret d'étoiles — accueil">
+        <img src="/uploads/logo-footer.svg" alt="Secret d'étoiles" width="200" height="44" />
+      </a>
       <p>Un cocon de tendresse pour bébé, tout en douceur.</p>
     </div>
 
@@ -107,13 +109,15 @@
   }
 
   .brand .logo {
-    font-family: var(--font-hand);
-    font-size: 2.4rem;
-    color: var(--color-star);
-    line-height: 1;
     display: block;
     margin-bottom: 12px;
     text-decoration: none;
+  }
+  .brand .logo img {
+    display: block;
+    height: auto;
+    max-height: 44px;
+    width: auto;
   }
   .brand p {
     font-family: var(--font-body);
