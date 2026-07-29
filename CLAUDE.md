@@ -136,9 +136,11 @@ secret-detoiles/
 ├─ astro.config.mjs
 ├─ tsconfig.json
 ├─ package.json
+├─ design-sources/          (⚠️ NON publié en ligne — hors de public/)
+│  └─ packshots/           (5 PNG sources 3000×3000, versionnés dans git, jamais servis publiquement)
 ├─ public/
 │  ├─ favicon.svg
-│  ├─ packshots/           (5 packshots PNG : taille-s, taille-m, taille-l, taille-xl, taille-xxl)
+│  ├─ packshots/           (UNIQUEMENT des WebP générés par `pnpm optimize:packshots` : taille-X.webp 800px + taille-X-large.webp 1200px)
 │  └─ admin/               (Decap CMS : index.html + config.yml, à créer Phase 8)
 ├─ src/
 │  ├─ styles/
@@ -169,6 +171,8 @@ secret-detoiles/
 │  │  └─ contact.astro
 │  └─ lib/                  (utilitaires TypeScript)
 ```
+
+> **Packshots — sources vs. WebP publiés** : les PNG sources haute résolution (3000×3000) vivent dans `design-sources/packshots/`, **hors de `public/`** — ils sont versionnés dans git mais **jamais publiés en ligne** (donc non téléchargeables). Le dossier `public/packshots/` ne contient **que les WebP générés** par `pnpm optimize:packshots`, qui produit pour chaque taille une vignette `taille-X.webp` (800px) et une version hero `taille-X-large.webp` (1200px). Pour changer un packshot : remplacer le PNG dans `design-sources/packshots/` puis relancer `pnpm optimize:packshots`.
 
 ---
 
