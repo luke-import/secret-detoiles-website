@@ -40,13 +40,8 @@ const { data } = page;
     <!-- SECTION 3 — COCON DE DOUCEUR (marque) -->
     <section class="marque">
       <div class="marque-inner">
-        <div class="marque-image" role="img" aria-label="Emplacement pour photo maman et bébé">
-          <span class="marque-star marque-star-1" aria-hidden="true">✦</span>
-          <span class="marque-star marque-star-2" aria-hidden="true">✦</span>
-          <span class="marque-star marque-star-3" aria-hidden="true">✧</span>
-          <div class="marque-image-icon"><span>📷</span></div>
-          <p class="marque-image-note">{data.marque.image_note}</p>
-          <p class="marque-image-sub">{data.marque.image_sub}</p>
+        <div class="marque-image">
+          <img src="/uploads/maman-bebe.webp" alt="Maman berçant son bébé endormi sur un fauteuil, dans un intérieur doux et étoilé" loading="lazy" />
         </div>
         <div class="marque-content">
           <p class="marque-eyebrow">{data.marque.eyebrow}</p>
@@ -161,65 +156,17 @@ const { data } = page;
     gap: 40px;
   }
   .marque-image {
-    position: relative;
-    overflow: hidden;
-    background: var(--tint-mint);
     border-radius: var(--radius-2xl);
     aspect-ratio: 4 / 5;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    overflow: hidden;
+    max-width: 500px;
+    margin: 0 auto;
   }
-  .marque-star {
-    position: absolute;
-    line-height: 1;
-  }
-  .marque-star-1 {
-    top: 15%;
-    left: 20%;
-    color: var(--color-star);
-    font-size: 24px;
-  }
-  .marque-star-2 {
-    top: 60%;
-    right: 15%;
-    color: var(--color-coral);
-    font-size: 20px;
-  }
-  .marque-star-3 {
-    bottom: 20%;
-    left: 40%;
-    color: var(--color-peach);
-    font-size: 18px;
-  }
-  .marque-image-icon {
-    width: 72px;
-    height: 72px;
-    border-radius: 50%;
-    background: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .marque-image-icon span {
-    font-size: 32px;
-    opacity: 0.6;
-  }
-  .marque-image-note {
-    font-family: var(--font-display);
-    font-size: 0.9rem;
-    color: var(--color-text-3);
-    margin-top: 16px;
-    opacity: 0.8;
-    text-align: center;
-  }
-  .marque-image-sub {
-    font-family: var(--font-body);
-    font-size: 0.75rem;
-    color: var(--color-text-3);
-    opacity: 0.6;
-    margin-top: 4px;
+  .marque-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
   .marque-eyebrow {
     font-family: var(--font-hand);
