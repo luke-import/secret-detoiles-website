@@ -14,9 +14,6 @@ export default defineConfig({
   },
 
   integrations: [
-    sitemap({
-      // Exclut la page de démo interne du sitemap (cf. Disallow /playground dans robots.txt).
-      filter: (page) => !page.includes('/playground'),
-    }),
+    sitemap(),
   ]
 });

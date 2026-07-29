@@ -60,7 +60,7 @@
 - [x] `ContactForm.astro` — formulaire nom/email/sujet/message, validation, envoi Web3Forms
 
 > **Lot A (24 juillet 2026)** — 5 composants atomiques livrés : Button, Sparkles, SectionEyebrow, ValueCard, SizeCard. Tous en `<style>` scoped, tokens uniquement (couleurs), TypeScript strict, build OK.
-> Page de démonstration temporaire `src/pages/playground.astro` créée (hors nav) — **à supprimer avant la mise en production**.
+> Page de démonstration temporaire `src/pages/playground.astro` créée (hors nav) — **supprimée le 29 juillet 2026** (avant la mise en production).
 > Restent pour les lots B/C : SiteHeader, SiteFooter, FaqAccordion, ContactForm.
 
 > **Lot B (27 juillet 2026)** — SiteHeader (sticky, logo Sacramento, menu desktop + burger/overlay mobile avec JS : toggle, Échap, clic lien, blocage du scroll body) et SiteFooter (bande arc-en-ciel + 4 colonnes + mentions légales) livrés. Intégrés dans `BaseLayout.astro` (header avant le `<slot />`, footer après) → présents sur toutes les pages. Aucun style inline dans les composants, tokens uniquement, build OK.
