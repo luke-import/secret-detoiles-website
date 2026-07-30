@@ -1,35 +1,51 @@
 seo:
-  title: "FAQ — Secret d'étoiles"
-  description: "Questions fréquentes sur les couches Secret d'étoiles : composition, sécurité, tailles, disponibilité."
-
+  title: FAQ — Secret d'étoiles
+  description: "Questions fréquentes sur les couches Secret d'étoiles :
+    composition, sécurité, tailles, disponibilité."
 hero:
-  eyebrow: "vos questions"
-  title: "Tout ce que vous voulez savoir"
-  lead: "Les réponses aux questions que vous vous posez le plus souvent. Vous ne trouvez pas votre bonheur ? Écrivez-nous."
-
+  eyebrow: vos questions
+  title: Tout ce que vous voulez savoir
+  lead: Les réponses aux questions que vous vous posez le plus souvent. Vous ne
+    trouvez pas votre bonheur ? Écrivez-nous.
 questions:
-  - question: "Vos couches sont-elles hypoallergéniques ?"
+  - question: Vos couches sont-elles hypoallergéniques ?
     answer:
-      - "Oui. Nos couches sont testées sous contrôle dermatologique par un laboratoire indépendant, sans parfum ni lotion, avec un adhésif hypoallergénique. Elles conviennent aux peaux les plus sensibles, dès la naissance."
-  - question: "À partir de quel âge peut-on utiliser les couches Secret d'étoiles ?"
+      - Oui. Nos couches sont testées sous contrôle dermatologique par un
+        laboratoire indépendant, sans parfum ni lotion, avec un adhésif
+        hypoallergénique. Elles conviennent aux peaux les plus sensibles, dès la
+        naissance.
+  - question: À partir de quel âge peut-on utiliser les couches Secret d'étoiles ?
     open: true
     answer:
-      - "Nos couches sont adaptées dès la naissance, avec la taille S conçue pour les bébés de 3 à 6 kg."
-      - "La gamme complète (S à XXL) vous accompagne jusqu'à l'apprentissage de la propreté, autour de 15 kg et plus."
-  - question: "Que contiennent vos couches, exactement ?"
+      - Nos couches sont adaptées dès la naissance, avec la taille S conçue pour
+        les bébés de 3 à 6 kg.
+      - La gamme complète (S à XXL) vous accompagne jusqu'à l'apprentissage de
+        la propreté, autour de 15 kg et plus.
+  - question: Que contiennent vos couches, exactement ?
     answer:
-      - "Nos couches sont composées de 6 matières principales : un voile en polypropylène, un cœur absorbant SAP, de la cellulose, une couche extérieure en polyéthylène, des élastomères pour l'ajustement, et un adhésif hypoallergénique. Aucun parfum, aucune lotion, aucun latex, aucun phtalate. La composition détaillée est disponible sur notre page dédiée."
-  - question: "Où sont fabriquées les couches ?"
+      - "Nos couches sont composées de 6 matières principales : un voile en
+        polypropylène, un cœur absorbant SAP, de la cellulose, une couche
+        extérieure en polyéthylène, des élastomères pour l'ajustement, et un
+        adhésif hypoallergénique. Aucun parfum, aucune lotion, aucun latex,
+        aucun phtalate. La composition détaillée est disponible sur notre page
+        dédiée."
+  - question: Où sont fabriquées les couches ?
     answer:
-      - "Nos couches sont fabriquées dans une usine partenaire européenne, sélectionnée pour la qualité de son savoir-faire et le respect strict des normes de sécurité européennes."
-  - question: "Comment choisir la bonne taille pour bébé ?"
+      - Nos couches sont fabriquées en Chine, au sein d'une usine partenaire
+        rigoureusement sélectionnée pour son expertise industrielle et le
+        respect des standards de qualité et de sécurité les plus élevés.
+  - question: Comment choisir la bonne taille pour bébé ?
     answer:
-      - "Le choix de la taille se fait principalement selon le poids de bébé. Notre grille : S (3-6 kg), M (5-10 kg), L (9-13 kg), XL (12-15 kg), XXL (+15 kg). En cas de doute entre deux tailles, mieux vaut choisir la plus grande pour éviter les fuites."
-  - question: "Où puis-je acheter les couches Secret d'étoiles ?"
+      - "Le choix de la taille se fait principalement selon le poids de bébé.
+        Notre grille : S (3-6 kg), M (5-10 kg), L (9-13 kg), XL (12-15 kg), XXL
+        (+15 kg). En cas de doute entre deux tailles, mieux vaut choisir la plus
+        grande pour éviter les fuites."
+  - question: Où puis-je acheter les couches Secret d'étoiles ?
     answer:
-      - "Nos couches seront prochainement disponibles chez nos revendeurs partenaires. Écrivez-nous à bonjour@secret-detoiles.fr pour connaître le point de vente le plus proche de chez vous."
-
+      - Nos couches seront prochainement disponibles chez nos revendeurs
+        partenaires. Écrivez-nous à bonjour@secret-detoiles.fr pour connaître le
+        point de vente le plus proche de chez vous.
 cta:
-  lead: "Une autre question ? Nous vous répondons rapidement."
-  label: "Nous contacter"
-  href: "/contact"
+  lead: Une autre question ? Nous vous répondons rapidement.
+  label: Nous contacter
+  href: /contact
