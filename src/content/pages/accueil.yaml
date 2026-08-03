@@ -20,17 +20,17 @@ engagements:
   cards:
     - tint: mint
       title: Testées dermatologiquement
-      description: Chaque référence contrôlée en laboratoire dermatologique pour
-        respecter la peau délicate de bébé.
+      description: Testées par des laboratoires indépendants. Adaptées aux peaux les
+        plus sensibles.
     - tint: blue-sky
-      title: Sans parfum
-      description: Une composition épurée, sans parfum ajouté ni ingrédient superflu.
+      title: Sans parfum, sans lotion
+      description: Rien d'autre que le nécessaire, pour respecter la peau de bébé.
     - tint: star
       title: Absorption longue durée
       description: Un cœur absorbant qui garde bébé au sec, du coucher au réveil.
     - tint: peach
-      title: Protection douce et fiable
-      description: Des barrières anti-fuites souples pour bouger en toute liberté.
+      title: Double barrière anti-fuite
+      description: Deux barrières et des élastiques souples, pensés pour le confort de bébé.
 marque:
   image_note: Emplacement photo maman & bébé
   image_sub: à remplacer en Phase 6
