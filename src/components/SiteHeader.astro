@@ -6,8 +6,13 @@ const links = [
   { href: '/la-gamme', label: 'La gamme' },
   { href: '/nos-valeurs', label: 'Nos valeurs' },
   { href: '/composition-securite', label: 'Composition' },
+  { href: '/ou-nous-trouver', label: 'Où nous trouver' },
   { href: '/faq', label: 'FAQ' },
 ];
+
+// Lien actif = page courante (on ignore un éventuel slash final).
+const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const isActive = (href: string) => href === currentPath;
 ---
 <header class="site-header" role="banner">
   <div class="inner container">
@@ -16,7 +21,9 @@ const links = [
     </a>
 
     <nav class="menu-desktop" aria-label="Navigation principale">
-      {links.map((link) => <a href={link.href}>{link.label}</a>)}
+      {links.map((link) => (
+        <a href={link.href} class:list={{ active: isActive(link.href) }} aria-current={isActive(link.href) ? 'page' : undefined}>{link.label}</a>
+      ))}
     </nav>
 
     <a href="/contact" class="cta-desktop">Nous contacter</a>
@@ -39,8 +46,10 @@ const links = [
 */}
 <nav id="mobile-menu" class="menu-mobile" aria-label="Navigation principale" data-open="false" inert>
   <button class="close" aria-label="Fermer le menu">×</button>
-  {links.map((link) => <a href={link.href}>{link.label}</a>)}
-  <a href="/contact">Nous contacter</a>
+  {links.map((link) => (
+    <a href={link.href} class:list={{ active: isActive(link.href) }} aria-current={isActive(link.href) ? 'page' : undefined}>{link.label}</a>
+  ))}
+  <a href="/contact" class:list={{ active: isActive('/contact') }} aria-current={isActive('/contact') ? 'page' : undefined}>Nous contacter</a>
 </nav>
 
 <script>
@@ -149,7 +158,15 @@ const links = [
     font-size: 1.4rem;
     color: var(--color-blue-night);
     text-decoration: none;
-    padding: 8px 0;
+    /* Padding horizontal compensé par la marge : le texte reste aligné, la pilule active déborde. */
+    align-self: flex-start;
+    padding: 8px 18px;
+    margin-left: -18px;
+    border-radius: var(--radius-pill);
+  }
+  .menu-mobile a.active {
+    background: var(--color-blue-night);
+    color: #fff;
   }
 
   .close {
@@ -167,7 +184,7 @@ const links = [
   @media (min-width: 900px) {
     .menu-desktop {
       display: flex;
-      gap: 28px;
+      gap: 4px;
     }
     .menu-desktop a {
       font-family: var(--font-display);
@@ -175,11 +192,18 @@ const links = [
       font-size: 0.95rem;
       color: var(--color-blue-night);
       text-decoration: none;
-      padding: 6px 0;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      white-space: nowrap;
       transition: 0.2s;
     }
     .menu-desktop a:hover {
       color: var(--color-coral);
+    }
+    .menu-desktop a.active,
+    .menu-desktop a.active:hover {
+      background: var(--color-blue-night);
+      color: #fff;
     }
     .cta-desktop {
       display: inline-flex;
@@ -192,6 +216,7 @@ const links = [
       font-weight: 600;
       font-size: 0.9rem;
       text-decoration: none;
+      white-space: nowrap;
       transition: 0.2s;
     }
     .cta-desktop:hover {
@@ -203,5 +228,13 @@ const links = [
     .close {
       display: none;
     }
+  }
+
+  /* 7 liens : entre 900 et 1100px on resserre pour rester sur une ligne. */
+  @media (min-width: 900px) and (max-width: 1099px) {
+    .inner { padding: 18px 16px; }
+    .logo img { height: 34px; }
+    .menu-desktop a { padding: 6px 8px; font-size: 0.88rem; }
+    .cta-desktop { padding: 10px 16px; font-size: 0.85rem; }
   }
 </style>

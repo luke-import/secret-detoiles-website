@@ -455,3 +455,83 @@ collections:
               - { label: "Surtitre manuscrit", name: eyebrow, widget: string }
               - { label: "Titre de section", name: title, widget: string }
               - { label: "Texte", name: lead, widget: text }
+              - label: "Bouton"
+                name: cta
+                widget: object
+                fields:
+                  - { label: "Texte du bouton", name: label, widget: string }
+                  - { label: "Lien du bouton", name: href, widget: string, hint: "Ex. /ou-nous-trouver" }
+      # ─────────────────────────────────────────────
+      # OÙ NOUS TROUVER
+      # ─────────────────────────────────────────────
+      - name: ou_nous_trouver
+        label: "Où nous trouver"
+        file: "src/content/pages/ou-nous-trouver.yaml"
+        format: "yaml"
+        fields:
+          - label: "SEO (référencement)"
+            name: seo
+            widget: object
+            fields:
+              - { label: "Titre onglet", name: title, widget: string }
+              - { label: "Description", name: description, widget: text }
+          - label: "Hero (bannière du haut)"
+            name: hero
+            widget: object
+            fields:
+              - { label: "Surtitre manuscrit", name: eyebrow, widget: string }
+              - { label: "Titre principal", name: title, widget: string }
+              - { label: "Sous-titre", name: lead, widget: text }
+          - label: "Texte quand un territoire n'a pas encore de point de vente"
+            name: vide
+            widget: object
+            hint: "Le titre « Pas encore de point de vente en Guyane » (etc.) est généré automatiquement."
+            fields:
+              - { label: "Texte", name: message, widget: text }
+              - { label: "Texte du bouton", name: lien_label, widget: string }
+              - { label: "Lien du bouton", name: lien_href, widget: string, hint: "Ex. /contact" }
+          - { label: "Mention sous la carte", name: mention, widget: text }
+
+  # Liste des points de vente affichés sur /ou-nous-trouver (liste + carte).
+  # Les territoires (couleurs, centrage de la carte) sont gérés dans le code.
+  - name: points_de_vente
+    label: "Points de vente"
+    delete: false
+    create: false
+    editor:
+      preview: false
+    files:
+      - name: points_de_vente
+        label: "Liste des points de vente"
+        file: "src/content/points-de-vente.yaml"
+        format: "yaml"
+        fields:
+          - label: "Points de vente"
+            name: points
+            widget: list
+            summary: "{{fields.nom}} — {{fields.ville}}"
+            hint: "L'ordre de la liste donne le numéro affiché sur la carte (par territoire)."
+            fields:
+              - label: "Territoire"
+                name: territoire
+                widget: select
+                options:
+                  - { label: "La Réunion", value: reunion }
+                  - { label: "La Guyane", value: guyane }
+                  - { label: "La Guadeloupe", value: guadeloupe }
+                  - { label: "La Martinique", value: martinique }
+              - { label: "Nom du magasin", name: nom, widget: string }
+              - label: "Type"
+                name: type
+                widget: select
+                options:
+                  - { label: "Pharmacie", value: pharmacie }
+                  - { label: "Parapharmacie", value: parapharmacie }
+                  - { label: "Grande surface", value: grande-surface }
+                  - { label: "Supermarché", value: supermarche }
+              - { label: "Adresse", name: adresse, widget: string }
+              - { label: "Code postal", name: codePostal, widget: string }
+              - { label: "Ville", name: ville, widget: string }
+              - { label: "Téléphone", name: telephone, widget: string, required: false }
+              - { label: "Horaires", name: horaires, widget: string, required: false, hint: "Ex. Lun–sam · 8h–19h" }
+              - { label: "Position sur la carte", name: position, widget: map, type: Point, decimals: 6, hint: "Zoomez sur le territoire puis cliquez à l'emplacement exact du magasin." }

@@ -13,5 +13,8 @@ form:
 
 trouver:
   eyebrow: "où nous trouver"
-  title: "Bientôt chez vos revendeurs partenaires"
-  lead: "Nos couches seront prochainement disponibles chez une sélection de revendeurs. Contactez-nous par email pour connaître le point de vente le plus proche."
+  title: "Nos points de vente"
+  lead: "La Réunion, la Guyane, la Guadeloupe, la Martinique : découvrez les magasins qui proposent nos couches enchantées près de chez vous."
+  cta:
+    label: "Trouver un point de vente"
+    href: "/ou-nous-trouver"

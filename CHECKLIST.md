@@ -207,6 +207,22 @@ Objectif : permettre à Grégory de modifier tous les textes et images du site d
 
 ---
 
+## Page Où nous trouver ✅
+
+- [x] Page Où nous trouver (`/ou-nous-trouver`) — sélecteur 4 territoires + liste + carte Leaflet/OSM + géoloc IP
+  - Textes éditables dans Decap (`src/content/pages/ou-nous-trouver.yaml`), points de vente éditables dans Decap (`src/content/points-de-vente.yaml`, position via le widget « map »). Territoires (couleurs, centrage) dans `src/data/territoires.ts`.
+  - Liste client intégrée : 19 pharmacies à La Réunion ; Guyane, Guadeloupe, Martinique en « Bientôt disponible ». Liens tel: au format international (indicatif par territoire).
+  - Fond de carte : tuiles OpenStreetMap adoucies en gris (filtre CSS sur les tuiles uniquement). CARTO Positron essayé puis retiré (27/10/2026).
+  - Géoloc : `functions/api/geo.ts` (Cloudflare Pages Function) ; `?territoire=` prioritaire, `?geo=RE|GF|GP|MQ|FR` pour simuler.
+  - Header : lien ajouté + état actif (pilule bleu nuit) sur tous les liens ; footer : lien ajouté ; contact : section « où nous trouver » → bouton vers la page.
+  - Packages ajoutés (validés) : `leaflet` 1.9.4, `leaflet.markercluster` 1.5.3 (MIT), `@types/leaflet` + `@types/leaflet.markercluster` (dev).
+  - Pins proches regroupés en bulles numérotées (couleur --ink du territoire, rayon 40, éventail au zoom max) ; clic liste → zoomToShowLayer + popup. Vue initiale de La Réunion vérifiée sans chevauchement (desktop + mobile).
+  - Territoire sans point de vente : « Bientôt disponible » (carte du sélecteur, en-tête), bloc « Pas encore de point de vente en … » + texte Decap + bouton « Être prévenu(e) » → /contact, encart sur la carte. Testé en vidant la Guyane en local (exemples remis avant commit).
+  - Contraste AA : tokens `--ink-*` (couleur du territoire assombrie) pour les types en petites capitales, les pastilles numérotées et les pins.
+  - Branche `ou-nous-trouver` (preview Cloudflare), pas encore fusionnée sur main.
+
+---
+
 ## Phase 12 — Recette finale
 
 - [ ] Tests mobile — iOS Safari + Android Chrome
@@ -216,6 +232,8 @@ Objectif : permettre à Grégory de modifier tous les textes et images du site d
 - [ ] Sauvegarde du repo (miroir sur un autre remote éventuellement)
 - [ ] Documentation des accès (OVH espace client, GitHub, Cloudflare, Decap admin)
 - [ ] Guide illustré d'édition via Decap CMS remis à Grégory
+- [ ] Décider du contraste des liens corail sur tout le site (3:1 sur blanc, sous le minimum AA)
+- [ ] Fond de carte plus épuré (piste : Protomaps auto-hébergé, sans clé ni compte)
 
 ---
 
