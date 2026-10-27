@@ -372,7 +372,8 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
       const controleur = new AbortController();
       const minuteur = window.setTimeout(() => controleur.abort(), 1500);
       try {
-        const res = await fetch('/api/geo', { signal: controleur.signal, cache: 'no-store' });
+        // POST : jamais mis en cache par Cloudflare (voir functions/api/geo.ts).
+        const res = await fetch('/api/geo', { method: 'POST', signal: controleur.signal, cache: 'no-store' });
         if (!res.ok) return null;
         const json = (await res.json()) as { country?: unknown };
         return typeof json.country === 'string' ? json.country : null;
