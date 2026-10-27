@@ -8,6 +8,7 @@ import {
   TERRITOIRES,
   TYPES_POINT_DE_VENTE,
   libellePointsDeVente,
+  telInternational,
   type PointDeVente,
 } from '../data/territoires';
 
@@ -55,7 +56,6 @@ const donneesJson = JSON.stringify(donneesCarte).replace(/</g, '\\u003c');
 // En-têtes : « Bientôt disponible » plutôt que « 0 point de vente ».
 const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt disponible');
 
-const telHref = (tel: string) => `tel:${tel.replace(/[^\d+]/g, '')}`;
 ---
 <BaseLayout title={data.seo.title} description={data.seo.description}>
   <main>
@@ -117,7 +117,7 @@ const telHref = (tel: string) => `tel:${tel.replace(/[^\d+]/g, '')}`;
                             <p class="item-type">{TYPES_POINT_DE_VENTE[p.type]}</p>
                             <p class="item-adr">{p.adresse}<br />{p.codePostal} {p.ville}</p>
                             {p.horaires && <p class="item-horaires">{p.horaires}</p>}
-                            {p.telephone && <a class="item-tel" href={telHref(p.telephone)}>{p.telephone}</a>}
+                            {p.telephone && <a class="item-tel" href={telInternational(p.telephone, t.indicatif)}>{p.telephone}</a>}
                           </div>
                         </li>
                       ))}
@@ -182,6 +182,7 @@ const telHref = (tel: string) => `tel:${tel.replace(/[^\d+]/g, '')}`;
     const tabs = [...root.querySelectorAll<HTMLButtonElement>('[data-tab]')];
     const panels = [...root.querySelectorAll<HTMLElement>('[data-panel]')];
     const soon = [...root.querySelectorAll<HTMLElement>('[data-soon]')];
+    const CLE_CARTO = import.meta.env.PUBLIC_CARTO_KEY as string | undefined;
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     let courant: TerritoireCarte | null = null;
@@ -194,11 +195,22 @@ const telHref = (tel: string) => `tel:${tel.replace(/[^\d+]/g, '')}`;
     const obtenirCarte = () => {
       cartePromise ??= import('leaflet').then((L) => {
         const carte = L.map(mapEl, { scrollWheelZoom: false });
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          maxZoom: 18,
-          referrerPolicy: 'strict-origin-when-cross-origin',
-          attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        }).addTo(carte);
+        if (CLE_CARTO) {
+          // Fond CARTO « Positron » : clair, sans relief. {r} = tuiles @2x sur écran Retina.
+          L.tileLayer(`https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?api_key=${encodeURIComponent(CLE_CARTO)}`, {
+            subdomains: 'abcd',
+            maxZoom: 18,
+            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/attributions">CARTO</a>',
+          }).addTo(carte);
+        } else {
+          // Repli sans clé : tuiles OSM adoucies en CSS (classe is-repli → filtre sur les seules tuiles).
+          mapEl.classList.add('is-repli');
+          L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            referrerPolicy: 'strict-origin-when-cross-origin',
+            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+          }).addTo(carte);
+        }
         // Zoom molette seulement après un clic sur la carte : évite de piéger le scroll de la page.
         carte.on('click', () => carte.scrollWheelZoom.enable());
         carte.on('mouseout', () => carte.scrollWheelZoom.disable());
@@ -701,6 +713,7 @@ const telHref = (tel: string) => `tel:${tel.replace(/[^\d+]/g, '')}`;
   }
 
   /* ── Éléments créés par Leaflet (hors du scope Astro) ── */
+  .map.is-repli :global(.leaflet-tile-pane) { filter: grayscale(1) brightness(1.05) contrast(0.9); }
   .map :global(.pdv-pin-icon) { background: none; border: none; }
   .map :global(.pdv-pin) {
     display: flex;

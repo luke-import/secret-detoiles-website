@@ -1,91 +1,156 @@
-# PLACEHOLDER — à remplacer par la liste client
-# (Les noms commencent par « [Exemple] » pour rester repérables même après
-# une sauvegarde depuis Decap, qui supprime les commentaires.)
-#
-# Position : format GeoJSON produit par le widget « map » de Decap,
-# attention à l'ordre → [longitude, latitude].
+# Points de vente affichés sur /ou-nous-trouver (liste + carte), éditables dans Decap.
+# Position : format GeoJSON du widget « map » de Decap → [longitude, latitude].
+# Guyane, Guadeloupe, Martinique : aucun point pour l'instant → « Bientôt disponible ».
 points:
-  # ── La Réunion ──
   - territoire: reunion
-    nom: "[Exemple] Pharmacie du Barachois"
+    nom: "Pharmacie Vanilla"
     type: pharmacie
-    adresse: "12 rue de Paris"
+    adresse: "15 route nationale 2"
+    codePostal: "97412"
+    ville: "Bras-Panon"
+    telephone: "02 62 51 66 67"
+    position: '{"type":"Point","coordinates":[55.68269,-20.99802]}'
+  - territoire: reunion
+    nom: "Pharmacie du Terrain de Sel"
+    type: pharmacie
+    adresse: "39 rue Sarda Garriga"
+    codePostal: "97419"
+    ville: "La Possession"
+    telephone: "02 62 22 29 50"
+    position: '{"type":"Point","coordinates":[55.33439,-20.93221]}'
+  - territoire: reunion
+    nom: "Pharmacie de l'Oasis"
+    type: pharmacie
+    adresse: "1 boulevard de Verdun"
+    codePostal: "97420"
+    ville: "Le Port"
+    telephone: "02 62 43 06 40"
+    position: '{"type":"Point","coordinates":[55.29657,-20.93887]}'
+  - territoire: reunion
+    nom: "Pharmacie de la Mairie"
+    type: pharmacie
+    adresse: "259 rue Hubert Delisle"
+    codePostal: "97430"
+    ville: "Le Tampon"
+    telephone: "02 62 27 01 91"
+    position: '{"type":"Point","coordinates":[55.51455,-21.27836]}'
+  - territoire: reunion
+    nom: "Pharmacie de la Mairie"
+    type: pharmacie
+    adresse: "193 avenue Île de France"
+    codePostal: "97440"
+    ville: "Saint-André"
+    telephone: "02 62 46 00 05"
+    position: '{"type":"Point","coordinates":[55.64988,-20.95904]}'
+  - territoire: reunion
+    nom: "Pharmacie Petit Bazar"
+    type: pharmacie
+    adresse: "1631 avenue Île de France"
+    codePostal: "97440"
+    ville: "Saint-André"
+    telephone: "02 62 28 56 62"
+    position: '{"type":"Point","coordinates":[55.64778,-20.94605]}'
+  - territoire: reunion
+    nom: "Pharmacie de l'Orchidée"
+    type: pharmacie
+    adresse: "16 rue Louis Brunet"
+    codePostal: "97470"
+    ville: "Saint-Benoît"
+    telephone: "02 62 50 10 89"
+    position: '{"type":"Point","coordinates":[55.71303,-21.03509]}'
+  - territoire: reunion
+    nom: "Pharmacie de la Trinité"
+    type: pharmacie
+    adresse: "10 avenue du Pape Jean-Paul II"
     codePostal: "97400"
     ville: "Saint-Denis"
-    telephone: "0262 00 00 01"
-    horaires: "Lun–sam · 8h–19h"
-    position: '{"type":"Point","coordinates":[55.4481,-20.8789]}'
+    telephone: "02 62 30 38 88"
+    position: '{"type":"Point","coordinates":[55.46859,-20.89497]}'
   - territoire: reunion
-    nom: "[Exemple] Supermarché du Front de mer"
-    type: supermarche
-    adresse: "4 boulevard Hubert-Delisle"
-    codePostal: "97410"
-    ville: "Saint-Pierre"
-    position: '{"type":"Point","coordinates":[55.4781,-21.3393]}'
+    nom: "Pharmacie Massiau"
+    type: pharmacie
+    adresse: "2 rue Saint-Joseph Ouvrier"
+    codePostal: "97400"
+    ville: "Saint-Denis"
+    telephone: "02 62 30 33 39"
+    position: '{"type":"Point","coordinates":[55.45746,-20.89594]}'
   - territoire: reunion
-    nom: "[Exemple] Parapharmacie de l'Ouest"
-    type: parapharmacie
-    adresse: "25 rue du Commerce"
+    nom: "Pharmacie du Ouaki"
+    type: pharmacie
+    adresse: "265 route de Cilaos, La Rivière"
+    codePostal: "97421"
+    ville: "Saint-Louis"
+    telephone: "02 62 39 02 13"
+    position: '{"type":"Point","coordinates":[55.44848,-21.26936]}'
+  - territoire: reunion
+    nom: "Pharmacie du Rosaire"
+    type: pharmacie
+    adresse: "13 rue Pente Nicole, La Rivière"
+    codePostal: "97421"
+    ville: "Saint-Louis"
+    telephone: "02 62 39 01 62"
+    position: '{"type":"Point","coordinates":[55.43718,-21.26347]}'
+  - territoire: reunion
+    nom: "Pharmacie des Jacarandas"
+    type: pharmacie
+    adresse: "28 rue Roland Garros, Bois-de-Nèfles"
+    codePostal: "97411"
+    ville: "Saint-Paul"
+    telephone: "02 62 27 14 40"
+    position: '{"type":"Point","coordinates":[55.32981,-20.99118]}'
+  - territoire: reunion
+    nom: "Pharmacie Principale"
+    type: pharmacie
+    adresse: "16 rue Marius et Ary Leblond"
     codePostal: "97460"
     ville: "Saint-Paul"
-    telephone: "0262 00 00 02"
-    position: '{"type":"Point","coordinates":[55.2707,-21.0096]}'
-
-  # ── La Guyane ──
-  - territoire: guyane
-    nom: "[Exemple] Pharmacie de la Place des Palmistes"
+    telephone: "02 62 22 51 19"
+    position: '{"type":"Point","coordinates":[55.27108,-21.00890]}'
+  - territoire: reunion
+    nom: "Pharmacie de Domenjod"
     type: pharmacie
-    adresse: "8 avenue du Général-de-Gaulle"
-    codePostal: "97300"
-    ville: "Cayenne"
-    telephone: "0594 00 00 01"
-    position: '{"type":"Point","coordinates":[-52.326,4.9372]}'
-  - territoire: guyane
-    nom: "[Exemple] Hypermarché de Kourou"
-    type: grande-surface
-    adresse: "1 avenue des Roches"
-    codePostal: "97310"
-    ville: "Kourou"
-    horaires: "Lun–dim · 8h30–20h"
-    position: '{"type":"Point","coordinates":[-52.6493,5.1599]}'
-
-  # ── La Guadeloupe ──
-  - territoire: guadeloupe
-    nom: "[Exemple] Pharmacie de la Darse"
+    adresse: "88 route de Domenjod"
+    codePostal: "97490"
+    ville: "Sainte-Clotilde"
+    telephone: "02 62 53 54 95"
+    position: '{"type":"Point","coordinates":[55.50331,-20.90750]}'
+  - territoire: reunion
+    nom: "Pharmacie Ker Chaudron"
     type: pharmacie
-    adresse: "3 rue Frébault"
-    codePostal: "97110"
-    ville: "Pointe-à-Pitre"
-    telephone: "0590 00 00 01"
-    position: '{"type":"Point","coordinates":[-61.5331,16.2411]}'
-  - territoire: guadeloupe
-    nom: "[Exemple] Supermarché du Champ d'Arbaud"
-    type: supermarche
-    adresse: "10 rue du Docteur-Cabre"
-    codePostal: "97100"
-    ville: "Basse-Terre"
-    position: '{"type":"Point","coordinates":[-61.7255,15.9985]}'
-  - territoire: guadeloupe
-    nom: "[Exemple] Grande surface de Destrellan"
-    type: grande-surface
-    adresse: "Zone commerciale de Destrellan"
-    codePostal: "97122"
-    ville: "Baie-Mahault"
-    position: '{"type":"Point","coordinates":[-61.5867,16.2674]}'
-
-  # ── La Martinique ──
-  - territoire: martinique
-    nom: "[Exemple] Pharmacie de la Savane"
+    adresse: "28 avenue Joseph Bédier"
+    codePostal: "97490"
+    ville: "Sainte-Clotilde"
+    telephone: "02 62 28 03 65"
+    position: '{"type":"Point","coordinates":[55.48698,-20.89272]}'
+  - territoire: reunion
+    nom: "Pharmacie les Calebassiers"
     type: pharmacie
-    adresse: "15 rue de la Liberté"
-    codePostal: "97200"
-    ville: "Fort-de-France"
-    telephone: "0596 00 00 01"
-    position: '{"type":"Point","coordinates":[-61.073,14.6037]}'
-  - territoire: martinique
-    nom: "[Exemple] Parapharmacie du Lamentin"
-    type: parapharmacie
-    adresse: "Centre commercial La Galleria"
-    codePostal: "97232"
-    ville: "Le Lamentin"
-    position: '{"type":"Point","coordinates":[-60.999,14.613]}'
+    adresse: "86 bis avenue Leconte de Lisle"
+    codePostal: "97490"
+    ville: "Sainte-Clotilde"
+    telephone: "02 62 28 06 82"
+    position: '{"type":"Point","coordinates":[55.48951,-20.89573]}'
+  - territoire: reunion
+    nom: "Pharmacie Nguyen"
+    type: pharmacie
+    adresse: "138 rue Louis Lagourgue"
+    codePostal: "97438"
+    ville: "Sainte-Marie"
+    telephone: "02 62 53 68 64"
+    position: '{"type":"Point","coordinates":[55.52151,-20.90783]}'
+  - territoire: reunion
+    nom: "Pharmacie Nouvelle de la Vanille"
+    type: pharmacie
+    adresse: "120 bis rue Manès"
+    codePostal: "97438"
+    ville: "Sainte-Marie"
+    telephone: "02 62 53 81 70"
+    position: '{"type":"Point","coordinates":[55.56774,-20.90938]}'
+  - territoire: reunion
+    nom: "Pharmacie de l'Océan Indien"
+    type: pharmacie
+    adresse: "133 avenue Mahatma Gandhi"
+    codePostal: "97441"
+    ville: "Sainte-Suzanne"
+    telephone: "02 62 46 25 75"
+    position: '{"type":"Point","coordinates":[55.64146,-20.93218]}'
