@@ -1,0 +1,5 @@
+# Fonds de carte Protomaps (/ou-nous-trouver) : tuiles figées par dossier daté
+# (public/cartes/<AAAAMMJJ>/) → cache long sans revalidation.
+/cartes/*
+  Cache-Control: public, max-age=31536000, immutable
+  Content-Type: application/x-protobuf

@@ -214,10 +214,10 @@ Objectif : permettre à Grégory de modifier tous les textes et images du site d
 - [x] Page Où nous trouver (`/ou-nous-trouver`) — sélecteur 4 territoires + liste + carte Leaflet/OSM + géoloc IP
   - Textes éditables dans Decap (`src/content/pages/ou-nous-trouver.yaml`), points de vente éditables dans Decap (`src/content/points-de-vente.yaml`, position via le widget « map »). Territoires (couleurs, centrage) dans `src/data/territoires.ts`.
   - Liste client intégrée : 19 pharmacies à La Réunion ; Guyane, Guadeloupe, Martinique en « Bientôt disponible ». Liens tel: au format international (indicatif par territoire).
-  - Fond de carte : tuiles OpenStreetMap adoucies en gris (filtre CSS sur les tuiles uniquement). CARTO Positron essayé puis retiré (27/10/2026).
+  - Fond de carte : Protomaps auto-hébergé en tuiles statiques (`public/cartes/20261027/<territoire>/{z}/{x}/{y}.pbf`, build Protomaps du 27/10/2026, générées par `pnpm cartes:tuiles`), recoloré aux tokens du site, aucun appel externe. Pas de `.pmtiles` : Cloudflare Pages ne gère pas les requêtes Range. Mise à jour annuelle : CLAUDE.md §12. (Historique : CARTO Positron essayé puis retiré, puis OSM en gris.)
   - Géoloc : `functions/api/geo.ts` (Cloudflare Pages Function) ; `?territoire=` prioritaire, `?geo=RE|GF|GP|MQ|FR` pour simuler.
   - Header : lien ajouté + état actif (pilule bleu nuit) sur tous les liens ; footer : lien ajouté ; contact : section « où nous trouver » → bouton vers la page.
-  - Packages ajoutés (validés) : `leaflet` 1.9.4, `leaflet.markercluster` 1.5.3 (MIT), `@types/leaflet` + `@types/leaflet.markercluster` (dev).
+  - Packages ajoutés (validés) : `leaflet` 1.9.4, `leaflet.markercluster` 1.5.3 (MIT), `protomaps-leaflet` 5.1.0, `@protomaps/basemaps` 5.7.2, `@types/leaflet` + `@types/leaflet.markercluster` (dev).
   - Pins proches regroupés en bulles numérotées (couleur --ink du territoire, rayon 40, éventail au zoom max) ; clic liste → zoomToShowLayer + popup. Vue initiale de La Réunion vérifiée sans chevauchement (desktop + mobile).
   - Territoire sans point de vente : « Bientôt disponible » (carte du sélecteur, en-tête), bloc « Pas encore de point de vente en … » + texte Decap + bouton « Être prévenu(e) » → /contact, encart sur la carte. Testé en vidant la Guyane en local (exemples remis avant commit).
   - Contraste AA : tokens `--ink-*` (couleur du territoire assombrie) pour les types en petites capitales, les pastilles numérotées et les pins.
@@ -237,7 +237,7 @@ Objectif : permettre à Grégory de modifier tous les textes et images du site d
 - [ ] Documentation des accès (OVH espace client, GitHub, Cloudflare, Decap admin)
 - [ ] Guide illustré d'édition via Decap CMS remis à Grégory
 - [ ] Décider du contraste des liens corail sur tout le site (3:1 sur blanc, sous le minimum AA)
-- [ ] Fond de carte plus épuré (piste : Protomaps auto-hébergé, sans clé ni compte)
+- [x] Fond de carte plus épuré (piste : Protomaps auto-hébergé, sans clé ni compte) — branche `carte-protomaps` : 17 569 tuiles / 100 Mo (Réunion z15 4 554 · Guadeloupe z15 8 035 · Martinique z15 2 845 · Guyane z12 2 135), limite Cloudflare 20 000 fichiers
 
 ---
 

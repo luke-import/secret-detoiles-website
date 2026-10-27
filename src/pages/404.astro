@@ -1,0 +1,77 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import Sparkles from '../components/Sparkles.astro';
+---
+<BaseLayout
+  title="Page introuvable — Secret d'étoiles"
+  description="Cette page n'existe pas ou plus. Retrouvez nos couches enchantées depuis l'accueil."
+  noIndex
+>
+  <main>
+    <section class="not-found">
+      <Sparkles density="medium" variant="hero" />
+      <div class="inner">
+        <p class="eyebrow">oups, page introuvable</p>
+        <h1 class="title">Cette page s'est envolée</h1>
+        <p class="lead">
+          Elle a dû filer rejoindre les étoiles. Pas d'inquiétude : tout le reste est bien là, tout en douceur.
+        </p>
+        <div class="ctas">
+          <Button variant="primary" href="/">Retour à l'accueil</Button>
+          <Button variant="ghost" href="/ou-nous-trouver">Trouver un point de vente</Button>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .not-found {
+    position: relative;
+    overflow: hidden;
+    padding: 6rem 1.5rem 5rem;
+    background: linear-gradient(180deg, var(--color-cream) 60%, var(--tint-blue-sky) 100%);
+    text-align: center;
+  }
+  .inner {
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .eyebrow {
+    font-family: var(--font-hand);
+    font-size: 2rem;
+    color: var(--color-coral);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    color: var(--color-blue-night);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .lead {
+    font-family: var(--font-body);
+    font-size: 1.15rem;
+    color: var(--color-text-2);
+    max-width: 48ch;
+    margin: 0 auto 32px;
+    line-height: 1.7;
+  }
+  .ctas {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  @media (min-width: 900px) {
+    .not-found { padding: 8rem 2rem 7rem; }
+  }
+</style>

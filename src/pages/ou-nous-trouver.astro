@@ -44,6 +44,7 @@ const donneesCarte = territoires.map((t) => ({
   couleur: t.couleur,
   center: t.center,
   zoom: t.zoom,
+  carte: t.carte,
   points: t.points.map((p) => ({
     nom: p.nom,
     type: TYPES_POINT_DE_VENTE[p.type],
@@ -154,9 +155,10 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
 </BaseLayout>
 
 <script>
-  import type { Map as CarteLeaflet, Marker, MarkerClusterGroup } from 'leaflet';
+  import type { LatLngBoundsExpression, Map as CarteLeaflet, Marker, MarkerClusterGroup } from 'leaflet';
   import type {} from 'leaflet.markercluster';
-  import { PAYS_VERS_TERRITOIRE, type TerritoireId } from '../data/territoires';
+  import type { Flavor } from '@protomaps/basemaps';
+  import { CARTES_VERSION, PAYS_VERS_TERRITOIRE, type TerritoireId } from '../data/territoires';
 
   interface PointCarte {
     nom: string;
@@ -171,8 +173,21 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
     couleur: string;
     center: [number, number];
     zoom: number;
+    carte: {
+      bbox: [number, number, number, number];
+      maxzoom: number;
+      horsEmprise?: { fond: 'terre'; marges: [number, number, number, number] };
+    };
     points: PointCarte[];
   }
+
+  // Fond de carte aux couleurs du site : lues dans les tokens CSS (le canvas Protomaps attend des couleurs résolues).
+  const token = (nom: string) => getComputedStyle(document.documentElement).getPropertyValue(nom).trim();
+  const melange = (a: string, b: string, partB: number) => {
+    const rgb = (hex: string) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+    const [ca, cb] = [rgb(a), rgb(b)];
+    return `#${ca.map((v, i) => Math.round(v + (cb[i] - v) * partB).toString(16).padStart(2, '0')).join('')}`;
+  };
 
   const root = document.querySelector<HTMLElement>('[data-pdv]');
   const brut = document.getElementById('pdv-data')?.textContent;
@@ -193,21 +208,94 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
     let marqueurs: Marker[] = [];
 
     // ── Carte : une seule instance, créée au premier affichage ──
-    let cartePromise: Promise<{ carte: CarteLeaflet; calque: MarkerClusterGroup; L: typeof import('leaflet') }> | null = null;
+    type Fond = ReturnType<typeof import('protomaps-leaflet').leafletLayer>;
+    let cartePromise: Promise<{
+      carte: CarteLeaflet;
+      calque: MarkerClusterGroup;
+      L: typeof import('leaflet');
+      fondPour: (t: TerritoireCarte) => Fond;
+      couleurs: { eau: string; terre: string };
+    }> | null = null;
+    let fondActif: Fond | null = null;
     const obtenirCarte = () => {
       cartePromise ??= import('leaflet').then(async (module) => {
         // leaflet.markercluster s'accroche à la variable globale L (format UMD) : on la lui fournit,
         // sous forme d'objet modifiable (un module ES importé ne l'est pas).
         const L = { ...module } as typeof module;
         (window as unknown as { L: typeof module }).L = L;
-        await import('leaflet.markercluster');
-        const carte = L.map(mapEl, { scrollWheelZoom: false });
-        // Tuiles OpenStreetMap, adoucies en gris par CSS (filtre sur les seules tuiles : les pins gardent leurs couleurs).
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          maxZoom: 18,
-          referrerPolicy: 'strict-origin-when-cross-origin',
-          attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        }).addTo(carte);
+        const [, protomaps, { namedFlavor }] = await Promise.all([
+          import('leaflet.markercluster'),
+          import('protomaps-leaflet'),
+          import('@protomaps/basemaps'),
+        ]);
+        // maxBoundsViscosity 1 : impossible de tirer la carte au-delà de l'emprise, même brièvement.
+        const carte = L.map(mapEl, { scrollWheelZoom: false, maxZoom: 18, maxBoundsViscosity: 1 });
+
+        // Flavor « light » de Protomaps, recoloré : terre crème, eau bleu ciel, routes blanches,
+        // ni relief, ni végétation colorée, ni POI.
+        const terre = token('--color-cream');
+        const bordure = token('--color-cream-deep');
+        const eau = melange(token('--tint-blue-sky'), token('--color-blue-sky'), 0.35);
+        const texte = token('--color-text-2');
+        const base = namedFlavor('light');
+        const sol = Object.fromEntries(
+          (['earth', 'park_a', 'park_b', 'hospital', 'industrial', 'school', 'wood_a', 'wood_b', 'pedestrian',
+            'scrub_a', 'scrub_b', 'glacier', 'sand', 'beach', 'aerodrome', 'zoo', 'military'] as const).map((k) => [k, terre]),
+        );
+        const routes = Object.fromEntries(
+          (Object.keys(base) as (keyof Flavor)[])
+            .filter((k) => /^(tunnel_|bridges_)?(other|minor|minor_a|minor_b|minor_service|link|major|highway|pier|runway)$/.test(k))
+            .map((k) => [k, '#fff']),
+        );
+        const bords = Object.fromEntries(
+          (Object.keys(base) as (keyof Flavor)[]).filter((k) => k.includes('casing')).map((k) => [k, bordure]),
+        );
+        const labels = Object.fromEntries(
+          (Object.keys(base) as (keyof Flavor)[])
+            .filter((k) => k.endsWith('_label'))
+            .map((k) => [k, texte]),
+        );
+        const halos = Object.fromEntries(
+          (Object.keys(base) as (keyof Flavor)[]).filter((k) => k.endsWith('_halo')).map((k) => [k, terre]),
+        );
+        const flavor: Flavor = {
+          ...base,
+          ...sol,
+          ...routes,
+          ...bords,
+          ...labels,
+          ...halos,
+          background: eau,
+          water: eau,
+          buildings: bordure,
+          railway: bordure,
+          boundaries: melange(bordure, texte, 0.3),
+          landcover: undefined,
+          pois: undefined,
+        };
+        const regles = { paintRules: protomaps.paintRules(flavor), labelRules: protomaps.labelRules(flavor, 'fr') };
+
+        // Tuiles statiques par territoire, servies depuis le site (aucun appel externe).
+        // La marge autour de l'emprise extraite n'a pas de tuiles : couleur de fond selon le territoire.
+        const fonds = new Map<TerritoireId, Fond>();
+        const fondPour = (t: TerritoireCarte) => {
+          let fond = fonds.get(t.id);
+          if (!fond) {
+            const [ouest, sud, est, nord] = t.carte.bbox;
+            fond = protomaps.leafletLayer({
+              url: `/cartes/${CARTES_VERSION}/${t.id}/{z}/{x}/{y}.pbf`,
+              // Aucune requête hors de l'emprise : une tuile absente renverrait la page 404 du site.
+              bounds: [[sud, ouest], [nord, est]],
+              ...regles,
+              backgroundColor: eau,
+              maxDataZoom: t.carte.maxzoom,
+              maxZoom: 18,
+              attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors · <a href="https://protomaps.com">Protomaps</a>',
+            });
+            fonds.set(t.id, fond);
+          }
+          return fond;
+        };
         // Zoom molette seulement après un clic sur la carte : évite de piéger le scroll de la page.
         carte.on('click', () => carte.scrollWheelZoom.enable());
         carte.on('mouseout', () => carte.scrollWheelZoom.disable());
@@ -227,7 +315,7 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
               iconAnchor: [15, 36],
             }),
         }).addTo(carte);
-        return { carte, calque, L };
+        return { carte, calque, L, fondPour, couleurs: { eau, terre } };
       });
       return cartePromise;
     };
@@ -268,10 +356,24 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
     };
 
     const afficherPins = async (t: TerritoireCarte) => {
-      const { carte, calque, L } = await obtenirCarte();
+      const { carte, calque, L, fondPour, couleurs } = await obtenirCarte();
       if (courant !== t) return; // le visiteur a changé de territoire entre-temps
       carte.invalidateSize();
+      // Limites levées le temps de recentrer, puis recalées sur l'emprise du territoire.
+      // AVANT clearLayers : le regroupement recalcule ses grilles à partir du zoom minimal courant.
+      carte.setMaxBounds(undefined as unknown as LatLngBoundsExpression);
+      carte.setMinZoom(0);
       calque.clearLayers();
+
+      // Fond du territoire : on remplace le calque, la carte reste la même.
+      const fond = fondPour(t);
+      if (fondActif !== fond) {
+        if (fondActif) carte.removeLayer(fondActif);
+        fond.addTo(carte);
+        fond.bringToBack();
+        fondActif = fond;
+      }
+
       marqueurs = t.points.map((p, i) =>
         L.marker([p.lat, p.lng], {
           title: p.nom,
@@ -288,6 +390,23 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
           .on('click', () => activerItem(i, true))
           .addTo(calque),
       );
+      // Limites de déplacement, posées AVANT le recentrage qui s'y plie.
+      // Au-delà de l'emprise il n'y a pas de tuiles : on y montre la couleur de ce qui l'entoure.
+      const [ouest, sud, est, nord] = t.carte.bbox;
+      const emprise = L.latLngBounds([sud, ouest], [nord, est]);
+      const hors = t.carte.horsEmprise;
+      mapEl.style.backgroundColor = hors ? couleurs[hors.fond] : couleurs.eau;
+      if (hors) {
+        // Guyane : marges seulement côté terre, bords exacts côté mer ; tout le territoire reste visible.
+        const [mo, ms, me, mn] = hors.marges;
+        carte.setMinZoom(carte.getBoundsZoom(emprise));
+        carte.setMaxBounds(L.latLngBounds([sud - ms, ouest - mo], [nord + mn, est + me]));
+      } else {
+        // Îles : au-delà c'est la mer, de la couleur du fond → marge de 10 %, invisible.
+        const limites = emprise.pad(0.1);
+        carte.setMinZoom(Math.max(0, carte.getBoundsZoom(limites) - 1));
+        carte.setMaxBounds(limites);
+      }
       if (t.points.length > 0) {
         carte.fitBounds(L.latLngBounds(t.points.map((p) => [p.lat, p.lng])), { padding: [48, 48], maxZoom: 14 });
       } else {
@@ -727,7 +846,6 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
   }
 
   /* ── Éléments créés par Leaflet (hors du scope Astro) ── */
-  .map :global(.leaflet-tile-pane) { filter: grayscale(1) brightness(1.05) contrast(0.9); }
   .map :global(.pdv-pin-icon) { background: none; border: none; }
   .map :global(.pdv-pin) {
     display: flex;
@@ -784,6 +902,9 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
   .map :global(.pdv-popup a:hover) { color: var(--color-coral-deep); }
   /* Attribution OSM (obligatoire) : décalée pour ne pas être rognée par le coin arrondi. */
   .map :global(.leaflet-control-attribution) { margin-right: 14px; border-radius: var(--radius-pill) var(--radius-pill) 0 0; padding: 0 8px; }
+  @media (max-width: 699px) {
+    .map :global(.leaflet-control-attribution) { font-size: 9.5px; white-space: nowrap; margin-right: 10px; }
+  }
 
   @media (min-width: 700px) {
     .selector { grid-template-columns: repeat(2, 1fr); }

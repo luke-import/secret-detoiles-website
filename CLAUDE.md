@@ -268,3 +268,36 @@ Conséquences pour l'architecture :
 - **Formulaire** : envoyé via Web3Forms vers `bonjour@secret-detoiles.fr`
 - **Pas de téléphone affiché**
 - **Pas d'adresse physique affichée** (Luke Import Saint-Pierre / La Réunion reste dans le CLAUDE.md pour info interne, mais n'apparaît PAS sur le site public)
+
+---
+
+## 12. Fond de carte (/ou-nous-trouver)
+
+Fond **Protomaps auto-hébergé**, servi en **tuiles statiques** depuis le site lui-même : aucune clé, aucun compte, aucun appel externe pour la carte. Données © OpenStreetMap contributors (attribution obligatoire, affichée sur la carte).
+
+- Pourquoi des tuiles et pas un `.pmtiles` : Cloudflare Pages **ne gère pas les requêtes Range** (il renvoie toujours le fichier entier), indispensables pour lire un `.pmtiles`.
+- Fichiers : `public/cartes/<AAAAMMJJ>/<territoire>/{z}/{x}/{y}.pbf` (le dossier = date du build Protomaps utilisé). Générés par `scripts/cartes-tuiles.js`.
+- Version utilisée par le code : `CARTES_VERSION` dans `src/data/territoires.ts`, avec l'emprise `bbox` et le `maxzoom` de chaque territoire (**à garder identiques** à ceux de `scripts/cartes-tuiles.js`).
+- Cache : `public/_headers` sert `/cartes/*` en cache 1 an `immutable` → **ne jamais remplacer des tuiles sous le même chemin**, toujours créer un nouveau dossier daté.
+- Couleurs : flavor « light » de `@protomaps/basemaps`, recoloré dans `ou-nous-trouver.astro` à partir des tokens CSS (terre crème, eau bleu ciel, routes blanches, libellés `--color-text-2`, ni POI ni végétation).
+- **Limite Cloudflare Pages : 20 000 fichiers par déploiement** (tout le site compris). Au 27/10/2026 : 17 569 tuiles (Réunion z15 : 4 554 · Guadeloupe z15 : 8 035 · Martinique z15 : 2 845 · Guyane z12 : 2 135) + ~60 fichiers du site. Si un territoire doit passer à un zoom supérieur (ex. Guyane quand elle aura des points de vente), il faudra en baisser un autre (ex. Guadeloupe z14 : 2 059 tuiles). Le vectoriel se sur-zoome sans flou.
+
+### Mise à jour annuelle
+
+1. Outil : `pmtiles` (go-pmtiles), binaire macOS sur https://github.com/protomaps/go-pmtiles/releases (pas installé dans le projet).
+2. Choisir le build le plus récent sur https://build.protomaps.com/ (fichier `AAAAMMJJ.pmtiles`).
+3. Extraire chaque territoire dans un dossier **hors du projet** (les `.pmtiles` ne sont pas publiés), puis générer les tuiles :
+
+```bash
+V=AAAAMMJJ
+B=https://build.protomaps.com/$V.pmtiles
+T=~/cartes-$V            # dossier temporaire, hors du dépôt
+mkdir -p $T
+pmtiles extract $B $T/reunion.pmtiles    --bbox=55.2,-21.42,55.85,-20.85  --maxzoom=15
+pmtiles extract $B $T/guyane.pmtiles     --bbox=-54.65,2.1,-51.6,5.8      --maxzoom=12
+pmtiles extract $B $T/guadeloupe.pmtiles --bbox=-61.85,15.8,-60.95,16.55  --maxzoom=15
+pmtiles extract $B $T/martinique.pmtiles --bbox=-61.25,14.38,-60.8,14.9   --maxzoom=15
+pnpm cartes:tuiles $V $T  # → public/cartes/$V/… et affiche le nombre de fichiers (doit rester < ~19 900)
+```
+
+4. Mettre `CARTES_VERSION = 'AAAAMMJJ'` dans `src/data/territoires.ts`, supprimer l'ancien dossier `public/cartes/<ancienne date>/`, `pnpm build`, vérifier la carte, commit.
