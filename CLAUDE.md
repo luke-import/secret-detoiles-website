@@ -237,6 +237,7 @@ Les variables et secrets sont gérés dans **Cloudflare Pages → Settings → E
 Secrets prévus :
 - Les variables d'environnement (`PUBLIC_WEB3FORMS_KEY`, etc.) sont gérées dans **Cloudflare Pages → Settings → Environment variables**. Le fichier `.env` local sert uniquement au développement.
 - `PUBLIC_CARTO_KEY` : clé CARTO basemaps pour le fond de carte clair « Positron » de `/ou-nous-trouver`. À définir dans Cloudflare Pages pour **Preview ET Production**, et dans `.env` en local. Elle est lue au **build** (`import.meta.env`) : après l'avoir ajoutée ou modifiée dans Cloudflare, il faut relancer un déploiement. Préfixe `PUBLIC_` = visible côté navigateur (normal pour une clé de tuiles). Si elle est absente, la carte se replie sur les tuiles OpenStreetMap passées en gris (filtre CSS).
+  CARTO basemaps : gratuit en usage commercial jusqu'à 1M tuiles/mois (vérifié le 27/10/2026).
 
 ---
 

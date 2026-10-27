@@ -1,5 +1,7 @@
 ---
 import 'leaflet/dist/leaflet.css';
+// Seulement le CSS d'animation du plugin de regroupement : pas MarkerCluster.Default.css (bulles vert/jaune).
+import 'leaflet.markercluster/dist/MarkerCluster.css';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionEyebrow from '../components/SectionEyebrow.astro';
 import Button from '../components/Button.astro';
@@ -152,7 +154,8 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
 </BaseLayout>
 
 <script>
-  import type { LayerGroup, Map as CarteLeaflet, Marker } from 'leaflet';
+  import type { Map as CarteLeaflet, Marker, MarkerClusterGroup } from 'leaflet';
+  import type {} from 'leaflet.markercluster';
   import { PAYS_VERS_TERRITOIRE, type TerritoireId } from '../data/territoires';
 
   interface PointCarte {
@@ -191,9 +194,14 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
     let marqueurs: Marker[] = [];
 
     // ── Carte : une seule instance, créée au premier affichage ──
-    let cartePromise: Promise<{ carte: CarteLeaflet; calque: LayerGroup; L: typeof import('leaflet') }> | null = null;
+    let cartePromise: Promise<{ carte: CarteLeaflet; calque: MarkerClusterGroup; L: typeof import('leaflet') }> | null = null;
     const obtenirCarte = () => {
-      cartePromise ??= import('leaflet').then((L) => {
+      cartePromise ??= import('leaflet').then(async (module) => {
+        // leaflet.markercluster s'accroche à la variable globale L (format UMD) : on la lui fournit,
+        // sous forme d'objet modifiable (un module ES importé ne l'est pas).
+        const L = { ...module } as typeof module;
+        (window as unknown as { L: typeof module }).L = L;
+        await import('leaflet.markercluster');
         const carte = L.map(mapEl, { scrollWheelZoom: false });
         if (CLE_CARTO) {
           // Fond CARTO « Positron » : clair, sans relief. {r} = tuiles @2x sur écran Retina.
@@ -214,7 +222,23 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
         // Zoom molette seulement après un clic sur la carte : évite de piéger le scroll de la page.
         carte.on('click', () => carte.scrollWheelZoom.enable());
         carte.on('mouseout', () => carte.scrollWheelZoom.disable());
-        return { carte, calque: L.layerGroup().addTo(carte), L };
+        // Pins proches regroupés en une bulle numérotée, aux couleurs du territoire courant.
+        const calque = L.markerClusterGroup({
+          maxClusterRadius: 40,
+          showCoverageOnHover: false,
+          spiderfyOnMaxZoom: true,
+          zoomToBoundsOnClick: true,
+          iconCreateFunction: (groupe) =>
+            L.divIcon({
+              className: 'pdv-pin-icon',
+              html: `<span class="pdv-cluster t-${courant?.couleur ?? ''}"><span>${groupe.getChildCount()}</span></span>`,
+              iconSize: [30, 30],
+              // Même ancrage que les pins (corps de la goutte au-dessus du point) : bulles et pins
+              // partagent la même géométrie, donc aucun chevauchement au-delà du rayon de regroupement.
+              iconAnchor: [15, 36],
+            }),
+        }).addTo(carte);
+        return { carte, calque, L };
       });
       return cartePromise;
     };
@@ -340,11 +364,11 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
         const t = courant;
         const point = t?.points[i];
         if (!t || !point) return;
-        const { carte } = await obtenirCarte();
+        const { calque } = await obtenirCarte();
         const marqueur = marqueurs[i];
         if (courant !== t || !marqueur) return;
-        carte.once('moveend', () => marqueur.openPopup());
-        carte.flyTo([point.lat, point.lng], Math.max(carte.getZoom(), 15), { animate: !reduceMotion, duration: 0.8 });
+        // Sort le pin de sa bulle si besoin (zoom ou éventail), puis ouvre sa popup.
+        calque.zoomToShowLayer(marqueur, () => marqueur.openPopup());
       }),
     );
 
@@ -726,6 +750,21 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
     border: 2px solid #fff;
     transform: rotate(-45deg);
     box-shadow: 0 6px 14px rgba(60, 90, 122, 0.25);
+  }
+  .map :global(.pdv-cluster) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: var(--radius-pill);
+    background: var(--ink);
+    border: 2px solid #fff;
+    box-shadow: 0 6px 14px rgba(60, 90, 122, 0.25);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #fff;
   }
   .map :global(.pdv-pin > span) {
     transform: rotate(45deg);

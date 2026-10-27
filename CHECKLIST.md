@@ -213,9 +213,11 @@ Objectif : permettre à Grégory de modifier tous les textes et images du site d
   - Textes éditables dans Decap (`src/content/pages/ou-nous-trouver.yaml`), points de vente éditables dans Decap (`src/content/points-de-vente.yaml`, position via le widget « map »). Territoires (couleurs, centrage) dans `src/data/territoires.ts`.
   - Liste client intégrée : 19 pharmacies à La Réunion ; Guyane, Guadeloupe, Martinique en « Bientôt disponible ». Liens tel: au format international (indicatif par territoire).
   - Fond de carte : CARTO Positron si `PUBLIC_CARTO_KEY` est définie (build), sinon repli OSM en gris (filtre CSS sur les tuiles uniquement).
+  - [ ] Clé CARTO à recevoir → `.env` local + Cloudflare Pages (Preview ET Production), puis redéployer et vérifier les tuiles.
   - Géoloc : `functions/api/geo.ts` (Cloudflare Pages Function) ; `?territoire=` prioritaire, `?geo=RE|GF|GP|MQ|FR` pour simuler.
   - Header : lien ajouté + état actif (pilule bleu nuit) sur tous les liens ; footer : lien ajouté ; contact : section « où nous trouver » → bouton vers la page.
-  - Packages ajoutés (validés) : `leaflet` 1.9.4, `@types/leaflet` (dev).
+  - Packages ajoutés (validés) : `leaflet` 1.9.4, `leaflet.markercluster` 1.5.3 (MIT), `@types/leaflet` + `@types/leaflet.markercluster` (dev).
+  - Pins proches regroupés en bulles numérotées (couleur --ink du territoire, rayon 40, éventail au zoom max) ; clic liste → zoomToShowLayer + popup. Vue initiale de La Réunion vérifiée sans chevauchement (desktop + mobile).
   - Territoire sans point de vente : « Bientôt disponible » (carte du sélecteur, en-tête), bloc « Pas encore de point de vente en … » + texte Decap + bouton « Être prévenu(e) » → /contact, encart sur la carte. Testé en vidant la Guyane en local (exemples remis avant commit).
   - Contraste AA : tokens `--ink-*` (couleur du territoire assombrie) pour les types en petites capitales, les pastilles numérotées et les pins.
   - Branche `ou-nous-trouver` (preview Cloudflare), pas encore fusionnée sur main.
