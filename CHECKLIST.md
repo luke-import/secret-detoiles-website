@@ -207,7 +207,9 @@ Objectif : permettre à Grégory de modifier tous les textes et images du site d
 
 ---
 
-## Page Où nous trouver ✅
+## Page Où nous trouver ✅ — en ligne le 27/10/2026
+
+- [x] En ligne sur https://secret-detoiles.fr/ou-nous-trouver (fusion de la branche `ou-nous-trouver` sur main, branche supprimée)
 
 - [x] Page Où nous trouver (`/ou-nous-trouver`) — sélecteur 4 territoires + liste + carte Leaflet/OSM + géoloc IP
   - Textes éditables dans Decap (`src/content/pages/ou-nous-trouver.yaml`), points de vente éditables dans Decap (`src/content/points-de-vente.yaml`, position via le widget « map »). Territoires (couleurs, centrage) dans `src/data/territoires.ts`.
@@ -219,7 +221,9 @@ Objectif : permettre à Grégory de modifier tous les textes et images du site d
   - Pins proches regroupés en bulles numérotées (couleur --ink du territoire, rayon 40, éventail au zoom max) ; clic liste → zoomToShowLayer + popup. Vue initiale de La Réunion vérifiée sans chevauchement (desktop + mobile).
   - Territoire sans point de vente : « Bientôt disponible » (carte du sélecteur, en-tête), bloc « Pas encore de point de vente en … » + texte Decap + bouton « Être prévenu(e) » → /contact, encart sur la carte. Testé en vidant la Guyane en local (exemples remis avant commit).
   - Contraste AA : tokens `--ink-*` (couleur du territoire assombrie) pour les types en petites capitales, les pastilles numérotées et les pins.
-  - Branche `ou-nous-trouver` (preview Cloudflare), pas encore fusionnée sur main.
+  - `/api/geo` passé en POST : la règle de cache du domaine mettait les GET en cache 4 h (même avec `no-store`, query string ignorée) → pays d'un visiteur servi à un autre.
+- [ ] Cloudflare (Grégory) : purger le cache du domaine, puis ajouter une règle « Bypass cache » sur `/api/*`
+- [ ] Decap (Grégory, connecté) : vérifier que « Où nous trouver » et « Points de vente » s'affichent et s'éditent
 
 ---
 
