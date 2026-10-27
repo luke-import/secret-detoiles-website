@@ -207,6 +207,18 @@ Objectif : permettre à Grégory de modifier tous les textes et images du site d
 
 ---
 
+## Page Où nous trouver ✅
+
+- [x] Page Où nous trouver (`/ou-nous-trouver`) — sélecteur 4 territoires + liste + carte Leaflet/OSM + géoloc IP
+  - Textes éditables dans Decap (`src/content/pages/ou-nous-trouver.yaml`), points de vente éditables dans Decap (`src/content/points-de-vente.yaml`, position via le widget « map »). Territoires (couleurs, centrage) dans `src/data/territoires.ts`.
+  - **Points de vente = données d'EXEMPLE** (noms préfixés « [Exemple] ») — à remplacer par la liste client.
+  - Géoloc : `functions/api/geo.ts` (Cloudflare Pages Function) ; `?territoire=` prioritaire, `?geo=RE|GF|GP|MQ|FR` pour simuler.
+  - Header : lien ajouté + état actif (pilule bleu nuit) sur tous les liens ; footer : lien ajouté ; contact : section « où nous trouver » → bouton vers la page.
+  - Packages ajoutés (validés) : `leaflet` 1.9.4, `@types/leaflet` (dev).
+  - Branche `ou-nous-trouver` (preview Cloudflare), pas encore fusionnée sur main.
+
+---
+
 ## Phase 12 — Recette finale
 
 - [ ] Tests mobile — iOS Safari + Android Chrome

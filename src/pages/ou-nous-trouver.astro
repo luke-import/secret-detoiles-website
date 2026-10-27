@@ -1,0 +1,708 @@
+---
+import 'leaflet/dist/leaflet.css';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionEyebrow from '../components/SectionEyebrow.astro';
+import { getEntry } from 'astro:content';
+import {
+  TERRITOIRES,
+  TYPES_POINT_DE_VENTE,
+  libellePointsDeVente,
+  type PointDeVente,
+} from '../data/territoires';
+
+const page = await getEntry('pages', 'ou-nous-trouver');
+if (!page) throw new Error('Page introuvable dans la collection');
+const data = page.data as typeof page.data & {
+  hero: { eyebrow: string; title: string; lead: string };
+  vide: { message: string; lien_label: string; lien_href: string };
+  mention: string;
+};
+
+const liste = await getEntry('pointsDeVente', 'points-de-vente');
+if (!liste) throw new Error('Liste des points de vente introuvable');
+
+// Numérotation par territoire, dans l'ordre du fichier (même numéro liste ↔ pin).
+const points: PointDeVente[] = liste.data.points.map(({ position, ...p }, i) => ({
+  ...p,
+  id: `pdv-${i + 1}`,
+  lat: position.lat,
+  lng: position.lng,
+}));
+
+const territoires = TERRITOIRES.map((t) => ({
+  ...t,
+  points: points.filter((p) => p.territoire === t.id),
+}));
+
+// Données lues par le script client pour la carte (la liste, elle, est déjà dans le HTML).
+const donneesCarte = territoires.map((t) => ({
+  id: t.id,
+  couleur: t.couleur,
+  center: t.center,
+  zoom: t.zoom,
+  points: t.points.map((p) => ({
+    nom: p.nom,
+    type: TYPES_POINT_DE_VENTE[p.type],
+    adresse: p.adresse,
+    ville: `${p.codePostal} ${p.ville}`,
+    lat: p.lat,
+    lng: p.lng,
+  })),
+}));
+const donneesJson = JSON.stringify(donneesCarte).replace(/</g, '\\u003c');
+
+const telHref = (tel: string) => `tel:${tel.replace(/[^\d+]/g, '')}`;
+---
+<BaseLayout title={data.seo.title} description={data.seo.description}>
+  <main>
+    <section class="pdv" data-pdv>
+      <div class="pdv-inner">
+        <div class="pdv-head">
+          <SectionEyebrow eyebrow={data.hero.eyebrow} title={data.hero.title} />
+          <p class="lead">{data.hero.lead}</p>
+        </div>
+
+        {/* ── Vue sélecteur (état initial) ── */}
+        <div class="selector" data-selector>
+          {territoires.map((t) => (
+            <button type="button" class={`t-card t-${t.couleur}`} data-open={t.id}>
+              <span class="t-star-small" aria-hidden="true">✦</span>
+              <span class="t-star-big" aria-hidden="true">✦</span>
+              <span class="t-nom">{t.nom}</span>
+              <span class="t-region">{t.region}</span>
+              <span class="t-foot">
+                <span class="t-count">{libellePointsDeVente(t.points.length)}</span>
+                <span class="t-arrow" aria-hidden="true">→</span>
+              </span>
+            </button>
+          ))}
+        </div>
+
+        {/* ── Vue territoire (après clic) ── */}
+        <div class="territory" data-territory hidden>
+          <div class="tabs" role="group" aria-label="Choisir un territoire">
+            <button type="button" class="tab-all" data-all>← Tous les territoires</button>
+            {territoires.map((t) => (
+              <button type="button" class={`tab t-${t.couleur}`} data-tab={t.id} aria-pressed="false">
+                <span class="dot" aria-hidden="true"></span>
+                {t.nom}
+              </button>
+            ))}
+          </div>
+
+          <div class="layout">
+            <div class="panel">
+              {territoires.map((t) => (
+                <div class={`list-panel t-${t.couleur}`} data-panel={t.id} hidden>
+                  <div class="panel-head">
+                    <h3>{t.nom}</h3>
+                    <p>{libellePointsDeVente(t.points.length)}</p>
+                  </div>
+                  {t.points.length > 0 ? (
+                    <ol class="list" data-list>
+                      {t.points.map((p, i) => (
+                        <li class="item" data-index={i}>
+                          <span class="num" aria-hidden="true">{i + 1}</span>
+                          <div class="item-body">
+                            <h4 class="item-nom">
+                              <button type="button" class="item-btn" data-item={i}>{p.nom}</button>
+                            </h4>
+                            <p class="item-type">{TYPES_POINT_DE_VENTE[p.type]}</p>
+                            <p class="item-adr">{p.adresse}<br />{p.codePostal} {p.ville}</p>
+                            {p.horaires && <p class="item-horaires">{p.horaires}</p>}
+                            {p.telephone && <a class="item-tel" href={telHref(p.telephone)}>{p.telephone}</a>}
+                          </div>
+                        </li>
+                      ))}
+                    </ol>
+                  ) : (
+                    <div class="empty">
+                      <p>{data.vide.message}</p>
+                      <a href={data.vide.lien_href}>{data.vide.lien_label}</a>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <div class="map-wrap">
+              <div class="map" data-map role="region" aria-label="Carte des points de vente"></div>
+            </div>
+          </div>
+
+          <p class="mention">{data.mention}</p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script type="application/json" id="pdv-data" set:html={donneesJson} />
+</BaseLayout>
+
+<script>
+  import type { LayerGroup, Map as CarteLeaflet, Marker } from 'leaflet';
+  import { PAYS_VERS_TERRITOIRE, type TerritoireId } from '../data/territoires';
+
+  interface PointCarte {
+    nom: string;
+    type: string;
+    adresse: string;
+    ville: string;
+    lat: number;
+    lng: number;
+  }
+  interface TerritoireCarte {
+    id: TerritoireId;
+    couleur: string;
+    center: [number, number];
+    zoom: number;
+    points: PointCarte[];
+  }
+
+  const root = document.querySelector<HTMLElement>('[data-pdv]');
+  const brut = document.getElementById('pdv-data')?.textContent;
+
+  if (root && brut) {
+    const territoires = JSON.parse(brut) as TerritoireCarte[];
+    const selector = root.querySelector<HTMLElement>('[data-selector]')!;
+    const territory = root.querySelector<HTMLElement>('[data-territory]')!;
+    const mapEl = root.querySelector<HTMLElement>('[data-map]')!;
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[data-tab]')];
+    const panels = [...root.querySelectorAll<HTMLElement>('[data-panel]')];
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let courant: TerritoireCarte | null = null;
+    // Dès que le visiteur choisit lui-même, la géoloc ne doit plus rien basculer.
+    let choixVisiteur = false;
+    let marqueurs: Marker[] = [];
+
+    // ── Carte : une seule instance, créée au premier affichage ──
+    let cartePromise: Promise<{ carte: CarteLeaflet; calque: LayerGroup; L: typeof import('leaflet') }> | null = null;
+    const obtenirCarte = () => {
+      cartePromise ??= import('leaflet').then((L) => {
+        const carte = L.map(mapEl, { scrollWheelZoom: false });
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 18,
+          referrerPolicy: 'strict-origin-when-cross-origin',
+          attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        }).addTo(carte);
+        // Zoom molette seulement après un clic sur la carte : évite de piéger le scroll de la page.
+        carte.on('click', () => carte.scrollWheelZoom.enable());
+        carte.on('mouseout', () => carte.scrollWheelZoom.disable());
+        return { carte, calque: L.layerGroup().addTo(carte), L };
+      });
+      return cartePromise;
+    };
+
+    const panneauActif = () => panels.find((p) => p.dataset.panel === courant?.id);
+
+    const activerItem = (index: number, defiler: boolean) => {
+      const panneau = panneauActif();
+      if (!panneau) return;
+      panneau.querySelectorAll<HTMLElement>('.item').forEach((li) => {
+        li.classList.toggle('is-active', Number(li.dataset.index) === index);
+      });
+      const liste = panneau.querySelector<HTMLElement>('[data-list]');
+      const li = liste?.querySelector<HTMLElement>(`.item[data-index="${index}"]`);
+      if (defiler && liste && li) {
+        liste.scrollTo({ top: li.offsetTop - 12, behavior: reduceMotion ? 'auto' : 'smooth' });
+      }
+    };
+
+    const contenuPopup = (p: PointCarte) => {
+      const el = document.createElement('div');
+      el.className = 'pdv-popup';
+      const nom = document.createElement('strong');
+      nom.textContent = p.nom;
+      const type = document.createElement('span');
+      type.className = 'pdv-popup-type';
+      type.textContent = p.type;
+      const adr = document.createElement('span');
+      adr.className = 'pdv-popup-adr';
+      adr.append(p.adresse, document.createElement('br'), p.ville);
+      const lien = document.createElement('a');
+      lien.href = `https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lng}`;
+      lien.target = '_blank';
+      lien.rel = 'noopener';
+      lien.textContent = 'Itinéraire →';
+      el.append(nom, type, adr, lien);
+      return el;
+    };
+
+    const afficherPins = async (t: TerritoireCarte) => {
+      const { carte, calque, L } = await obtenirCarte();
+      if (courant !== t) return; // le visiteur a changé de territoire entre-temps
+      carte.invalidateSize();
+      calque.clearLayers();
+      marqueurs = t.points.map((p, i) =>
+        L.marker([p.lat, p.lng], {
+          title: p.nom,
+          alt: `${i + 1}. ${p.nom}`,
+          icon: L.divIcon({
+            className: 'pdv-pin-icon',
+            html: `<span class="pdv-pin t-${t.couleur}"><span>${i + 1}</span></span>`,
+            iconSize: [30, 30],
+            iconAnchor: [15, 36],
+            popupAnchor: [0, -34],
+          }),
+        })
+          .bindPopup(contenuPopup(p))
+          .on('click', () => activerItem(i, true))
+          .addTo(calque),
+      );
+      if (t.points.length > 0) {
+        carte.fitBounds(L.latLngBounds(t.points.map((p) => [p.lat, p.lng])), { padding: [48, 48], maxZoom: 14 });
+      } else {
+        carte.setView(t.center, t.zoom);
+      }
+    };
+
+    const majUrl = (id: TerritoireId | null) => {
+      const url = new URL(window.location.href);
+      if (id) url.searchParams.set('territoire', id);
+      else url.searchParams.delete('territoire');
+      history.replaceState(null, '', url);
+    };
+
+    const ouvrir = (id: TerritoireId, { focusOnglet = false } = {}) => {
+      const t = territoires.find((x) => x.id === id);
+      if (!t) return;
+      courant = t;
+      selector.hidden = true;
+      territory.hidden = false;
+      tabs.forEach((tab) => tab.setAttribute('aria-pressed', String(tab.dataset.tab === id)));
+      panels.forEach((p) => {
+        p.hidden = p.dataset.panel !== id;
+        p.querySelectorAll('.item.is-active').forEach((li) => li.classList.remove('is-active'));
+        p.querySelector('[data-list]')?.scrollTo({ top: 0 });
+      });
+      majUrl(id);
+      if (focusOnglet) tabs.find((tab) => tab.dataset.tab === id)?.focus();
+      void afficherPins(t);
+    };
+
+    const revenirAuSelecteur = () => {
+      const precedent = courant?.id;
+      courant = null;
+      territory.hidden = true;
+      selector.hidden = false;
+      majUrl(null);
+      selector.querySelector<HTMLButtonElement>(`[data-open="${precedent}"]`)?.focus();
+    };
+
+    // ── Interactions ──
+    selector.querySelectorAll<HTMLButtonElement>('[data-open]').forEach((btn) =>
+      btn.addEventListener('click', () => {
+        choixVisiteur = true;
+        ouvrir(btn.dataset.open as TerritoireId, { focusOnglet: true });
+      }),
+    );
+    tabs.forEach((tab) =>
+      tab.addEventListener('click', () => {
+        choixVisiteur = true;
+        ouvrir(tab.dataset.tab as TerritoireId);
+      }),
+    );
+    root.querySelector('[data-all]')?.addEventListener('click', () => {
+      choixVisiteur = true; // « Tous les territoires » ne relance pas la géoloc
+      revenirAuSelecteur();
+    });
+    root.querySelectorAll<HTMLButtonElement>('[data-item]').forEach((btn) =>
+      btn.addEventListener('click', async () => {
+        const i = Number(btn.dataset.item);
+        activerItem(i, false);
+        const t = courant;
+        const point = t?.points[i];
+        if (!t || !point) return;
+        const { carte } = await obtenirCarte();
+        const marqueur = marqueurs[i];
+        if (courant !== t || !marqueur) return;
+        carte.once('moveend', () => marqueur.openPopup());
+        carte.flyTo([point.lat, point.lng], Math.max(carte.getZoom(), 15), { animate: !reduceMotion, duration: 0.8 });
+      }),
+    );
+
+    // ── Au chargement : ?territoire → géoloc IP (ou ?geo simulé) → sélecteur ──
+    const params = new URLSearchParams(window.location.search);
+    const estTerritoire = (v: string | null | undefined): v is TerritoireId =>
+      territoires.some((t) => t.id === v);
+
+    const detecterPays = async (): Promise<string | null> => {
+      const simule = params.get('geo');
+      if (simule) return simule.toUpperCase();
+      const controleur = new AbortController();
+      const minuteur = window.setTimeout(() => controleur.abort(), 1500);
+      try {
+        const res = await fetch('/api/geo', { signal: controleur.signal, cache: 'no-store' });
+        if (!res.ok) return null;
+        const json = (await res.json()) as { country?: unknown };
+        return typeof json.country === 'string' ? json.country : null;
+      } catch {
+        return null; // erreur réseau, timeout, réponse non JSON (ex. en local)
+      } finally {
+        window.clearTimeout(minuteur);
+      }
+    };
+
+    const depuisUrl = params.get('territoire');
+    if (estTerritoire(depuisUrl)) {
+      ouvrir(depuisUrl);
+    } else {
+      // Le sélecteur est déjà affiché : pas d'écran blanc pendant l'appel.
+      void detecterPays().then((pays) => {
+        const id = pays ? PAYS_VERS_TERRITOIRE[pays] : undefined;
+        if (id && !choixVisiteur) ouvrir(id);
+      });
+    }
+  }
+</script>
+
+<style>
+  /* Couleurs par territoire, reprises par les cartes, onglets, liste et pins de la carte. */
+  .pdv :global(.t-blue-sky) { --c: var(--color-blue-sky); --tint: var(--tint-blue-sky); }
+  .pdv :global(.t-mint) { --c: var(--color-mint); --tint: var(--tint-mint); }
+  .pdv :global(.t-star) { --c: var(--color-star); --tint: var(--tint-star); }
+  .pdv :global(.t-coral) { --c: var(--color-coral); --tint: var(--tint-coral); }
+
+  .pdv [hidden] { display: none !important; }
+
+  .pdv { background: var(--color-cream); padding: 5rem 1.5rem; }
+  .pdv-inner { max-width: var(--max-width); margin: 0 auto; }
+  .pdv-head { text-align: center; }
+  .lead {
+    font-family: var(--font-body);
+    font-size: 1.2rem;
+    color: var(--color-text-2);
+    max-width: 720px;
+    margin: 1.5rem auto 0;
+    line-height: 1.7;
+  }
+
+  /* ── Sélecteur ── */
+  .selector {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+  .t-card {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: 260px;
+    padding: 2.2rem;
+    border-radius: 28px;
+    background: var(--tint);
+    text-align: left;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .t-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 30px rgba(60, 90, 122, 0.12);
+  }
+  .t-card:focus-visible { outline-offset: 4px; border-radius: 28px; }
+  .t-star-small {
+    color: var(--c);
+    font-size: 1.5rem;
+    line-height: 1;
+    margin-bottom: 1.6rem;
+  }
+  .t-star-big {
+    position: absolute;
+    top: -3.2rem;
+    right: -2.2rem;
+    font-size: 11rem;
+    line-height: 1;
+    /* Un ton au-dessus du tint, dérivé des tokens (pas de nouvelle couleur). */
+    color: color-mix(in srgb, var(--c) 28%, var(--tint));
+    pointer-events: none;
+  }
+  .t-nom {
+    position: relative;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.7rem;
+    line-height: 1.15;
+    color: var(--color-blue-night);
+  }
+  .t-region {
+    position: relative;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--color-text-2);
+    margin-top: 0.3rem;
+  }
+  .t-foot {
+    margin-top: auto;
+    padding-top: 2rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .t-count {
+    font-family: var(--font-body);
+    font-weight: 700;
+    color: var(--color-blue-night);
+  }
+  .t-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    border-radius: var(--radius-pill);
+    background: #fff;
+    color: var(--color-blue-night);
+    font-size: 1.2rem;
+    transition: transform 0.25s ease;
+  }
+  .t-card:hover .t-arrow { transform: translateX(3px); }
+
+  /* ── Onglets ── */
+  .tabs {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 3rem;
+    overflow-x: auto;
+    padding: 4px 4px 8px;
+    scrollbar-width: thin;
+  }
+  .tab-all,
+  .tab {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 10px 18px;
+    border-radius: var(--radius-pill);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--color-blue-night);
+    white-space: nowrap;
+    transition: 0.2s;
+  }
+  .tab-all {
+    background: var(--color-cream-warm);
+    border: 1px solid var(--color-cream-deep);
+  }
+  .tab-all:hover { background: var(--color-cream-hover); }
+  .tab { background: #fff; border: 1px solid var(--color-cream-deep); }
+  .tab:hover { border-color: var(--c); }
+  .tab[aria-pressed='true'] {
+    background: var(--color-blue-night);
+    border-color: var(--color-blue-night);
+    color: #fff;
+  }
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: var(--radius-pill);
+    background: var(--c);
+  }
+  .tab:focus-visible,
+  .tab-all:focus-visible { border-radius: var(--radius-pill); }
+
+  /* ── Liste + carte ── */
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+  .panel,
+  .map-wrap {
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    border: 1px solid var(--color-cream-deep);
+    background: #fff;
+  }
+  .list-panel {
+    display: flex;
+    flex-direction: column;
+    max-height: 420px;
+  }
+  .panel-head {
+    padding: 1.5rem 1.75rem 1rem;
+    border-bottom: 1px solid var(--color-cream-deep);
+  }
+  .panel-head h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: var(--color-blue-night);
+  }
+  .panel-head p {
+    font-family: var(--font-body);
+    color: var(--color-text-2);
+    font-size: 0.95rem;
+  }
+  .list {
+    position: relative;
+    list-style: none;
+    overflow-y: auto;
+    padding: 0.75rem;
+    flex: 1;
+  }
+  .item {
+    position: relative;
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    transition: background 0.2s;
+  }
+  .item:hover,
+  .item.is-active { background: var(--tint); }
+  .num {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-pill);
+    background: var(--c);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+  .item-body { min-width: 0; }
+  .item-nom {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+    line-height: 1.3;
+    color: var(--color-blue-night);
+  }
+  /* Le bouton couvre tout l'item (clic n'importe où) ; le lien téléphone reste au-dessus. */
+  .item-btn {
+    font: inherit;
+    text-align: left;
+  }
+  .item-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-md);
+  }
+  .item-btn:focus-visible { outline: none; }
+  .item-btn:focus-visible::after { outline: 2px solid var(--color-coral); outline-offset: -2px; }
+  .item-type {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--c);
+    margin-top: 0.15rem;
+  }
+  .item-adr,
+  .item-horaires {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    color: var(--color-text-3);
+    line-height: 1.5;
+    margin-top: 0.4rem;
+  }
+  .item-horaires { margin-top: 0.2rem; color: var(--color-text-2); }
+  .item-tel {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    margin-top: 0.4rem;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+  .empty {
+    padding: 3rem 1.75rem;
+    text-align: center;
+    font-family: var(--font-body);
+  }
+  .empty p {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: var(--color-blue-night);
+    margin-bottom: 0.75rem;
+  }
+  .empty a { font-weight: 700; }
+
+  .map { height: 380px; }
+
+  .mention {
+    margin-top: 1.5rem;
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: var(--color-muted);
+  }
+
+  /* ── Éléments créés par Leaflet (hors du scope Astro) ── */
+  .map :global(.pdv-pin-icon) { background: none; border: none; }
+  .map :global(.pdv-pin) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50% 50% 50% 0;
+    background: var(--c);
+    border: 2px solid #fff;
+    transform: rotate(-45deg);
+    box-shadow: 0 6px 14px rgba(60, 90, 122, 0.25);
+  }
+  .map :global(.pdv-pin > span) {
+    transform: rotate(45deg);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #fff;
+  }
+  .map :global(.leaflet-popup-content-wrapper) { border-radius: var(--radius-md); }
+  .map :global(.pdv-popup) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-family: var(--font-body);
+    color: var(--color-blue-night);
+  }
+  .map :global(.pdv-popup strong) { font-family: var(--font-display); font-size: 1rem; }
+  .map :global(.pdv-popup-type) {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-2);
+  }
+  .map :global(.pdv-popup-adr) { font-size: 0.9rem; color: var(--color-text-3); }
+  .map :global(.pdv-popup a) { color: var(--color-coral); font-weight: 700; margin-top: 0.25rem; }
+  .map :global(.pdv-popup a:hover) { color: var(--color-coral-deep); }
+  /* Attribution OSM (obligatoire) : décalée pour ne pas être rognée par le coin arrondi. */
+  .map :global(.leaflet-control-attribution) { margin-right: 14px; border-radius: var(--radius-pill) var(--radius-pill) 0 0; padding: 0 8px; }
+
+  @media (min-width: 700px) {
+    .selector { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (min-width: 900px) {
+    .layout {
+      grid-template-columns: 2fr 3fr;
+      height: 880px;
+    }
+    .panel { height: 100%; }
+    .list-panel { max-height: none; height: 100%; }
+    .map-wrap { height: 100%; }
+    .map { height: 100%; }
+  }
+
+  @media (min-width: 1100px) {
+    .selector { grid-template-columns: repeat(4, 1fr); }
+  }
+</style>

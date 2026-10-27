@@ -1,0 +1,91 @@
+# PLACEHOLDER — à remplacer par la liste client
+# (Les noms commencent par « [Exemple] » pour rester repérables même après
+# une sauvegarde depuis Decap, qui supprime les commentaires.)
+#
+# Position : format GeoJSON produit par le widget « map » de Decap,
+# attention à l'ordre → [longitude, latitude].
+points:
+  # ── La Réunion ──
+  - territoire: reunion
+    nom: "[Exemple] Pharmacie du Barachois"
+    type: pharmacie
+    adresse: "12 rue de Paris"
+    codePostal: "97400"
+    ville: "Saint-Denis"
+    telephone: "0262 00 00 01"
+    horaires: "Lun–sam · 8h–19h"
+    position: '{"type":"Point","coordinates":[55.4481,-20.8789]}'
+  - territoire: reunion
+    nom: "[Exemple] Supermarché du Front de mer"
+    type: supermarche
+    adresse: "4 boulevard Hubert-Delisle"
+    codePostal: "97410"
+    ville: "Saint-Pierre"
+    position: '{"type":"Point","coordinates":[55.4781,-21.3393]}'
+  - territoire: reunion
+    nom: "[Exemple] Parapharmacie de l'Ouest"
+    type: parapharmacie
+    adresse: "25 rue du Commerce"
+    codePostal: "97460"
+    ville: "Saint-Paul"
+    telephone: "0262 00 00 02"
+    position: '{"type":"Point","coordinates":[55.2707,-21.0096]}'
+
+  # ── La Guyane ──
+  - territoire: guyane
+    nom: "[Exemple] Pharmacie de la Place des Palmistes"
+    type: pharmacie
+    adresse: "8 avenue du Général-de-Gaulle"
+    codePostal: "97300"
+    ville: "Cayenne"
+    telephone: "0594 00 00 01"
+    position: '{"type":"Point","coordinates":[-52.326,4.9372]}'
+  - territoire: guyane
+    nom: "[Exemple] Hypermarché de Kourou"
+    type: grande-surface
+    adresse: "1 avenue des Roches"
+    codePostal: "97310"
+    ville: "Kourou"
+    horaires: "Lun–dim · 8h30–20h"
+    position: '{"type":"Point","coordinates":[-52.6493,5.1599]}'
+
+  # ── La Guadeloupe ──
+  - territoire: guadeloupe
+    nom: "[Exemple] Pharmacie de la Darse"
+    type: pharmacie
+    adresse: "3 rue Frébault"
+    codePostal: "97110"
+    ville: "Pointe-à-Pitre"
+    telephone: "0590 00 00 01"
+    position: '{"type":"Point","coordinates":[-61.5331,16.2411]}'
+  - territoire: guadeloupe
+    nom: "[Exemple] Supermarché du Champ d'Arbaud"
+    type: supermarche
+    adresse: "10 rue du Docteur-Cabre"
+    codePostal: "97100"
+    ville: "Basse-Terre"
+    position: '{"type":"Point","coordinates":[-61.7255,15.9985]}'
+  - territoire: guadeloupe
+    nom: "[Exemple] Grande surface de Destrellan"
+    type: grande-surface
+    adresse: "Zone commerciale de Destrellan"
+    codePostal: "97122"
+    ville: "Baie-Mahault"
+    position: '{"type":"Point","coordinates":[-61.5867,16.2674]}'
+
+  # ── La Martinique ──
+  - territoire: martinique
+    nom: "[Exemple] Pharmacie de la Savane"
+    type: pharmacie
+    adresse: "15 rue de la Liberté"
+    codePostal: "97200"
+    ville: "Fort-de-France"
+    telephone: "0596 00 00 01"
+    position: '{"type":"Point","coordinates":[-61.073,14.6037]}'
+  - territoire: martinique
+    nom: "[Exemple] Parapharmacie du Lamentin"
+    type: parapharmacie
+    adresse: "Centre commercial La Galleria"
+    codePostal: "97232"
+    ville: "Le Lamentin"
+    position: '{"type":"Point","coordinates":[-60.999,14.613]}'
