@@ -185,7 +185,6 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
     const tabs = [...root.querySelectorAll<HTMLButtonElement>('[data-tab]')];
     const panels = [...root.querySelectorAll<HTMLElement>('[data-panel]')];
     const soon = [...root.querySelectorAll<HTMLElement>('[data-soon]')];
-    const CLE_CARTO = import.meta.env.PUBLIC_CARTO_KEY as string | undefined;
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     let courant: TerritoireCarte | null = null;
@@ -203,22 +202,12 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
         (window as unknown as { L: typeof module }).L = L;
         await import('leaflet.markercluster');
         const carte = L.map(mapEl, { scrollWheelZoom: false });
-        if (CLE_CARTO) {
-          // Fond CARTO « Positron » : clair, sans relief. {r} = tuiles @2x sur écran Retina.
-          L.tileLayer(`https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?api_key=${encodeURIComponent(CLE_CARTO)}`, {
-            subdomains: 'abcd',
-            maxZoom: 18,
-            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/attributions">CARTO</a>',
-          }).addTo(carte);
-        } else {
-          // Repli sans clé : tuiles OSM adoucies en CSS (classe is-repli → filtre sur les seules tuiles).
-          mapEl.classList.add('is-repli');
-          L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 18,
-            referrerPolicy: 'strict-origin-when-cross-origin',
-            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-          }).addTo(carte);
-        }
+        // Tuiles OpenStreetMap, adoucies en gris par CSS (filtre sur les seules tuiles : les pins gardent leurs couleurs).
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 18,
+          referrerPolicy: 'strict-origin-when-cross-origin',
+          attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        }).addTo(carte);
         // Zoom molette seulement après un clic sur la carte : évite de piéger le scroll de la page.
         carte.on('click', () => carte.scrollWheelZoom.enable());
         carte.on('mouseout', () => carte.scrollWheelZoom.disable());
@@ -737,7 +726,7 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
   }
 
   /* ── Éléments créés par Leaflet (hors du scope Astro) ── */
-  .map.is-repli :global(.leaflet-tile-pane) { filter: grayscale(1) brightness(1.05) contrast(0.9); }
+  .map :global(.leaflet-tile-pane) { filter: grayscale(1) brightness(1.05) contrast(0.9); }
   .map :global(.pdv-pin-icon) { background: none; border: none; }
   .map :global(.pdv-pin) {
     display: flex;
