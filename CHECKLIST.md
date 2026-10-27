@@ -230,6 +230,7 @@ Objectif : permettre à Grégory de modifier tous les textes et images du site d
 - [ ] Sauvegarde du repo (miroir sur un autre remote éventuellement)
 - [ ] Documentation des accès (OVH espace client, GitHub, Cloudflare, Decap admin)
 - [ ] Guide illustré d'édition via Decap CMS remis à Grégory
+- [ ] Décider du contraste des liens corail sur tout le site (3:1 sur blanc, sous le minimum AA)
 
 ---
 

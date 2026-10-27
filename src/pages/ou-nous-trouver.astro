@@ -636,6 +636,12 @@ const telHref = (tel: string) => `tel:${tel.replace(/[^\d+]/g, '')}`;
     font-family: var(--font-body);
     font-weight: 700;
     font-size: 0.95rem;
+    /* Bleu nuit plutôt que le corail des liens (3:1 seulement) : contraste AA, sur cette page uniquement. */
+    color: var(--color-blue-night);
+  }
+  .item-tel:hover {
+    color: var(--color-blue-night);
+    text-decoration: underline;
   }
   .empty {
     flex: 1;
