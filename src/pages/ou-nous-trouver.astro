@@ -2,6 +2,7 @@
 import 'leaflet/dist/leaflet.css';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionEyebrow from '../components/SectionEyebrow.astro';
+import Button from '../components/Button.astro';
 import { getEntry } from 'astro:content';
 import {
   TERRITOIRES,
@@ -51,6 +52,9 @@ const donneesCarte = territoires.map((t) => ({
 }));
 const donneesJson = JSON.stringify(donneesCarte).replace(/</g, '\\u003c');
 
+// En-têtes : « Bientôt disponible » plutôt que « 0 point de vente ».
+const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt disponible');
+
 const telHref = (tel: string) => `tel:${tel.replace(/[^\d+]/g, '')}`;
 ---
 <BaseLayout title={data.seo.title} description={data.seo.description}>
@@ -71,7 +75,10 @@ const telHref = (tel: string) => `tel:${tel.replace(/[^\d+]/g, '')}`;
               <span class="t-nom">{t.nom}</span>
               <span class="t-region">{t.region}</span>
               <span class="t-foot">
-                <span class="t-count">{libellePointsDeVente(t.points.length)}</span>
+                <span class="t-count">
+                  {t.points.length === 0 && <span class="t-count-star" aria-hidden="true">✦</span>}
+                  {compteur(t.points.length)}
+                </span>
                 <span class="t-arrow" aria-hidden="true">→</span>
               </span>
             </button>
@@ -96,7 +103,7 @@ const telHref = (tel: string) => `tel:${tel.replace(/[^\d+]/g, '')}`;
                 <div class={`list-panel t-${t.couleur}`} data-panel={t.id} hidden>
                   <div class="panel-head">
                     <h3>{t.nom}</h3>
-                    <p>{libellePointsDeVente(t.points.length)}</p>
+                    <p>{compteur(t.points.length)}</p>
                   </div>
                   {t.points.length > 0 ? (
                     <ol class="list" data-list>
@@ -117,8 +124,9 @@ const telHref = (tel: string) => `tel:${tel.replace(/[^\d+]/g, '')}`;
                     </ol>
                   ) : (
                     <div class="empty">
-                      <p>{data.vide.message}</p>
-                      <a href={data.vide.lien_href}>{data.vide.lien_label}</a>
+                      <p class="empty-title">Pas encore de point de vente {t.prep}</p>
+                      <p class="empty-text">{data.vide.message}</p>
+                      <Button href={data.vide.lien_href}>{data.vide.lien_label}</Button>
                     </div>
                   )}
                 </div>
@@ -127,6 +135,11 @@ const telHref = (tel: string) => `tel:${tel.replace(/[^\d+]/g, '')}`;
 
             <div class="map-wrap">
               <div class="map" data-map role="region" aria-label="Carte des points de vente"></div>
+              {territoires.filter((t) => t.points.length === 0).map((t) => (
+                <p class={`map-soon t-${t.couleur}`} data-soon={t.id} hidden>
+                  <span class="map-soon-star" aria-hidden="true">✦</span> Bientôt disponible {t.prep}
+                </p>
+              ))}
             </div>
           </div>
 
@@ -168,6 +181,7 @@ const telHref = (tel: string) => `tel:${tel.replace(/[^\d+]/g, '')}`;
     const mapEl = root.querySelector<HTMLElement>('[data-map]')!;
     const tabs = [...root.querySelectorAll<HTMLButtonElement>('[data-tab]')];
     const panels = [...root.querySelectorAll<HTMLElement>('[data-panel]')];
+    const soon = [...root.querySelectorAll<HTMLElement>('[data-soon]')];
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     let courant: TerritoireCarte | null = null;
@@ -270,6 +284,7 @@ const telHref = (tel: string) => `tel:${tel.replace(/[^\d+]/g, '')}`;
       selector.hidden = true;
       territory.hidden = false;
       tabs.forEach((tab) => tab.setAttribute('aria-pressed', String(tab.dataset.tab === id)));
+      soon.forEach((el) => (el.hidden = el.dataset.soon !== id));
       panels.forEach((p) => {
         p.hidden = p.dataset.panel !== id;
         p.querySelectorAll('.item.is-active').forEach((li) => li.classList.remove('is-active'));
@@ -358,10 +373,11 @@ const telHref = (tel: string) => `tel:${tel.replace(/[^\d+]/g, '')}`;
 
 <style>
   /* Couleurs par territoire, reprises par les cartes, onglets, liste et pins de la carte. */
-  .pdv :global(.t-blue-sky) { --c: var(--color-blue-sky); --tint: var(--tint-blue-sky); }
-  .pdv :global(.t-mint) { --c: var(--color-mint); --tint: var(--tint-mint); }
-  .pdv :global(.t-star) { --c: var(--color-star); --tint: var(--tint-star); }
-  .pdv :global(.t-coral) { --c: var(--color-coral); --tint: var(--tint-coral); }
+  /* --ink = version assombrie (AA) pour le texte et les pastilles à chiffre blanc. */
+  .pdv :global(.t-blue-sky) { --c: var(--color-blue-sky); --tint: var(--tint-blue-sky); --ink: var(--ink-blue-sky); }
+  .pdv :global(.t-mint) { --c: var(--color-mint); --tint: var(--tint-mint); --ink: var(--ink-mint); }
+  .pdv :global(.t-star) { --c: var(--color-star); --tint: var(--tint-star); --ink: var(--ink-star); }
+  .pdv :global(.t-coral) { --c: var(--color-coral); --tint: var(--tint-coral); --ink: var(--ink-coral); }
 
   .pdv [hidden] { display: none !important; }
 
@@ -447,6 +463,7 @@ const telHref = (tel: string) => `tel:${tel.replace(/[^\d+]/g, '')}`;
     font-weight: 700;
     color: var(--color-blue-night);
   }
+  .t-count-star { color: var(--c); margin-right: 0.3rem; }
   .t-arrow {
     display: inline-flex;
     align-items: center;
@@ -563,7 +580,7 @@ const telHref = (tel: string) => `tel:${tel.replace(/[^\d+]/g, '')}`;
     width: 32px;
     height: 32px;
     border-radius: var(--radius-pill);
-    background: var(--c);
+    background: var(--ink);
     color: #fff;
     display: inline-flex;
     align-items: center;
@@ -599,7 +616,7 @@ const telHref = (tel: string) => `tel:${tel.replace(/[^\d+]/g, '')}`;
     font-size: 0.72rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--c);
+    color: var(--ink);
     margin-top: 0.15rem;
   }
   .item-adr,
@@ -621,20 +638,53 @@ const telHref = (tel: string) => `tel:${tel.replace(/[^\d+]/g, '')}`;
     font-size: 0.95rem;
   }
   .empty {
-    padding: 3rem 1.75rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 2.5rem 1.75rem;
     text-align: center;
-    font-family: var(--font-body);
   }
-  .empty p {
+  .empty-title {
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: 1.25rem;
+    font-size: 1.3rem;
+    line-height: 1.3;
     color: var(--color-blue-night);
+  }
+  .empty-text {
+    font-family: var(--font-body);
+    color: var(--color-text-2);
+    max-width: 34ch;
     margin-bottom: 0.75rem;
   }
-  .empty a { font-weight: 700; }
 
-  .map { height: 380px; }
+  .map-wrap { position: relative; }
+  .map { height: 380px; position: relative; z-index: 0; }
+  .map-soon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    pointer-events: none;
+    white-space: nowrap;
+    font-size: 0.92rem;
+    padding: 0.7rem 1.2rem;
+    border-radius: var(--radius-pill);
+    background: #fff;
+    box-shadow: 0 10px 26px rgba(60, 90, 122, 0.16);
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--color-blue-night);
+    text-align: center;
+  }
+  .map-soon-star { color: var(--c); }
+  @media (min-width: 700px) {
+    .map-soon { font-size: 1rem; padding: 0.8rem 1.4rem; }
+  }
 
   .mention {
     margin-top: 1.5rem;
@@ -653,7 +703,7 @@ const telHref = (tel: string) => `tel:${tel.replace(/[^\d+]/g, '')}`;
     width: 30px;
     height: 30px;
     border-radius: 50% 50% 50% 0;
-    background: var(--c);
+    background: var(--ink);
     border: 2px solid #fff;
     transform: rotate(-45deg);
     box-shadow: 0 6px 14px rgba(60, 90, 122, 0.25);

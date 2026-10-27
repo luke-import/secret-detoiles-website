@@ -215,6 +215,8 @@ Objectif : permettre à Grégory de modifier tous les textes et images du site d
   - Géoloc : `functions/api/geo.ts` (Cloudflare Pages Function) ; `?territoire=` prioritaire, `?geo=RE|GF|GP|MQ|FR` pour simuler.
   - Header : lien ajouté + état actif (pilule bleu nuit) sur tous les liens ; footer : lien ajouté ; contact : section « où nous trouver » → bouton vers la page.
   - Packages ajoutés (validés) : `leaflet` 1.9.4, `@types/leaflet` (dev).
+  - Territoire sans point de vente : « Bientôt disponible » (carte du sélecteur, en-tête), bloc « Pas encore de point de vente en … » + texte Decap + bouton « Être prévenu(e) » → /contact, encart sur la carte. Testé en vidant la Guyane en local (exemples remis avant commit).
+  - Contraste AA : tokens `--ink-*` (couleur du territoire assombrie) pour les types en petites capitales, les pastilles numérotées et les pins.
   - Branche `ou-nous-trouver` (preview Cloudflare), pas encore fusionnée sur main.
 
 ---

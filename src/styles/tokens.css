@@ -28,6 +28,13 @@
   --tint-peach: #FBEEE3;
   --tint-coral: #F7E4DF;
 
+  /* Encres : couleurs d'accent assombries pour le texte et les pastilles à chiffre blanc.
+     Dérivées des tokens ci-dessus ; contraste AA (≥ 4,5:1) sur blanc ET sur le tint associé. */
+  --ink-blue-sky: color-mix(in srgb, var(--color-blue-sky) 60%, black);
+  --ink-mint: color-mix(in srgb, var(--color-mint) 55%, black);
+  --ink-star: color-mix(in srgb, var(--color-star) 55%, black);
+  --ink-coral: color-mix(in srgb, var(--color-coral) 65%, black);
+
   /* Typographies */
   --font-hand: 'Sacramento', cursive;
   --font-display: 'Fredoka Variable', system-ui, sans-serif;

@@ -482,13 +482,14 @@ collections:
               - { label: "Surtitre manuscrit", name: eyebrow, widget: string }
               - { label: "Titre principal", name: title, widget: string }
               - { label: "Sous-titre", name: lead, widget: text }
-          - label: "Territoire sans point de vente"
+          - label: "Texte quand un territoire n'a pas encore de point de vente"
             name: vide
             widget: object
+            hint: "Le titre « Pas encore de point de vente en Guyane » (etc.) est généré automatiquement."
             fields:
-              - { label: "Message", name: message, widget: string }
-              - { label: "Texte du lien", name: lien_label, widget: string }
-              - { label: "Lien", name: lien_href, widget: string, hint: "Ex. /contact" }
+              - { label: "Texte", name: message, widget: text }
+              - { label: "Texte du bouton", name: lien_label, widget: string }
+              - { label: "Lien du bouton", name: lien_href, widget: string, hint: "Ex. /contact" }
           - { label: "Mention sous la carte", name: mention, widget: text }
 
   # Liste des points de vente affichés sur /ou-nous-trouver (liste + carte).
