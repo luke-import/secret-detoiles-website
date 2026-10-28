@@ -181,6 +181,19 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
     points: PointCarte[];
   }
 
+  // Étoile à 5 branches aux pointes arrondies pour les repères de la carte : centre large
+  // (rayon intérieur 34/52) pour loger « 19 » lisiblement. Centre optique un peu bas (y = 53).
+  // viewBox avec marge : le contour blanc déborde du tracé.
+  const ETOILE =
+    'M 45.6 6.4 Q 50.0 1.0 54.4 6.4 L 70.0 25.5 L 93.0 34.4 Q 99.5 36.9 95.7 42.8 L 82.3 63.5 ' +
+    'L 81.0 88.1 Q 80.6 95.1 73.8 93.3 L 50.0 87.0 L 26.2 93.3 Q 19.4 95.1 19.0 88.1 L 17.7 63.5 ' +
+    'L 4.3 42.8 Q 0.5 36.9 7.0 34.4 L 30.0 25.5 Z';
+  const etoile = (classe: string, couleur: string, texte: string | number) =>
+    `<span class="pdv-etoile ${classe} t-${couleur}"><svg viewBox="-6 -6 112 112" aria-hidden="true">` +
+    `<path d="${ETOILE}"/></svg><span>${texte}</span></span>`;
+  const TAILLE_ETOILE = 40;
+  const TAILLE_BULLE = 48;
+
   // Fond de carte aux couleurs du site : lues dans les tokens CSS (le canvas Protomaps attend des couleurs résolues).
   const token = (nom: string) => getComputedStyle(document.documentElement).getPropertyValue(nom).trim();
   const melange = (a: string, b: string, partB: number) => {
@@ -301,18 +314,18 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
         carte.on('mouseout', () => carte.scrollWheelZoom.disable());
         // Pins proches regroupés en une bulle numérotée, aux couleurs du territoire courant.
         const calque = L.markerClusterGroup({
-          maxClusterRadius: 40,
+          // ≥ demi-étoile + demi-bulle (20 + 24 px) : deux repères non regroupés ne se touchent jamais.
+          maxClusterRadius: 48,
           showCoverageOnHover: false,
           spiderfyOnMaxZoom: true,
           zoomToBoundsOnClick: true,
+          // Bulle = même étoile, un peu plus grande, ancrée comme les étoiles en son centre.
           iconCreateFunction: (groupe) =>
             L.divIcon({
               className: 'pdv-pin-icon',
-              html: `<span class="pdv-cluster t-${courant?.couleur ?? ''}"><span>${groupe.getChildCount()}</span></span>`,
-              iconSize: [30, 30],
-              // Même ancrage que les pins (corps de la goutte au-dessus du point) : bulles et pins
-              // partagent la même géométrie, donc aucun chevauchement au-delà du rayon de regroupement.
-              iconAnchor: [15, 36],
+              html: etoile('pdv-cluster', courant?.couleur ?? '', groupe.getChildCount()),
+              iconSize: [TAILLE_BULLE, TAILLE_BULLE],
+              iconAnchor: [TAILLE_BULLE / 2, TAILLE_BULLE / 2],
             }),
         }).addTo(carte);
         return { carte, calque, L, fondPour, couleurs: { eau, terre } };
@@ -322,7 +335,20 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
 
     const panneauActif = () => panels.find((p) => p.dataset.panel === courant?.id);
 
+    // Étoile active (pharmacie sélectionnée) : classe posée sur l'icône, et reposée si l'étoile
+    // réapparaît (sortie d'une bulle de regroupement, qui recrée son élément).
+    let indexActif: number | null = null;
+    const majEtoilesActives = () => {
+      marqueurs.forEach((m, i) => {
+        const actif = i === indexActif;
+        m.getElement()?.classList.toggle('is-actif', actif);
+        m.setZIndexOffset(actif ? 1000 : 0);
+      });
+    };
+
     const activerItem = (index: number, defiler: boolean) => {
+      indexActif = index;
+      majEtoilesActives();
       const panneau = panneauActif();
       if (!panneau) return;
       panneau.querySelectorAll<HTMLElement>('.item').forEach((li) => {
@@ -374,20 +400,23 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
         fondActif = fond;
       }
 
+      indexActif = null;
       marqueurs = t.points.map((p, i) =>
         L.marker([p.lat, p.lng], {
           title: p.nom,
           alt: `${i + 1}. ${p.nom}`,
+          // Étoile posée sur l'adresse (ancre au centre), popup juste au-dessus.
           icon: L.divIcon({
             className: 'pdv-pin-icon',
-            html: `<span class="pdv-pin t-${t.couleur}"><span>${i + 1}</span></span>`,
-            iconSize: [30, 30],
-            iconAnchor: [15, 36],
-            popupAnchor: [0, -34],
+            html: etoile('pdv-pin', t.couleur, i + 1),
+            iconSize: [TAILLE_ETOILE, TAILLE_ETOILE],
+            iconAnchor: [TAILLE_ETOILE / 2, TAILLE_ETOILE / 2],
+            popupAnchor: [0, -TAILLE_ETOILE / 2],
           }),
         })
           .bindPopup(contenuPopup(p))
           .on('click', () => activerItem(i, true))
+          .on('add', () => majEtoilesActives())
           .addTo(calque),
       );
       // Limites de déplacement, posées AVANT le recentrage qui s'y plie.
@@ -841,39 +870,42 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
 
   /* ── Éléments créés par Leaflet (hors du scope Astro) ── */
   .map :global(.pdv-pin-icon) { background: none; border: none; }
-  .map :global(.pdv-pin) {
+  .map :global(.pdv-etoile) {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 4px 7px rgba(60, 90, 122, 0.3));
+    transition: transform 0.2s ease;
+  }
+  .map :global(.pdv-etoile svg) { display: block; width: 100%; height: 100%; overflow: visible; }
+  .map :global(.pdv-etoile path) {
+    fill: var(--c);
+    stroke: #fff;
+    stroke-width: 5; /* ≈ 2px à 40px de large */
+    stroke-linejoin: round;
+    transition: fill 0.2s ease;
+  }
+  .map :global(.pdv-etoile > span) {
+    position: absolute;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 30px;
-    height: 30px;
-    border-radius: 50% 50% 50% 0;
-    background: var(--c);
-    border: 2px solid #fff;
-    transform: rotate(-45deg);
-    box-shadow: 0 6px 14px rgba(60, 90, 122, 0.25);
-  }
-  .map :global(.pdv-cluster) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 30px;
-    height: 30px;
-    border-radius: var(--radius-pill);
-    background: var(--c);
-    border: 2px solid #fff;
-    box-shadow: 0 6px 14px rgba(60, 90, 122, 0.25);
     font-family: var(--font-display);
     font-weight: 700;
-    font-size: 0.85rem;
+    font-size: 13px;
+    line-height: 1;
     color: #fff;
+    padding-top: 7%; /* centre optique de l'étoile à 5 branches, un peu plus bas */
   }
-  .map :global(.pdv-pin > span) {
-    transform: rotate(45deg);
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 0.85rem;
-    color: #fff;
+  .map :global(.pdv-cluster > span) { font-size: 15px; }
+  /* Pharmacie sélectionnée (liste ou clic sur l'étoile) : agrandie et en bleu nuit. */
+  .map :global(.is-actif .pdv-etoile) { transform: scale(1.15); }
+  .map :global(.is-actif .pdv-etoile path) { fill: var(--color-blue-night); }
+  @media (prefers-reduced-motion: no-preference) {
+    .map :global(.pdv-pin-icon:hover .pdv-etoile) { transform: rotate(12deg) scale(1.08); }
+    .map :global(.pdv-pin-icon.is-actif:hover .pdv-etoile) { transform: rotate(12deg) scale(1.15); }
   }
   .map :global(.leaflet-popup-content-wrapper) { border-radius: var(--radius-md); }
   .map :global(.pdv-popup) {
