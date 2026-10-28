@@ -518,7 +518,7 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
 
 <style>
   /* Couleurs par territoire, reprises par les cartes, onglets, liste et pins de la carte. */
-  /* --ink = version assombrie (AA) pour le texte et les pastilles à chiffre blanc. */
+  /* --ink = version assombrie (AA), disponible mais non utilisée : couleurs pastel conservées volontairement. */
   .pdv :global(.t-blue-sky) { --c: var(--color-blue-sky); --tint: var(--tint-blue-sky); --ink: var(--ink-blue-sky); }
   .pdv :global(.t-mint) { --c: var(--color-mint); --tint: var(--tint-mint); --ink: var(--ink-mint); }
   .pdv :global(.t-star) { --c: var(--color-star); --tint: var(--tint-star); --ink: var(--ink-star); }
@@ -725,7 +725,7 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
     width: 32px;
     height: 32px;
     border-radius: var(--radius-pill);
-    background: var(--ink);
+    background: var(--c);
     color: #fff;
     display: inline-flex;
     align-items: center;
@@ -761,7 +761,7 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
     font-size: 0.72rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--ink);
+    color: var(--c);
     margin-top: 0.15rem;
   }
   .item-adr,
@@ -781,12 +781,6 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
     font-family: var(--font-body);
     font-weight: 700;
     font-size: 0.95rem;
-    /* Bleu nuit plutôt que le corail des liens (3:1 seulement) : contraste AA, sur cette page uniquement. */
-    color: var(--color-blue-night);
-  }
-  .item-tel:hover {
-    color: var(--color-blue-night);
-    text-decoration: underline;
   }
   .empty {
     flex: 1;
@@ -854,7 +848,7 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
     width: 30px;
     height: 30px;
     border-radius: 50% 50% 50% 0;
-    background: var(--ink);
+    background: var(--c);
     border: 2px solid #fff;
     transform: rotate(-45deg);
     box-shadow: 0 6px 14px rgba(60, 90, 122, 0.25);
@@ -866,7 +860,7 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
     width: 30px;
     height: 30px;
     border-radius: var(--radius-pill);
-    background: var(--ink);
+    background: var(--c);
     border: 2px solid #fff;
     box-shadow: 0 6px 14px rgba(60, 90, 122, 0.25);
     font-family: var(--font-display);
