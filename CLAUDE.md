@@ -237,6 +237,9 @@ Les variables et secrets sont gérés dans **Cloudflare Pages → Settings → E
 Secrets prévus :
 - Les variables d'environnement (`PUBLIC_WEB3FORMS_KEY`, etc.) sont gérées dans **Cloudflare Pages → Settings → Environment variables**. Le fichier `.env` local sert uniquement au développement.
 
+### Cache Cloudflare
+Pas de règle de cache sur le domaine : Cloudflare Pages gère le cache. Seule règle : Bypass sur /api/.
+
 ---
 
 ## 10. Principe d'édition du contenu

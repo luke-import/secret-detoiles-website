@@ -222,7 +222,9 @@ Objectif : permettre à Grégory de modifier tous les textes et images du site d
   - Territoire sans point de vente : « Bientôt disponible » (carte du sélecteur, en-tête), bloc « Pas encore de point de vente en … » + texte Decap + bouton « Être prévenu(e) » → /contact, encart sur la carte. Testé en vidant la Guyane en local (exemples remis avant commit).
   - Contraste AA : tokens `--ink-*` (couleur du territoire assombrie) pour les types en petites capitales, les pastilles numérotées et les pins.
   - `/api/geo` passé en POST : la règle de cache du domaine mettait les GET en cache 4 h (même avec `no-store`, query string ignorée) → pays d'un visiteur servi à un autre.
-- [ ] Cloudflare (Grégory) : purger le cache du domaine, puis ajouter une règle « Bypass cache » sur `/api/*`
+- [x] Cloudflare (Grégory, 28/10/2026) : cache du domaine purgé, règle « Cache site complet » (4 h) désactivée, règle « Bypass cache » sur `/api/` active
+  - Vérifié en production : pages en `DYNAMIC`, une modification de contenu poussée sur main est visible ~45 s après le push (fin du déploiement), sans purge.
+- [x] Fond Protomaps + page 404 en ligne (squash `8f8c424`, 27/10/2026) : carte sans appel externe, adresse inconnue → 404, `/api/geo` en POST, lien « Où nous trouver » sur les 8 pages
 - [ ] Decap (Grégory, connecté) : vérifier que « Où nous trouver » et « Points de vente » s'affichent et s'éditent
 
 ---
