@@ -164,3 +164,10 @@ points:
     codePostal: "97470"
     ville: Saint-Benoît
     telephone: 0262 50 16 67
+  - territoire: reunion
+    nom: Pharmacie de la Mairie
+    type: pharmacie
+    adresse: 259 Rue Hubert Delisle
+    codePostal: "97430"
+    ville: Le Tampon
+    telephone: 02 62 27 01 91
