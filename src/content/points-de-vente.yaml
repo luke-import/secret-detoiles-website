@@ -157,3 +157,10 @@ points:
     codePostal: "97434"
     ville: Saint-Paul
     telephone: 02 62 24 22 23
+  - territoire: reunion
+    nom: Pharmacie de la Rivière des Roches
+    type: pharmacie
+    adresse: 267 Route Nationale 2
+    codePostal: "97470"
+    ville: Saint-Benoît
+    telephone: 0262 50 16 67
