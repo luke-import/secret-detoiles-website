@@ -534,4 +534,4 @@ collections:
               - { label: "Ville", name: ville, widget: string }
               - { label: "Téléphone", name: telephone, widget: string, required: false }
               - { label: "Horaires", name: horaires, widget: string, required: false, hint: "Ex. Lun–sam · 8h–19h" }
-              - { label: "Position sur la carte", name: position, widget: map, type: Point, decimals: 6, hint: "Zoomez sur le territoire puis cliquez à l'emplacement exact du magasin." }
+              - { label: "Position (facultatif)", name: position, widget: map, type: Point, decimals: 6, required: false, hint: "Laissez vide : le site place le point automatiquement à partir de l'adresse. À utiliser seulement si le point tombe au mauvais endroit." }

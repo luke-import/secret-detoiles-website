@@ -6,6 +6,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionEyebrow from '../components/SectionEyebrow.astro';
 import Button from '../components/Button.astro';
 import { getEntry } from 'astro:content';
+import { geocoder } from '../lib/geocodage';
 import {
   TERRITOIRES,
   TYPES_POINT_DE_VENTE,
@@ -25,13 +26,14 @@ const data = page.data as typeof page.data & {
 const liste = await getEntry('pointsDeVente', 'points-de-vente');
 if (!liste) throw new Error('Liste des points de vente introuvable');
 
-// Numérotation par territoire, dans l'ordre du fichier (même numéro liste ↔ pin).
-const points: PointDeVente[] = liste.data.points.map(({ position, ...p }, i) => ({
-  ...p,
-  id: `pdv-${i + 1}`,
-  lat: position.lat,
-  lng: position.lng,
-}));
+// Numérotation par territoire, dans l'ordre du fichier (même numéro liste ↔ étoile).
+// Position : celle saisie dans Decap si elle existe, sinon géocodage de l'adresse (au build).
+const points: PointDeVente[] = await Promise.all(
+  liste.data.points.map(async ({ position, ...p }, i) => {
+    const pos = position ?? (await geocoder(p.nom, p.adresse, p.codePostal, p.ville));
+    return { ...p, id: `pdv-${i + 1}`, lat: pos?.lat ?? null, lng: pos?.lng ?? null };
+  }),
+);
 
 const territoires = TERRITOIRES.map((t) => ({
   ...t,
@@ -165,8 +167,8 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
     type: string;
     adresse: string;
     ville: string;
-    lat: number;
-    lng: number;
+    lat: number | null; // null : adresse introuvable → dans la liste, sans étoile
+    lng: number | null;
   }
   interface TerritoireCarte {
     id: TerritoireId;
@@ -226,10 +228,10 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
     let courant: TerritoireCarte | null = null;
     // Dès que le visiteur choisit lui-même, la géoloc ne doit plus rien basculer.
     let choixVisiteur = false;
-    let marqueurs: Marker[] = [];
+    let marqueurs: (Marker | undefined)[] = []; // undefined : pharmacie sans position
     // Une popup par pharmacie, NON liée à son marqueur : on l'ouvre nous-mêmes (carte.openPopup) une fois
     // le zoom terminé, sinon le recadrage automatique de Leaflet entrerait en conflit avec le zoom.
-    let popups: Popup[] = [];
+    let popups: (Popup | undefined)[] = [];
 
     // ── Carte : une seule instance, créée au premier affichage ──
     type Fond = ReturnType<typeof import('protomaps-leaflet').leafletLayer>;
@@ -379,7 +381,7 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
       const secteurs = carteCourante.getZoom() < SEUIL_NUMEROS;
       marqueurs.forEach((m, i) => {
         const p = t.points[i];
-        if (!p) return;
+        if (!p || !m) return;
         // Titre natif (nom) seulement en vue numéros ; en vue secteurs, infobulle « 1 pharmacie ».
         m.options.title = secteurs ? '' : p.nom;
         m.setIcon(iconeEtoile(L, t, i, secteurs));
@@ -401,6 +403,7 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
     let indexActif: number | null = null;
     const majEtoilesActives = () => {
       marqueurs.forEach((m, i) => {
+        if (!m) return;
         const actif = i === indexActif;
         m.getElement()?.classList.toggle('is-actif', actif);
         m.setZIndexOffset(actif ? 1000 : 0);
@@ -467,21 +470,23 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
       leaflet = L;
       carteCourante = carte;
       marqueurs = t.points.map((p, i) => {
+        if (p.lat === null || p.lng === null) return undefined; // adresse introuvable : pas d'étoile
+        const { lat, lng } = p;
         // Étoile posée sur l'adresse (ancre au centre), popup juste au-dessus. Icône posée par majIcones().
-        const m = L.marker([p.lat, p.lng], {
+        const m = L.marker([lat, lng], {
           title: p.nom,
           alt: `${i + 1}. ${p.nom}`,
           icon: iconeEtoile(L, t, i, carte.getZoom() < SEUIL_NUMEROS),
         });
         // Popup juste au-dessus de l'étoile numérotée (elle est ouverte au seuil ou au-delà).
-        popups[i] = L.popup({ offset: [0, -TAILLE_ETOILE / 2] }).setLatLng([p.lat, p.lng]).setContent(contenuPopup(p));
+        popups[i] = L.popup({ offset: [0, -TAILLE_ETOILE / 2] }).setLatLng([lat, lng]).setContent(contenuPopup(p));
         return m
           .on('click', () => {
             activerItem(i, true);
             if (carte.getZoom() < SEUIL_NUMEROS) {
               // Étoile « 1 » (vue secteurs) : on zoome jusqu'au seuil, puis on ouvre la popup.
               carte.once('moveend', () => ouvrirPopup(i));
-              carte.setView([p.lat, p.lng], SEUIL_NUMEROS);
+              carte.setView([lat, lng], SEUIL_NUMEROS);
             } else {
               ouvrirPopup(i);
             }
@@ -506,8 +511,9 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
         carte.setMinZoom(Math.max(0, carte.getBoundsZoom(limites) - 1));
         carte.setMaxBounds(limites);
       }
-      if (t.points.length > 0) {
-        carte.fitBounds(L.latLngBounds(t.points.map((p) => [p.lat, p.lng])), { padding: [48, 48], maxZoom: 14 });
+      const places = t.points.flatMap((p) => (p.lat !== null && p.lng !== null ? [[p.lat, p.lng] as [number, number]] : []));
+      if (places.length > 0) {
+        carte.fitBounds(L.latLngBounds(places), { padding: [48, 48], maxZoom: 14 });
       } else {
         carte.setView(t.center, t.zoom);
       }
@@ -571,7 +577,8 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
         activerItem(i, false);
         const t = courant;
         const point = t?.points[i];
-        if (!t || !point) return;
+        if (!t || !point || point.lat === null || point.lng === null) return; // sans position : rien sur la carte
+        const { lat, lng } = point;
         const { carte, calque } = await obtenirCarte();
         const marqueur = marqueurs[i];
         if (courant !== t || !marqueur) return;
@@ -580,7 +587,7 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
         const montrer = () => calque.zoomToShowLayer(marqueur, () => ouvrirPopup(i));
         if (carte.getZoom() < SEUIL_NUMEROS) {
           carte.once('moveend', montrer);
-          carte.setView([point.lat, point.lng], SEUIL_NUMEROS);
+          carte.setView([lat, lng], SEUIL_NUMEROS);
         } else {
           montrer();
         }

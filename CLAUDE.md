@@ -304,3 +304,19 @@ pnpm cartes:tuiles $V $T  # → public/cartes/$V/… et affiche le nombre de fic
 ```
 
 4. Mettre `CARTES_VERSION = 'AAAAMMJJ'` dans `src/data/territoires.ts`, supprimer l'ancien dossier `public/cartes/<ancienne date>/`, `pnpm build`, vérifier la carte, commit.
+
+---
+
+## 13. Points de vente : position sur la carte (/ou-nous-trouver)
+
+**Règle : automatique par défaut, manuel si besoin.**
+
+- Dans Decap (« Points de vente »), le champ **« Position (facultatif) »** se laisse **vide** : au build, le site géocode l'adresse (adresse + code postal + ville) avec la **Base Adresse Nationale** (`api-adresse.data.gouv.fr`, gratuite, sans clé, couvre les 4 territoires). Code : `src/lib/geocodage.ts`.
+- Une position placée à la main dans Decap est **toujours prioritaire** (et n'est jamais re-géocodée). À utiliser seulement si le point automatique tombe au mauvais endroit.
+- Résultat du géocodage :
+  - score ≥ 0,8 et adresse trouvée au numéro → position utilisée, sans message ;
+  - score entre 0,5 et 0,8, ou rue seulement → position utilisée **+ avertissement** ;
+  - score < 0,5, aucun résultat ou API injoignable → **pas d'étoile sur la carte** (la pharmacie reste dans la liste) **+ avertissement**. Le seuil de 0,5 existe parce que, pour une adresse inexistante, la BAN propose souvent une autre rue de la commune (score ~0,5).
+  - Le build n'échoue **jamais** à cause du géocodage.
+- **Où lire les avertissements** : Cloudflare Pages → projet `secret-detoiles-website` → Deployments → le déploiement → **Build log**. Lignes commençant par `⚠️  [points de vente]` (nom de la pharmacie, adresse trouvée, score). En local : sortie de `pnpm build`.
+- Si un avertissement apparaît : corriger l'adresse dans Decap, ou placer le point à la main dans « Position (facultatif) ».

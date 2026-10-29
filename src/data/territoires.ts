@@ -42,8 +42,9 @@ export interface PointDeVente {
   adresse: string;
   codePostal: string;
   ville: string;
-  lat: number;
-  lng: number;
+  /** null : adresse introuvable au géocodage → visible dans la liste, sans étoile sur la carte. */
+  lat: number | null;
+  lng: number | null;
   telephone?: string;
   horaires?: string;
 }

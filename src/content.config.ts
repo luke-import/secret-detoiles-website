@@ -56,7 +56,8 @@ const pointsDeVente = defineCollection({
         ville: z.string(),
         telephone: texteOptionnel,
         horaires: texteOptionnel,
-        position: positionSchema,
+        // Facultative : vide → géocodage automatique de l'adresse au build (src/lib/geocodage.ts).
+        position: z.preprocess((v) => (v === '' || v === null ? undefined : v), positionSchema.optional()),
       }),
     ),
   }),
