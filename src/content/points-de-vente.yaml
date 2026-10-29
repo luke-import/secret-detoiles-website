@@ -150,3 +150,10 @@ points:
     codePostal: "97400"
     telephone: 02 62 20 02 90
     ville: Saint-Denis
+  - territoire: reunion
+    nom: Pharmacie des Filaos
+    type: pharmacie
+    adresse: 94 Av. de Bourbon
+    codePostal: "97434"
+    ville: Saint-Paul
+    telephone: 02 62 24 22 23
