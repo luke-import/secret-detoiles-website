@@ -143,3 +143,10 @@ points:
     ville: Sainte-Suzanne
     telephone: 02 62 46 25 75
     position: '{"type":"Point","coordinates":[55.64146,-20.93218]}'
+  - territoire: reunion
+    nom: Pharmacie Ho Mouye
+    type: pharmacie
+    adresse: 318 rue du Maréchal Leclerc
+    codePostal: "97400"
+    telephone: 02 62 20 02 90
+    ville: Saint-Denis
