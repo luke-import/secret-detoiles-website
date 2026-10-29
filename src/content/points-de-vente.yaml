@@ -171,3 +171,10 @@ points:
     codePostal: "97430"
     ville: Le Tampon
     telephone: 02 62 27 01 91
+  - territoire: reunion
+    nom: Pharmacie Principale
+    type: pharmacie
+    adresse: 174 RUE ROGER PAYET
+    codePostal: "97438"
+    ville: SAINTE MARIE
+    telephone: "0262535350"
