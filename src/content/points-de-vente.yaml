@@ -1,156 +1,145 @@
-# Points de vente affichés sur /ou-nous-trouver (liste + carte), éditables dans Decap.
-# Position : format GeoJSON du widget « map » de Decap → [longitude, latitude].
-# Guyane, Guadeloupe, Martinique : aucun point pour l'instant → « Bientôt disponible ».
 points:
   - territoire: reunion
-    nom: "Pharmacie Vanilla"
+    nom: Pharmacie Vanilla
     type: pharmacie
-    adresse: "15 route nationale 2"
+    adresse: 15 route nationale 2
     codePostal: "97412"
-    ville: "Bras-Panon"
-    telephone: "02 62 51 66 67"
+    ville: Bras-Panon
+    telephone: 02 62 51 66 67
     position: '{"type":"Point","coordinates":[55.68269,-20.99802]}'
   - territoire: reunion
-    nom: "Pharmacie du Terrain de Sel"
+    nom: Pharmacie du Terrain de Sel
     type: pharmacie
-    adresse: "39 rue Sarda Garriga"
+    adresse: 39 rue Sarda Garriga
     codePostal: "97419"
-    ville: "La Possession"
-    telephone: "02 62 22 29 50"
+    ville: La Possession
+    telephone: 02 62 22 29 50
     position: '{"type":"Point","coordinates":[55.33439,-20.93221]}'
   - territoire: reunion
-    nom: "Pharmacie de l'Oasis"
+    nom: Pharmacie de l'Oasis
     type: pharmacie
-    adresse: "1 boulevard de Verdun"
+    adresse: 1 boulevard de Verdun
     codePostal: "97420"
-    ville: "Le Port"
-    telephone: "02 62 43 06 40"
+    ville: Le Port
+    telephone: 02 62 43 06 40
     position: '{"type":"Point","coordinates":[55.29657,-20.93887]}'
   - territoire: reunion
-    nom: "Pharmacie de la Mairie"
+    nom: Pharmacie de la Mairie
     type: pharmacie
-    adresse: "259 rue Hubert Delisle"
+    adresse: 259 rue Hubert Delisle
     codePostal: "97430"
-    ville: "Le Tampon"
-    telephone: "02 62 27 01 91"
+    ville: Le Tampon
+    telephone: 02 62 27 01 91
     position: '{"type":"Point","coordinates":[55.51455,-21.27836]}'
   - territoire: reunion
-    nom: "Pharmacie de la Mairie"
+    nom: Pharmacie de la Mairie
     type: pharmacie
-    adresse: "193 avenue Île de France"
+    adresse: 193 avenue Île de France
     codePostal: "97440"
-    ville: "Saint-André"
-    telephone: "02 62 46 00 05"
+    ville: Saint-André
+    telephone: 02 62 46 00 05
     position: '{"type":"Point","coordinates":[55.64988,-20.95904]}'
   - territoire: reunion
-    nom: "Pharmacie Petit Bazar"
+    nom: Pharmacie Petit Bazar
     type: pharmacie
-    adresse: "1631 avenue Île de France"
+    adresse: 1631 avenue Île de France
     codePostal: "97440"
-    ville: "Saint-André"
-    telephone: "02 62 28 56 62"
+    ville: Saint-André
+    telephone: 02 62 28 56 62
     position: '{"type":"Point","coordinates":[55.64778,-20.94605]}'
   - territoire: reunion
-    nom: "Pharmacie de l'Orchidée"
+    nom: Pharmacie de l'Orchidée
     type: pharmacie
-    adresse: "16 rue Louis Brunet"
+    adresse: 16 rue Louis Brunet
     codePostal: "97470"
-    ville: "Saint-Benoît"
-    telephone: "02 62 50 10 89"
+    ville: Saint-Benoît
+    telephone: 02 62 50 10 89
     position: '{"type":"Point","coordinates":[55.71303,-21.03509]}'
   - territoire: reunion
-    nom: "Pharmacie de la Trinité"
+    nom: Pharmacie de la Trinité
     type: pharmacie
-    adresse: "10 avenue du Pape Jean-Paul II"
+    adresse: 10 avenue du Pape Jean-Paul II
     codePostal: "97400"
-    ville: "Saint-Denis"
-    telephone: "02 62 30 38 88"
+    ville: Saint-Denis
+    telephone: 02 62 30 38 88
     position: '{"type":"Point","coordinates":[55.46859,-20.89497]}'
   - territoire: reunion
-    nom: "Pharmacie Massiau"
+    nom: Pharmacie Massiau
     type: pharmacie
-    adresse: "2 rue Saint-Joseph Ouvrier"
+    adresse: 2 rue Saint-Joseph Ouvrier
     codePostal: "97400"
-    ville: "Saint-Denis"
-    telephone: "02 62 30 33 39"
+    ville: Saint-Denis
+    telephone: 02 62 30 33 39
     position: '{"type":"Point","coordinates":[55.45746,-20.89594]}'
   - territoire: reunion
-    nom: "Pharmacie du Ouaki"
+    nom: Pharmacie du Ouaki
     type: pharmacie
-    adresse: "265 route de Cilaos, La Rivière"
+    adresse: 265 route de Cilaos, La Rivière
     codePostal: "97421"
-    ville: "Saint-Louis"
-    telephone: "02 62 39 02 13"
+    ville: Saint-Louis
+    telephone: 02 62 39 02 13
     position: '{"type":"Point","coordinates":[55.44848,-21.26936]}'
   - territoire: reunion
-    nom: "Pharmacie du Rosaire"
+    nom: Pharmacie du Rosaire
     type: pharmacie
-    adresse: "13 rue Pente Nicole, La Rivière"
+    adresse: 13 rue Pente Nicole, La Rivière
     codePostal: "97421"
-    ville: "Saint-Louis"
-    telephone: "02 62 39 01 62"
+    ville: Saint-Louis
+    telephone: 02 62 39 01 62
     position: '{"type":"Point","coordinates":[55.43718,-21.26347]}'
   - territoire: reunion
-    nom: "Pharmacie des Jacarandas"
+    nom: Pharmacie des Jacarandas
     type: pharmacie
-    adresse: "28 rue Roland Garros, Bois-de-Nèfles"
+    adresse: 28 rue Roland Garros, Bois-de-Nèfles
     codePostal: "97411"
-    ville: "Saint-Paul"
-    telephone: "02 62 27 14 40"
+    ville: Saint-Paul
+    telephone: 02 62 27 14 40
     position: '{"type":"Point","coordinates":[55.32981,-20.99118]}'
   - territoire: reunion
-    nom: "Pharmacie Principale"
+    nom: Pharmacie de Domenjod
     type: pharmacie
-    adresse: "16 rue Marius et Ary Leblond"
-    codePostal: "97460"
-    ville: "Saint-Paul"
-    telephone: "02 62 22 51 19"
-    position: '{"type":"Point","coordinates":[55.27108,-21.00890]}'
-  - territoire: reunion
-    nom: "Pharmacie de Domenjod"
-    type: pharmacie
-    adresse: "88 route de Domenjod"
+    adresse: 88 route de Domenjod
     codePostal: "97490"
-    ville: "Sainte-Clotilde"
-    telephone: "02 62 53 54 95"
+    ville: Sainte-Clotilde
+    telephone: 02 62 53 54 95
     position: '{"type":"Point","coordinates":[55.50331,-20.90750]}'
   - territoire: reunion
-    nom: "Pharmacie Ker Chaudron"
+    nom: Pharmacie Ker Chaudron
     type: pharmacie
-    adresse: "28 avenue Joseph Bédier"
+    adresse: 28 avenue Joseph Bédier
     codePostal: "97490"
-    ville: "Sainte-Clotilde"
-    telephone: "02 62 28 03 65"
+    ville: Sainte-Clotilde
+    telephone: 02 62 28 03 65
     position: '{"type":"Point","coordinates":[55.48698,-20.89272]}'
   - territoire: reunion
-    nom: "Pharmacie les Calebassiers"
+    nom: Pharmacie les Calebassiers
     type: pharmacie
-    adresse: "86 bis avenue Leconte de Lisle"
+    adresse: 86 bis avenue Leconte de Lisle
     codePostal: "97490"
-    ville: "Sainte-Clotilde"
-    telephone: "02 62 28 06 82"
+    ville: Sainte-Clotilde
+    telephone: 02 62 28 06 82
     position: '{"type":"Point","coordinates":[55.48951,-20.89573]}'
   - territoire: reunion
-    nom: "Pharmacie Nguyen"
+    nom: Pharmacie Nguyen
     type: pharmacie
-    adresse: "138 rue Louis Lagourgue"
+    adresse: 138 rue Louis Lagourgue
     codePostal: "97438"
-    ville: "Sainte-Marie"
-    telephone: "02 62 53 68 64"
+    ville: Sainte-Marie
+    telephone: 02 62 53 68 64
     position: '{"type":"Point","coordinates":[55.52151,-20.90783]}'
   - territoire: reunion
-    nom: "Pharmacie Nouvelle de la Vanille"
+    nom: Pharmacie Nouvelle de la Vanille
     type: pharmacie
-    adresse: "120 bis rue Manès"
+    adresse: 120 bis rue Manès
     codePostal: "97438"
-    ville: "Sainte-Marie"
-    telephone: "02 62 53 81 70"
+    ville: Sainte-Marie
+    telephone: 02 62 53 81 70
     position: '{"type":"Point","coordinates":[55.56774,-20.90938]}'
   - territoire: reunion
-    nom: "Pharmacie de l'Océan Indien"
+    nom: Pharmacie de l'Océan Indien
     type: pharmacie
-    adresse: "133 avenue Mahatma Gandhi"
+    adresse: 133 avenue Mahatma Gandhi
     codePostal: "97441"
-    ville: "Sainte-Suzanne"
-    telephone: "02 62 46 25 75"
+    ville: Sainte-Suzanne
+    telephone: 02 62 46 25 75
     position: '{"type":"Point","coordinates":[55.64146,-20.93218]}'
