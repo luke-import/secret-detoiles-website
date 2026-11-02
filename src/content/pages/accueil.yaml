@@ -53,11 +53,31 @@ gamme:
   cta:
     label: Voir toute la gamme
     href: /la-gamme
+partenaire:
+  visible: true
+  eyebrow: exclusivement
+  title: Disponibles chez Ma Pharma Engagée
+  text: "Retrouvez les couches Secret d'étoiles exclusivement dans les pharmacies
+    du réseau Ma Pharma Engagée, des pharmaciens engagés sur leur territoire, en
+    Outre-mer. Proximité, conseil, pouvoir d'achat et respect de
+    l'environnement : des valeurs qui rejoignent les nôtres."
+  logo: /partenaires/ma-pharma-engagee.svg
+  logo_alt: Ma Pharma Engagée
+  cta_primary:
+    label: Trouver une pharmacie
+    href: /ou-nous-trouver
+  cta_secondary:
+    label: Découvrir Ma Pharma Engagée
+    href: https://mapharmaengagee.fr/
+  facebook: https://www.facebook.com/MaPharmaEngagee/
 cta_final:
-  eyebrow: prêt à embarquer ?
-  title: Un peu de magie dans le quotidien de bébé
-  lead: Retrouvez bientôt les couches Secret d'étoiles chez vos revendeurs
-    partenaires.
+  eyebrow: près de chez vous
+  title: Trouvez votre pharmacie
+  lead: Nos couches vous attendent dans les pharmacies Ma Pharma Engagée de La
+    Réunion. Consultez la carte pour trouver la plus proche de chez vous.
   cta:
+    label: Voir la carte
+    href: /ou-nous-trouver
+  cta_secondary:
     label: Nous contacter
     href: /contact

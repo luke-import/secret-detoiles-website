@@ -127,6 +127,36 @@ collections:
                 fields:
                   - { label: "Texte du bouton", name: label, widget: string }
                   - { label: "Lien du bouton", name: href, widget: string }
+          - label: "Section partenaire (Ma Pharma Engagée)"
+            name: partenaire
+            widget: object
+            fields:
+              - { label: "Afficher la section", name: visible, widget: boolean, default: true, hint: "Décoché : la section disparaît de la page d'accueil" }
+              - { label: "Surtitre manuscrit", name: eyebrow, widget: string }
+              - { label: "Titre de section", name: title, widget: string }
+              - { label: "Texte", name: text, widget: text }
+              # Le logo va dans public/partenaires/ (et non dans /uploads) : c'est
+              # un logo de partenaire, rangé à part des photos du site.
+              - label: "Logo du partenaire"
+                name: logo
+                widget: image
+                media_folder: "/public/partenaires"
+                public_folder: "/partenaires"
+                hint: "SVG ou PNG/WebP à fond transparent, au moins 600 px de large"
+              - { label: "Texte alternatif du logo", name: logo_alt, widget: hidden }
+              - label: "Bouton principal"
+                name: cta_primary
+                widget: object
+                fields:
+                  - { label: "Texte du bouton", name: label, widget: string }
+                  - { label: "Lien du bouton", name: href, widget: string, hint: "Ex. /ou-nous-trouver" }
+              - label: "Bouton secondaire (site du partenaire)"
+                name: cta_secondary
+                widget: object
+                fields:
+                  - { label: "Texte du bouton", name: label, widget: string }
+                  - { label: "Lien du bouton", name: href, widget: string, hint: "Adresse complète, ouverte dans un nouvel onglet" }
+              - { label: "Lien Facebook du partenaire", name: facebook, widget: string, hint: "Adresse complète de leur page Facebook" }
           - label: "Bannière finale (CTA)"
             name: cta_final
             widget: object
@@ -134,12 +164,18 @@ collections:
               - { label: "Surtitre manuscrit", name: eyebrow, widget: string }
               - { label: "Titre", name: title, widget: string }
               - { label: "Sous-titre", name: lead, widget: text }
-              - label: "Bouton"
+              - label: "Bouton principal"
                 name: cta
                 widget: object
                 fields:
                   - { label: "Texte du bouton", name: label, widget: string }
                   - { label: "Lien du bouton", name: href, widget: string }
+              - label: "Bouton secondaire"
+                name: cta_secondary
+                widget: object
+                fields:
+                  - { label: "Texte du bouton", name: label, widget: string }
+                  - { label: "Lien du bouton", name: href, widget: string, hint: "Ex. /contact" }
       # ─────────────────────────────────────────────
       # NOTRE HISTOIRE
       # ─────────────────────────────────────────────

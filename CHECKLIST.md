@@ -232,6 +232,32 @@ Objectif : permettre à Grégory de modifier tous les textes et images du site d
 
 ---
 
+## Section partenaire « Ma Pharma Engagée » (accueil) — branche `section-partenaire`, en local
+
+- [x] Section ajoutée sur la page d'accueil, entre « La gamme » et la bannière finale, ancre `#partenaire`
+- [x] Desktop : logo à gauche dans une carte blanche, texte à droite — mobile : logo au-dessus, centré
+- [x] Contenu entièrement dans `src/content/pages/accueil.yaml` (bloc `partenaire`), rien codé en dur
+- [x] Decap : bloc « Section partenaire » dans la page Accueil, avec l'interrupteur « Afficher la section » (testé : décoché, la section disparaît)
+- [x] Logo rangé dans `public/partenaires/` — Decap y dépose les téléversements (`media_folder` du champ), pas dans `/uploads`
+- [x] `Button.astro` accepte `target` / `rel` : les liens sortants s'ouvrent en nouvel onglet avec `rel="noopener"`
+- [x] `scroll-margin-top` sur la section : sans elle, arriver sur `/#partenaire` plaçait le titre derrière l'en-tête collant (80 px)
+- [x] Build 0 erreur, 0 avertissement ; captures 1440 et 375 px dans `out/partenaire/`
+- [x] Formulation « exclusivement » (surtitre + texte) — cohérente avec la carte : les 18 points de vente de `points-de-vente.yaml` sont tous de type `pharmacie`
+- [x] **Logo réel en place** : SVG fourni par Grégory, optimisé avec svgo en `pnpm dlx` (rien ajouté à `package.json`). 20 651 → 14 138 octets (−31 %), **rendu strictement identique** : 0 pixel d'écart sur 2 449 200 comparés. ⚠️ Toujours ré-optimiser avec `--precision=6` : la précision par défaut (3) décale les contours (0,17 % des pixels, tous sur les bords)
+- [x] Bannière finale : surtitre « près de chez vous », second bouton « Nous contacter » → `/contact` (éditable dans Decap comme le premier)
+- [x] Nouvelle variante `ghost-cream` dans `Button.astro` : sur le fond bleu nuit de la bannière, le `ghost` ordinaire est **invisible** (contraste mesuré **1:1**, texte bleu nuit sur fond bleu nuit). En crème : **6,92:1** pour le texte et la bordure
+- [x] Bannière finale réorientée vers la carte : « Trouvez votre pharmacie » / « Voir la carte » → `/ou-nous-trouver`. La dissonance « bientôt chez vos revendeurs » est levée
+- [ ] Pousser en preview Cloudflare, puis fusionner sur `main` — **sur accord de Grégory uniquement**
+
+### À savoir pour la suite
+- `--color-cream-warm` vaut aujourd'hui `#FDFBF6`, exactement comme `--color-cream` (commit `4bc2647`, « unification monochrome tous fonds »). Un fond en tint pastel aurait rompu cette décision : la section reprend donc `cream-warm` et c'est la **bordure** `--color-cream-deep` de la carte qui la détache. ⚠️ Le tableau du CLAUDE.md annonce encore `#F3EEE1` pour ce token : doc et code ne disent pas la même chose.
+- Une valeur de contenu qui contient « : » doit être entre guillemets dans le YAML, sinon Astro la lit comme une sous-clé et le build casse.
+- Les deux points ouverts sur la bannière sont réglés : surtitre « près de chez vous », et le bouton vers `/contact` est revenu en secondaire.
+- ⚠️ Le serveur de dev a servi une **feuille de style périmée** après l'ajout de la variante : la règle était dans le source et dans `dist/`, mais absente du CSS envoyé au navigateur. Au moindre doute sur un style qui « ne prend pas », redémarrer `pnpm dev` avant de chercher ailleurs.
+- « de La Réunion » dans la bannière est exact aujourd'hui : les 18 points de vente sont tous réunionnais. À revoir le jour où une pharmacie d'un autre territoire s'ajoute.
+
+---
+
 ## Phase 12 — Recette finale
 
 - [ ] Tests mobile — iOS Safari + Android Chrome
@@ -260,4 +286,4 @@ Cette section sert à noter tout ce qui ne rentre pas ailleurs : décisions à p
 
 ### Points ouverts
 - Photo maman & bébé pour la section "cocon de douceur" home : source à décider (banque d'images libre, séance photo, illustration...)
-- Placeholders "logos revendeurs" en bas de page contact : quelles enseignes afficher réellement ?
+- Placeholders "logos revendeurs" en bas de page contact : quelles enseignes afficher réellement ? (Ma Pharma Engagée a désormais sa propre section sur l'accueil)

@@ -1,18 +1,21 @@
 ---
 interface Props {
-  variant?: 'primary' | 'ghost' | 'cream';
+  variant?: 'primary' | 'ghost' | 'cream' | 'ghost-cream';
   href?: string;
   type?: 'button' | 'submit';
   class?: string;
+  /* Liens sortants : « _blank » impose rel="noopener" (sécurité). */
+  target?: '_blank';
+  rel?: string;
 }
 
-const { variant = 'primary', href, type = 'button', class: className } = Astro.props;
+const { variant = 'primary', href, type = 'button', class: className, target, rel } = Astro.props;
 
 const classes = ['btn', `btn-${variant}`, className];
 ---
 {
   href ? (
-    <a href={href} class:list={classes}>
+    <a href={href} class:list={classes} target={target} rel={target === '_blank' ? (rel ?? 'noopener') : rel}>
       <slot />
     </a>
   ) : (
@@ -55,6 +58,19 @@ const classes = ['btn', `btn-${variant}`, className];
   .btn-ghost:hover {
     background: var(--color-blue-night);
     color: var(--color-cream);
+  }
+
+  /* Bouton secondaire SUR FOND SOMBRE (bannière finale). Le « ghost »
+     ordinaire y serait invisible : texte bleu nuit sur fond bleu nuit,
+     contraste mesuré 1:1. En crème : 6,92:1. */
+  .btn-ghost-cream {
+    background: transparent;
+    color: var(--color-cream);
+    border: 1.5px solid var(--color-cream);
+  }
+  .btn-ghost-cream:hover {
+    background: var(--color-cream);
+    color: var(--color-blue-night);
   }
 
   .btn-cream {

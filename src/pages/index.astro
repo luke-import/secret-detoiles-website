@@ -80,7 +80,53 @@ const { data } = page;
       </div>
     </section>
 
-    <!-- SECTION 5 — CTA FINAL -->
+    <!-- SECTION 5 — PARTENAIRE (réseau de pharmacies) -->
+    {data.partenaire.visible && (
+      <section class="partenaire" id="partenaire">
+        <div class="partenaire-inner">
+          <a
+            class="partenaire-logo"
+            href={data.partenaire.cta_secondary.href}
+            target="_blank"
+            rel="noopener"
+          >
+            <img src={data.partenaire.logo} alt={data.partenaire.logo_alt} loading="lazy" />
+          </a>
+          <div class="partenaire-content">
+            <SectionEyebrow
+              eyebrow={data.partenaire.eyebrow}
+              title={data.partenaire.title}
+              center={false}
+            />
+            <p class="partenaire-p">{data.partenaire.text}</p>
+            <div class="partenaire-ctas">
+              <Button variant="primary" href={data.partenaire.cta_primary.href}>
+                {data.partenaire.cta_primary.label}
+              </Button>
+              <Button variant="ghost" href={data.partenaire.cta_secondary.href} target="_blank">
+                {data.partenaire.cta_secondary.label}
+              </Button>
+              <a
+                class="partenaire-facebook"
+                href={data.partenaire.facebook}
+                target="_blank"
+                rel="noopener"
+                aria-label="Ma Pharma Engagée sur Facebook"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path
+                    fill="currentColor"
+                    d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.1 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.78-1.63 1.57v1.88h2.78l-.45 2.91h-2.33V22c4.78-.76 8.44-4.92 8.44-9.94Z"
+                  />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- SECTION 6 — CTA FINAL -->
     <section class="cta-final">
       <div class="cta-final-inner">
         <Sparkles density="medium" variant="cta" />
@@ -88,7 +134,12 @@ const { data } = page;
           <p class="cta-final-eyebrow">{data.cta_final.eyebrow}</p>
           <h2 class="cta-final-title">{data.cta_final.title}</h2>
           <p class="cta-final-lead">{data.cta_final.lead}</p>
-          <Button variant="cream" href={data.cta_final.cta.href}>{data.cta_final.cta.label}</Button>
+          <div class="cta-final-boutons">
+            <Button variant="cream" href={data.cta_final.cta.href}>{data.cta_final.cta.label}</Button>
+            <Button variant="ghost-cream" href={data.cta_final.cta_secondary.href}>
+              {data.cta_final.cta_secondary.label}
+            </Button>
+          </div>
         </div>
       </div>
     </section>
@@ -242,7 +293,87 @@ const { data } = page;
     justify-content: center;
   }
 
-  /* ===== SECTION 5 — CTA FINAL ===== */
+  /* ===== SECTION 5 — PARTENAIRE ===== */
+  .partenaire {
+    padding: 5rem 1.5rem;
+    background: var(--color-cream-warm);
+    /* L'en-tête est collant (80 px) : sans cette marge, arriver sur
+       /#partenaire place le titre DERRIÈRE l'en-tête. */
+    scroll-margin-top: 96px;
+  }
+  .partenaire-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+  /* La carte accueille n'importe quel rapport d'image sans le déformer
+     (object-fit: contain) et sans décaler la page au chargement. */
+  .partenaire-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 16 / 10;
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+    padding: 28px;
+    background: #fff;
+    border: 1.5px solid var(--color-cream-deep);
+    border-radius: var(--radius-xl);
+    transition: 0.2s;
+  }
+  .partenaire-logo:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-primary-hover);
+  }
+  .partenaire-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  .partenaire-p {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--color-text-2);
+    line-height: 1.75;
+    margin: 24px 0 0;
+  }
+  .partenaire-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    margin-top: 28px;
+  }
+  .partenaire-facebook {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* 44 px : cible tactile minimale recommandée (WCAG 2.5.8). */
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-pill);
+    color: var(--color-blue-night);
+    transition: 0.2s;
+  }
+  .partenaire-facebook svg {
+    width: 22px;
+    height: 22px;
+  }
+  .partenaire-facebook:hover {
+    background: var(--color-cream-hover);
+    color: var(--color-coral-deep);
+  }
+
+  /* ===== SECTION 6 — CTA FINAL ===== */
+  .cta-final-boutons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+  }
   .cta-final {
     padding: 5rem 1.5rem;
   }
@@ -324,6 +455,15 @@ const { data } = page;
       grid-template-columns: 1fr 1fr;
       gap: 60px;
       align-items: center;
+    }
+    .partenaire-inner {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .partenaire-logo {
+      margin: 0;
     }
   }
 
