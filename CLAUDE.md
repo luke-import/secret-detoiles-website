@@ -283,7 +283,7 @@ Fond **Protomaps auto-hébergé**, servi en **tuiles statiques** depuis le site 
 - Version utilisée par le code : `CARTES_VERSION` dans `src/data/territoires.ts`, avec l'emprise `bbox` et le `maxzoom` de chaque territoire (**à garder identiques** à ceux de `scripts/cartes-tuiles.js`).
 - Cache : `public/_headers` sert `/cartes/*` en cache 1 an `immutable` → **ne jamais remplacer des tuiles sous le même chemin**, toujours créer un nouveau dossier daté.
 - Couleurs : flavor « light » de `@protomaps/basemaps`, recoloré dans `ou-nous-trouver.astro` à partir des tokens CSS (terre crème, eau bleu ciel, routes blanches, libellés `--color-text-2`, ni POI ni végétation).
-- **Limite Cloudflare Pages : 20 000 fichiers par déploiement** (tout le site compris). Au 27/10/2026 : 17 569 tuiles (Réunion z15 : 4 554 · Guadeloupe z15 : 8 035 · Martinique z15 : 2 845 · Guyane z12 : 2 135) + ~60 fichiers du site. Si un territoire doit passer à un zoom supérieur (ex. Guyane quand elle aura des points de vente), il faudra en baisser un autre (ex. Guadeloupe z14 : 2 059 tuiles). Le vectoriel se sur-zoome sans flou.
+- **Limite Cloudflare Pages : 20 000 fichiers par déploiement** (tout le site compris). Au 02/11/2026 : 15 434 tuiles (Réunion z15 : 4 554 · Guadeloupe z15 : 8 035 · Martinique z15 : 2 845) + ~65 fichiers du site. Si un territoire doit passer à un zoom supérieur (ou si un territoire est ajouté), il faudra peut-être en baisser un autre (ex. Guadeloupe z14 : 2 059 tuiles). Le vectoriel se sur-zoome sans flou.
 
 ### Mise à jour annuelle
 
@@ -297,7 +297,6 @@ B=https://build.protomaps.com/$V.pmtiles
 T=~/cartes-$V            # dossier temporaire, hors du dépôt
 mkdir -p $T
 pmtiles extract $B $T/reunion.pmtiles    --bbox=55.2,-21.42,55.85,-20.85  --maxzoom=15
-pmtiles extract $B $T/guyane.pmtiles     --bbox=-54.65,2.1,-51.6,5.8      --maxzoom=12
 pmtiles extract $B $T/guadeloupe.pmtiles --bbox=-61.85,15.8,-60.95,16.55  --maxzoom=15
 pmtiles extract $B $T/martinique.pmtiles --bbox=-61.25,14.38,-60.8,14.9   --maxzoom=15
 pnpm cartes:tuiles $V $T  # → public/cartes/$V/… et affiche le nombre de fichiers (doit rester < ~19 900)
@@ -311,7 +310,7 @@ pnpm cartes:tuiles $V $T  # → public/cartes/$V/… et affiche le nombre de fic
 
 **Règle : automatique par défaut, manuel si besoin.**
 
-- Dans Decap (« Points de vente »), le champ **« Position (facultatif) »** se laisse **vide** : au build, le site géocode l'adresse (adresse + code postal + ville) avec la **Base Adresse Nationale** (`api-adresse.data.gouv.fr`, gratuite, sans clé, couvre les 4 territoires). Code : `src/lib/geocodage.ts`.
+- Dans Decap (« Points de vente »), le champ **« Position (facultatif) »** se laisse **vide** : au build, le site géocode l'adresse (adresse + code postal + ville) avec la **Base Adresse Nationale** (`api-adresse.data.gouv.fr`, gratuite, sans clé, couvre les 3 territoires). Code : `src/lib/geocodage.ts`.
 - Une position placée à la main dans Decap est **toujours prioritaire** (et n'est jamais re-géocodée). À utiliser seulement si le point automatique tombe au mauvais endroit.
 - Résultat du géocodage :
   - score ≥ 0,8 et adresse trouvée au numéro → position utilisée, sans message ;

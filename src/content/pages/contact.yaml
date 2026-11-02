@@ -14,7 +14,7 @@ form:
 trouver:
   eyebrow: "où nous trouver"
   title: "Nos points de vente"
-  lead: "La Réunion, la Guyane, la Guadeloupe, la Martinique : découvrez les magasins qui proposent nos couches enchantées près de chez vous."
+  lead: "La Réunion, la Guadeloupe, la Martinique : découvrez les magasins qui proposent nos couches enchantées près de chez vous."
   cta:
     label: "Trouver un point de vente"
     href: "/ou-nous-trouver"

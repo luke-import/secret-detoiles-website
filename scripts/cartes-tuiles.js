@@ -10,14 +10,13 @@ import { join } from 'node:path';
 // Même emprise et zoom max que src/data/territoires.ts (limite Cloudflare : 20 000 fichiers par déploiement).
 const TERRITOIRES = {
   reunion: { bbox: [55.2, -21.42, 55.85, -20.85], maxzoom: 15 },
-  guyane: { bbox: [-54.65, 2.1, -51.6, 5.8], maxzoom: 12 },
   guadeloupe: { bbox: [-61.85, 15.8, -60.95, 16.55], maxzoom: 15 },
   martinique: { bbox: [-61.25, 14.38, -60.8, 14.9], maxzoom: 15 },
 };
 
 const [version, dossierPmtiles] = process.argv.slice(2);
 if (!/^\d{8}$/.test(version ?? '') || !dossierPmtiles) {
-  console.error('Usage : pnpm cartes:tuiles <AAAAMMJJ> <dossier contenant reunion.pmtiles, guyane.pmtiles…>');
+  console.error('Usage : pnpm cartes:tuiles <AAAAMMJJ> <dossier contenant reunion.pmtiles, guadeloupe.pmtiles…>');
   process.exit(1);
 }
 

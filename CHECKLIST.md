@@ -211,18 +211,19 @@ Objectif : permettre à Grégory de modifier tous les textes et images du site d
 
 - [x] En ligne sur https://secret-detoiles.fr/ou-nous-trouver (fusion de la branche `ou-nous-trouver` sur main, branche supprimée)
 
-- [x] Page Où nous trouver (`/ou-nous-trouver`) — sélecteur 4 territoires + liste + carte Leaflet/OSM + géoloc IP
+- [x] Page Où nous trouver (`/ou-nous-trouver`) — sélecteur 3 territoires (La Réunion, Guadeloupe, Martinique ; Guyane retirée le 02/11/2026) + liste + carte Leaflet/OSM + géoloc IP
   - Textes éditables dans Decap (`src/content/pages/ou-nous-trouver.yaml`), points de vente éditables dans Decap (`src/content/points-de-vente.yaml`, position via le widget « map »). Territoires (couleurs, centrage) dans `src/data/territoires.ts`.
-  - Liste client intégrée : 19 pharmacies à La Réunion ; Guyane, Guadeloupe, Martinique en « Bientôt disponible ». Liens tel: au format international (indicatif par territoire).
+  - Liste client intégrée : 19 pharmacies à La Réunion ; Guadeloupe, Martinique en « Bientôt disponible » (Guyane retirée le 02/11/2026). Liens tel: au format international (indicatif par territoire).
   - Fond de carte : Protomaps auto-hébergé en tuiles statiques (`public/cartes/20261027/<territoire>/{z}/{x}/{y}.pbf`, build Protomaps du 27/10/2026, générées par `pnpm cartes:tuiles`), recoloré aux tokens du site, aucun appel externe. Pas de `.pmtiles` : Cloudflare Pages ne gère pas les requêtes Range. Mise à jour annuelle : CLAUDE.md §12. (Historique : CARTO Positron essayé puis retiré, puis OSM en gris.)
-  - Géoloc : `functions/api/geo.ts` (Cloudflare Pages Function) ; `?territoire=` prioritaire, `?geo=RE|GF|GP|MQ|FR` pour simuler.
+  - Géoloc : `functions/api/geo.ts` (Cloudflare Pages Function) ; `?territoire=` prioritaire, `?geo=RE|GP|MQ|FR` pour simuler (GF → sélecteur depuis le retrait de la Guyane).
   - Header : lien ajouté + état actif (pilule bleu nuit) sur tous les liens ; footer : lien ajouté ; contact : section « où nous trouver » → bouton vers la page.
   - Packages ajoutés (validés) : `leaflet` 1.9.4, `leaflet.markercluster` 1.5.3 (MIT), `protomaps-leaflet` 5.1.0, `@protomaps/basemaps` 5.7.2, `@types/leaflet` + `@types/leaflet.markercluster` (dev).
   - Pins proches regroupés en bulles numérotées (couleur pastel du territoire, rayon 40, éventail au zoom max) ; clic liste → zoomToShowLayer + popup. Vue initiale de La Réunion vérifiée sans chevauchement (desktop + mobile).
-  - Territoire sans point de vente : « Bientôt disponible » (carte du sélecteur, en-tête), bloc « Pas encore de point de vente en … » + texte Decap + bouton « Être prévenu(e) » → /contact, encart sur la carte. Testé en vidant la Guyane en local (exemples remis avant commit).
+  - Territoire sans point de vente : « Bientôt disponible » (carte du sélecteur, en-tête), bloc « Pas encore de point de vente en … » + texte Decap + bouton « Être prévenu(e) » → /contact, encart sur la carte. Testé à l'époque en vidant un territoire en local (exemples remis avant commit).
   - Repères de carte en étoiles à 5 branches arrondies (demande client, 28/10/2026) : numéro ou nombre en Fredoka blanc, 40px (pharmacie) / 48px (bulle), ancrées au centre de l'adresse, étoile active agrandie en bleu nuit, rayon de regroupement 48px. Remplissage semi-transparent (0,55, contour 0,8) pour voir les noms de villes, chiffre blanc avec ombre renforcée, ombre de l'étoile allégée ; étoile active et survol opaques.
   - Étoiles « secteurs » (28/10/2026) : sous le zoom 13, chaque étoile affiche le NOMBRE de pharmacies (bulle = groupe, étoile isolée = « 1 », rayon de regroupement 80 px) ; à partir du zoom 13, le numéro de la liste. Clic sur « 1 » ou dans la liste → zoom au seuil + popup ; clic sur une grande bulle → zoom progressif (le secteur se divise) ; infobulle « N pharmacies » au survol. Popups = `L.popup` indépendants ouverts par `carte.openPopup` après le zoom (pas de décalage sur mobile).
   - Géocodage automatique (29/10/2026) : position facultative dans Decap ; sans position, l'adresse est géocodée au build via la Base Adresse Nationale (avertissements dans le build log Cloudflare, jamais d'échec du build). Voir CLAUDE.md §13.
+  - Carte sans regroupement + retrait de la Guyane (02/11/2026, branche `carte-sans-regroupement`) : `leaflet.markercluster` supprimé ; une étoile vide (32 px, pastel, 0,55) par pharmacie à son emplacement exact, infobulle avec le nom au survol ; étoile active bleu nuit, opaque, agrandie, au-dessus des autres, zoom calculé pour la séparer de ses voisines + popup ; puces étoiles sans chiffre dans la liste. Guyane retirée partout (territoires, géoloc GF → sélecteur, tuiles, Decap, textes) : 3 territoires, 15 434 tuiles.
   - Couleurs : retour aux couleurs pastel du territoire (types, pastilles, pins, bulles) et téléphones en corail (28/10/2026). Tokens `--ink-*` (version AA) gardés dans tokens.css, non utilisés.
   - `/api/geo` passé en POST : la règle de cache du domaine mettait les GET en cache 4 h (même avec `no-store`, query string ignorée) → pays d'un visiteur servi à un autre.
 - [x] Cloudflare (Grégory, 28/10/2026) : cache du domaine purgé, règle « Cache site complet » (4 h) désactivée, règle « Bypass cache » sur `/api/` active
@@ -269,7 +270,7 @@ Objectif : permettre à Grégory de modifier tous les textes et images du site d
 - [ ] Guide illustré d'édition via Decap CMS remis à Grégory
 - [ ] Décider du contraste des liens corail sur tout le site (3:1 sur blanc, sous le minimum AA)
 - [x] Couleurs pastel conservées volontairement sur /ou-nous-trouver (contraste < AA) — tokens `--ink-*` prêts dans tokens.css si besoin
-- [x] Fond de carte plus épuré (piste : Protomaps auto-hébergé, sans clé ni compte) — branche `carte-protomaps` : 17 569 tuiles / 100 Mo (Réunion z15 4 554 · Guadeloupe z15 8 035 · Martinique z15 2 845 · Guyane z12 2 135), limite Cloudflare 20 000 fichiers
+- [x] Fond de carte plus épuré (piste : Protomaps auto-hébergé, sans clé ni compte) — branche `carte-protomaps` : 15 434 tuiles depuis le retrait de la Guyane le 02/11/2026 (Réunion z15 4 554 · Guadeloupe z15 8 035 · Martinique z15 2 845), limite Cloudflare 20 000 fichiers
 
 ---
 

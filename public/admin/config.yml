@@ -521,7 +521,7 @@ collections:
           - label: "Texte quand un territoire n'a pas encore de point de vente"
             name: vide
             widget: object
-            hint: "Le titre « Pas encore de point de vente en Guyane » (etc.) est généré automatiquement."
+            hint: "Le titre « Pas encore de point de vente en Martinique » (etc.) est généré automatiquement."
             fields:
               - { label: "Texte", name: message, widget: text }
               - { label: "Texte du bouton", name: lien_label, widget: string }
@@ -553,7 +553,6 @@ collections:
                 widget: select
                 options:
                   - { label: "La Réunion", value: reunion }
-                  - { label: "La Guyane", value: guyane }
                   - { label: "La Guadeloupe", value: guadeloupe }
                   - { label: "La Martinique", value: martinique }
               - { label: "Nom du magasin", name: nom, widget: string }

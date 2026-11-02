@@ -1,5 +1,5 @@
 // Géocodage des points de vente au build, via la Base Adresse Nationale (gratuite, sans clé,
-// couvre La Réunion, la Guyane, la Guadeloupe et la Martinique).
+// couvre La Réunion, la Guadeloupe et la Martinique).
 // Règle : une position saisie dans Decap est toujours prioritaire ; sinon on géocode l'adresse.
 // Le build ne doit JAMAIS échouer à cause du géocodage : en cas de doute, avertissement dans le
 // log de build (Cloudflare Pages → déploiement → Build log) et pas d'étoile sur la carte.

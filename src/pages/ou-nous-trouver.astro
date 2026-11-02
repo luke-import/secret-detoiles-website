@@ -1,12 +1,11 @@
 ---
 import 'leaflet/dist/leaflet.css';
-// Seulement le CSS d'animation du plugin de regroupement : pas MarkerCluster.Default.css (bulles vert/jaune).
-import 'leaflet.markercluster/dist/MarkerCluster.css';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionEyebrow from '../components/SectionEyebrow.astro';
 import Button from '../components/Button.astro';
 import { getEntry } from 'astro:content';
 import { geocoder } from '../lib/geocodage';
+import { ETOILE_PATH, ETOILE_VIEWBOX } from '../lib/etoile';
 import {
   TERRITOIRES,
   TYPES_POINT_DE_VENTE,
@@ -26,7 +25,7 @@ const data = page.data as typeof page.data & {
 const liste = await getEntry('pointsDeVente', 'points-de-vente');
 if (!liste) throw new Error('Liste des points de vente introuvable');
 
-// Numérotation par territoire, dans l'ordre du fichier (même numéro liste ↔ étoile).
+// Ordre du fichier = ordre de la liste (index commun liste ↔ étoile de la carte).
 // Position : celle saisie dans Decap si elle existe, sinon géocodage de l'adresse (au build).
 const points: PointDeVente[] = await Promise.all(
   liste.data.points.map(async ({ position, ...p }, i) => {
@@ -114,7 +113,7 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
                     <ol class="list" data-list>
                       {t.points.map((p, i) => (
                         <li class="item" data-index={i}>
-                          <span class="num" aria-hidden="true">{i + 1}</span>
+                          <svg class="puce" viewBox={ETOILE_VIEWBOX} aria-hidden="true"><path d={ETOILE_PATH} /></svg>
                           <div class="item-body">
                             <h4 class="item-nom">
                               <button type="button" class="item-btn" data-item={i}>{p.nom}</button>
@@ -157,9 +156,9 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
 </BaseLayout>
 
 <script>
-  import type { LatLngBoundsExpression, Map as CarteLeaflet, Marker, MarkerClusterGroup, Popup } from 'leaflet';
-  import type {} from 'leaflet.markercluster';
+  import type { LatLngBoundsExpression, LayerGroup, Map as CarteLeaflet, Marker, Popup } from 'leaflet';
   import type { Flavor } from '@protomaps/basemaps';
+  import { ETOILE_PATH, ETOILE_VIEWBOX } from '../lib/etoile';
   import { CARTES_VERSION, PAYS_VERS_TERRITOIRE, type TerritoireId } from '../data/territoires';
 
   interface PointCarte {
@@ -175,34 +174,21 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
     couleur: string;
     center: [number, number];
     zoom: number;
-    carte: {
-      bbox: [number, number, number, number];
-      maxzoom: number;
-      horsEmprise?: { fond: 'terre'; marges: [number, number, number, number] };
-    };
+    carte: { bbox: [number, number, number, number]; maxzoom: number };
     points: PointCarte[];
   }
 
-  // Étoile à 5 branches aux pointes arrondies pour les repères de la carte : centre large
-  // (rayon intérieur 34/52) pour loger « 19 » lisiblement. Centre optique un peu bas (y = 53).
-  // viewBox avec marge : le contour blanc déborde du tracé.
-  const ETOILE =
-    'M 45.6 6.4 Q 50.0 1.0 54.4 6.4 L 70.0 25.5 L 93.0 34.4 Q 99.5 36.9 95.7 42.8 L 82.3 63.5 ' +
-    'L 81.0 88.1 Q 80.6 95.1 73.8 93.3 L 50.0 87.0 L 26.2 93.3 Q 19.4 95.1 19.0 88.1 L 17.7 63.5 ' +
-    'L 4.3 42.8 Q 0.5 36.9 7.0 34.4 L 30.0 25.5 Z';
-  const etoile = (classe: string, couleur: string, texte: string | number) =>
-    `<span class="pdv-etoile ${classe} t-${couleur}"><svg viewBox="-6 -6 112 112" aria-hidden="true">` +
-    `<path d="${ETOILE}"/></svg><span>${texte}</span></span>`;
-  const TAILLE_ETOILE = 40;
-  const TAILLE_BULLE = 48;
-  // Seuil de zoom (même règle pour tous les territoires). En dessous : vue « secteurs », chaque étoile
-  // affiche un NOMBRE de pharmacies (bulle = nombre du groupe, étoile isolée = « 1 », taille bulle).
-  // À partir du seuil (vue de quartier) : chaque étoile affiche son numéro de la liste.
-  const SEUIL_NUMEROS = 13;
-  // Rayon de regroupement : large sous le seuil (une étoile par ville ou zone proche),
-  // puis juste ce qu'il faut pour qu'aucune étoile n'en touche une autre (demi-étoile + demi-bulle).
-  const rayonRegroupement = (zoom: number) => (zoom < SEUIL_NUMEROS ? 80 : 48);
-  const pharmacies = (n: number) => `${n} pharmacie${n > 1 ? 's' : ''}`;
+  // Une étoile vide (sans chiffre) par pharmacie, à son emplacement exact, à tous les zooms.
+  const TAILLE_ETOILE = 32;
+  const etoile = (couleur: string) =>
+    `<span class="pdv-etoile t-${couleur}"><svg viewBox="${ETOILE_VIEWBOX}" aria-hidden="true">` +
+    `<path d="${ETOILE_PATH}"/></svg></span>`;
+  // Pharmacie sélectionnée : zoom jusqu'à ce que ses voisines soient au moins à cet écart (en px,
+  // centre à centre) pour la distinguer, sans dépasser ZOOM_MAX_AUTO (adresses quasi identiques).
+  const ECART_MIN = 44;
+  const ZOOM_MAX_AUTO = 17;
+  // Clic dans la liste : on zoome au moins jusqu'à la vue de quartier.
+  const ZOOM_LISTE = 13;
 
   // Fond de carte aux couleurs du site : lues dans les tokens CSS (le canvas Protomaps attend des couleurs résolues).
   const token = (nom: string) => getComputedStyle(document.documentElement).getPropertyValue(nom).trim();
@@ -237,23 +223,19 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
     type Fond = ReturnType<typeof import('protomaps-leaflet').leafletLayer>;
     let cartePromise: Promise<{
       carte: CarteLeaflet;
-      calque: MarkerClusterGroup;
+      calque: LayerGroup;
       L: typeof import('leaflet');
       fondPour: (t: TerritoireCarte) => Fond;
-      couleurs: { eau: string; terre: string };
+      eau: string;
     }> | null = null;
     let fondActif: Fond | null = null;
     const obtenirCarte = () => {
       cartePromise ??= import('leaflet').then(async (module) => {
-        // leaflet.markercluster s'accroche à la variable globale L (format UMD) : on la lui fournit,
+        // protomaps-leaflet s'appuie sur la variable globale L : on la lui fournit,
         // sous forme d'objet modifiable (un module ES importé ne l'est pas).
         const L = { ...module } as typeof module;
         (window as unknown as { L: typeof module }).L = L;
-        const [, protomaps, { namedFlavor }] = await Promise.all([
-          import('leaflet.markercluster'),
-          import('protomaps-leaflet'),
-          import('@protomaps/basemaps'),
-        ]);
+        const [protomaps, { namedFlavor }] = await Promise.all([import('protomaps-leaflet'), import('@protomaps/basemaps')]);
         // maxBoundsViscosity 1 : impossible de tirer la carte au-delà de l'emprise, même brièvement.
         const carte = L.map(mapEl, { scrollWheelZoom: false, maxZoom: 18, maxBoundsViscosity: 1 });
 
@@ -302,7 +284,8 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
         const regles = { paintRules: protomaps.paintRules(flavor), labelRules: protomaps.labelRules(flavor, 'fr') };
 
         // Tuiles statiques par territoire, servies depuis le site (aucun appel externe).
-        // La marge autour de l'emprise extraite n'a pas de tuiles : couleur de fond selon le territoire.
+        // La marge autour de l'emprise extraite n'a pas de tuiles : elle prend la couleur de l'eau.
+        mapEl.style.backgroundColor = eau;
         const fonds = new Map<TerritoireId, Fond>();
         const fondPour = (t: TerritoireCarte) => {
           let fond = fonds.get(t.id);
@@ -325,71 +308,13 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
         // Zoom molette seulement après un clic sur la carte : évite de piéger le scroll de la page.
         carte.on('click', () => carte.scrollWheelZoom.enable());
         carte.on('mouseout', () => carte.scrollWheelZoom.disable());
-        // Pins proches regroupés en une bulle numérotée, aux couleurs du territoire courant.
-        const calque = L.markerClusterGroup({
-          maxClusterRadius: rayonRegroupement,
-          showCoverageOnHover: false,
-          spiderfyOnMaxZoom: true,
-          zoomToBoundsOnClick: false, // remplacé ci-dessous : zoom au moins jusqu'au seuil des numéros
-          // Bulle = même étoile, un peu plus grande, ancrée comme les étoiles en son centre.
-          iconCreateFunction: (groupe) =>
-            L.divIcon({
-              className: 'pdv-pin-icon',
-              html: etoile('pdv-cluster', courant?.couleur ?? '', groupe.getChildCount()),
-              iconSize: [TAILLE_BULLE, TAILLE_BULLE],
-              iconAnchor: [TAILLE_BULLE / 2, TAILLE_BULLE / 2],
-            }),
-        }).addTo(carte);
-        // Clic sur une bulle : si son secteur tient à l'écran au seuil, zoom jusqu'à lui (les numéros
-        // apparaissent) ; sinon (grand secteur), on le cadre : il se divise en sous-secteurs, et on recommence.
-        // Zoomer directement au seuil sur le centre d'un grand secteur montrerait une zone vide.
-        calque.on('clusterclick', (e) => {
-          const limites = e.propagatedFrom.getBounds();
-          const zoomCadre = carte.getBoundsZoom(limites.pad(0.3));
-          if (zoomCadre >= SEUIL_NUMEROS) carte.setView(limites.getCenter(), zoomCadre);
-          else carte.setView(limites.getCenter(), Math.max(zoomCadre, carte.getZoom() + 1));
-        });
-        // Infobulle « 3 pharmacies » au survol d'une bulle.
-        calque.on('clustermouseover', (e) => {
-          const groupe = e.propagatedFrom;
-          groupe.bindTooltip(pharmacies(groupe.getChildCount()), { direction: 'top', offset: [0, -TAILLE_BULLE / 2], className: 'pdv-infobulle' }).openTooltip();
-        });
-        // Changement de zoom : les étoiles isolées passent de « 1 » au numéro (et inversement).
-        carte.on('zoomend', () => majIcones());
-        return { carte, calque, L, fondPour, couleurs: { eau, terre } };
+        const calque = L.layerGroup().addTo(carte);
+        return { carte, calque, L, fondPour, eau };
       });
       return cartePromise;
     };
 
-    // Icône d'une étoile isolée selon le zoom : numéro de la liste (≥ seuil) ou « 1 » façon bulle (< seuil).
-    const iconeEtoile = (L: typeof import('leaflet'), t: TerritoireCarte, i: number, secteurs: boolean) => {
-      const taille = secteurs ? TAILLE_BULLE : TAILLE_ETOILE;
-      return L.divIcon({
-        className: 'pdv-pin-icon',
-        html: secteurs ? etoile('pdv-cluster', t.couleur, 1) : etoile('pdv-pin', t.couleur, i + 1),
-        iconSize: [taille, taille],
-        iconAnchor: [taille / 2, taille / 2],
-        popupAnchor: [0, -taille / 2],
-      });
-    };
-    let leaflet: typeof import('leaflet') | null = null;
     let carteCourante: CarteLeaflet | null = null;
-    const majIcones = () => {
-      const t = courant;
-      if (!leaflet || !carteCourante || !t) return;
-      const L = leaflet;
-      const secteurs = carteCourante.getZoom() < SEUIL_NUMEROS;
-      marqueurs.forEach((m, i) => {
-        const p = t.points[i];
-        if (!p || !m) return;
-        // Titre natif (nom) seulement en vue numéros ; en vue secteurs, infobulle « 1 pharmacie ».
-        m.options.title = secteurs ? '' : p.nom;
-        m.setIcon(iconeEtoile(L, t, i, secteurs));
-        if (secteurs) m.bindTooltip(pharmacies(1), { direction: 'top', offset: [0, -TAILLE_BULLE / 2], className: 'pdv-infobulle' });
-        else m.unbindTooltip();
-      });
-      majEtoilesActives();
-    };
 
     const ouvrirPopup = (i: number) => {
       const popup = popups[i];
@@ -398,15 +323,15 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
 
     const panneauActif = () => panels.find((p) => p.dataset.panel === courant?.id);
 
-    // Étoile active (pharmacie sélectionnée) : classe posée sur l'icône, et reposée si l'étoile
-    // réapparaît (sortie d'une bulle de regroupement, qui recrée son élément).
+    // Étoile active (pharmacie sélectionnée) : bleu nuit, opaque, agrandie et AU-DESSUS des autres
+    // (z-index), y compris quand elle chevauche ses voisines.
     let indexActif: number | null = null;
     const majEtoilesActives = () => {
       marqueurs.forEach((m, i) => {
         if (!m) return;
         const actif = i === indexActif;
         m.getElement()?.classList.toggle('is-actif', actif);
-        m.setZIndexOffset(actif ? 1000 : 0);
+        m.setZIndexOffset(actif ? 10000 : 0);
       });
     };
 
@@ -446,11 +371,10 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
     };
 
     const afficherPins = async (t: TerritoireCarte) => {
-      const { carte, calque, L, fondPour, couleurs } = await obtenirCarte();
+      const { carte, calque, L, fondPour } = await obtenirCarte();
       if (courant !== t) return; // le visiteur a changé de territoire entre-temps
       carte.invalidateSize();
       // Limites levées le temps de recentrer, puis recalées sur l'emprise du territoire.
-      // AVANT clearLayers : le regroupement recalcule ses grilles à partir du zoom minimal courant.
       carte.setMaxBounds(undefined as unknown as LatLngBoundsExpression);
       carte.setMinZoom(0);
       calque.clearLayers();
@@ -467,57 +391,76 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
 
       indexActif = null;
       popups = [];
-      leaflet = L;
       carteCourante = carte;
       marqueurs = t.points.map((p, i) => {
         if (p.lat === null || p.lng === null) return undefined; // adresse introuvable : pas d'étoile
         const { lat, lng } = p;
-        // Étoile posée sur l'adresse (ancre au centre), popup juste au-dessus. Icône posée par majIcones().
+        // Étoile vide posée sur l'adresse (ancre au centre) ; infobulle avec le nom au survol.
         const m = L.marker([lat, lng], {
-          title: p.nom,
-          alt: `${i + 1}. ${p.nom}`,
-          icon: iconeEtoile(L, t, i, carte.getZoom() < SEUIL_NUMEROS),
+          icon: L.divIcon({
+            className: 'pdv-pin-icon',
+            html: etoile(t.couleur),
+            iconSize: [TAILLE_ETOILE, TAILLE_ETOILE],
+            iconAnchor: [TAILLE_ETOILE / 2, TAILLE_ETOILE / 2],
+          }),
         });
-        // Popup juste au-dessus de l'étoile numérotée (elle est ouverte au seuil ou au-delà).
+        // Popup juste au-dessus de l'étoile, NON liée au marqueur (ouverte après le zoom).
         popups[i] = L.popup({ offset: [0, -TAILLE_ETOILE / 2] }).setLatLng([lat, lng]).setContent(contenuPopup(p));
         return m
-          .on('click', () => {
-            activerItem(i, true);
-            if (carte.getZoom() < SEUIL_NUMEROS) {
-              // Étoile « 1 » (vue secteurs) : on zoome jusqu'au seuil, puis on ouvre la popup.
-              carte.once('moveend', () => ouvrirPopup(i));
-              carte.setView([lat, lng], SEUIL_NUMEROS);
-            } else {
-              ouvrirPopup(i);
-            }
+          .bindTooltip(p.nom, { direction: 'top', offset: [0, -TAILLE_ETOILE / 2], className: 'pdv-infobulle' })
+          .on('click', () => void selectionner(i, 0, true))
+          .on('add', () => {
+            m.getElement()?.setAttribute('aria-label', p.nom); // nom lu par les lecteurs d'écran
+            majEtoilesActives();
           })
-          .on('add', () => majEtoilesActives())
           .addTo(calque);
       });
       // Limites de déplacement, posées AVANT le recentrage qui s'y plie.
-      // Au-delà de l'emprise il n'y a pas de tuiles : on y montre la couleur de ce qui l'entoure.
+      // Au-delà de l'emprise c'est la mer, de la couleur du fond → marge de 10 %, invisible.
       const [ouest, sud, est, nord] = t.carte.bbox;
-      const emprise = L.latLngBounds([sud, ouest], [nord, est]);
-      const hors = t.carte.horsEmprise;
-      mapEl.style.backgroundColor = hors ? couleurs[hors.fond] : couleurs.eau;
-      if (hors) {
-        // Guyane : marges seulement côté terre, bords exacts côté mer ; tout le territoire reste visible.
-        const [mo, ms, me, mn] = hors.marges;
-        carte.setMinZoom(carte.getBoundsZoom(emprise));
-        carte.setMaxBounds(L.latLngBounds([sud - ms, ouest - mo], [nord + mn, est + me]));
-      } else {
-        // Îles : au-delà c'est la mer, de la couleur du fond → marge de 10 %, invisible.
-        const limites = emprise.pad(0.1);
-        carte.setMinZoom(Math.max(0, carte.getBoundsZoom(limites) - 1));
-        carte.setMaxBounds(limites);
-      }
+      const limites = L.latLngBounds([sud, ouest], [nord, est]).pad(0.1);
+      carte.setMinZoom(Math.max(0, carte.getBoundsZoom(limites) - 1));
+      carte.setMaxBounds(limites);
       const places = t.points.flatMap((p) => (p.lat !== null && p.lng !== null ? [[p.lat, p.lng] as [number, number]] : []));
       if (places.length > 0) {
         carte.fitBounds(L.latLngBounds(places), { padding: [48, 48], maxZoom: 14 });
       } else {
         carte.setView(t.center, t.zoom);
       }
-      majIcones();
+    };
+
+    // Zoom minimal pour que l'étoile i soit à au moins ECART_MIN px de toutes ses voisines.
+    // L'écart double à chaque cran de zoom : on le calcule depuis l'écart au zoom courant.
+    const zoomPourDistinguer = (carte: CarteLeaflet, t: TerritoireCarte, i: number, plancher: number) => {
+      const p = t.points[i];
+      const zc = carte.getZoom();
+      let z = Math.max(zc, plancher);
+      if (!p || p.lat === null || p.lng === null) return z;
+      const a = carte.project([p.lat, p.lng], zc);
+      t.points.forEach((q, j) => {
+        if (j === i || q.lat === null || q.lng === null) return;
+        const d = a.distanceTo(carte.project([q.lat, q.lng], zc));
+        if (d > 0 && d < ECART_MIN) z = Math.max(z, Math.ceil(zc + Math.log2(ECART_MIN / d)));
+      });
+      return Math.min(z, Math.max(ZOOM_MAX_AUTO, zc));
+    };
+
+    // Sélection d'une pharmacie (clic sur l'étoile ou dans la liste) : étoile active, zoom si
+    // nécessaire pour la distinguer de ses voisines, puis popup.
+    const selectionner = async (i: number, plancher: number, defiler: boolean) => {
+      activerItem(i, defiler);
+      const t = courant;
+      const p = t?.points[i];
+      if (!t || !p || p.lat === null || p.lng === null) return; // sans position : rien sur la carte
+      const { carte } = await obtenirCarte();
+      if (courant !== t) return;
+      const z = zoomPourDistinguer(carte, t, i, plancher);
+      if (z > carte.getZoom()) {
+        carte.once('moveend', () => ouvrirPopup(i));
+        carte.setView([p.lat, p.lng], z);
+      } else {
+        ouvrirPopup(i); // la popup recadre la carte si besoin
+      }
     };
 
     const majUrl = (id: TerritoireId | null) => {
@@ -572,26 +515,7 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
       revenirAuSelecteur();
     });
     root.querySelectorAll<HTMLButtonElement>('[data-item]').forEach((btn) =>
-      btn.addEventListener('click', async () => {
-        const i = Number(btn.dataset.item);
-        activerItem(i, false);
-        const t = courant;
-        const point = t?.points[i];
-        if (!t || !point || point.lat === null || point.lng === null) return; // sans position : rien sur la carte
-        const { lat, lng } = point;
-        const { carte, calque } = await obtenirCarte();
-        const marqueur = marqueurs[i];
-        if (courant !== t || !marqueur) return;
-        // Zoom au moins jusqu'au seuil (l'étoile affiche son numéro), sort l'étoile de sa bulle
-        // si besoin (zoom ou éventail), puis ouvre sa popup.
-        const montrer = () => calque.zoomToShowLayer(marqueur, () => ouvrirPopup(i));
-        if (carte.getZoom() < SEUIL_NUMEROS) {
-          carte.once('moveend', montrer);
-          carte.setView([lat, lng], SEUIL_NUMEROS);
-        } else {
-          montrer();
-        }
-      }),
+      btn.addEventListener('click', () => void selectionner(Number(btn.dataset.item), ZOOM_LISTE, false)),
     );
 
     // ── Au chargement : ?territoire → géoloc IP (ou ?geo simulé) → sélecteur ──
@@ -634,7 +558,6 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
   /* Couleurs par territoire, reprises par les cartes, onglets, liste et pins de la carte. */
   /* --ink = version assombrie (AA), disponible mais non utilisée : couleurs pastel conservées volontairement. */
   .pdv :global(.t-blue-sky) { --c: var(--color-blue-sky); --tint: var(--tint-blue-sky); --ink: var(--ink-blue-sky); }
-  .pdv :global(.t-mint) { --c: var(--color-mint); --tint: var(--tint-mint); --ink: var(--ink-mint); }
   .pdv :global(.t-star) { --c: var(--color-star); --tint: var(--tint-star); --ink: var(--ink-star); }
   .pdv :global(.t-coral) { --c: var(--color-coral); --tint: var(--tint-coral); --ink: var(--ink-coral); }
 
@@ -834,20 +757,16 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
   }
   .item:hover,
   .item.is-active { background: var(--tint); }
-  .num {
+  /* Puce de la liste : petite étoile sans chiffre, couleur du territoire ; bleu nuit si sélectionnée
+     (comme l'étoile active de la carte). */
+  .puce {
     flex-shrink: 0;
-    width: 32px;
-    height: 32px;
-    border-radius: var(--radius-pill);
-    background: var(--c);
-    color: #fff;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 0.95rem;
+    width: 24px;
+    height: 24px;
+    margin-top: 1px;
   }
+  .puce path { fill: var(--c); transition: fill 0.2s ease; }
+  .item.is-active .puce path { fill: var(--color-blue-night); }
   .item-body { min-width: 0; }
   .item-nom {
     font-family: var(--font-display);
@@ -965,45 +884,29 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
     transition: transform 0.2s ease, filter 0.2s ease;
   }
   .map :global(.pdv-etoile svg) { display: block; width: 100%; height: 100%; overflow: visible; }
-  /* Remplissage et contour semi-transparents : on devine les noms de villes sous l'étoile.
-     Le chiffre, lui, reste blanc opaque. */
+  /* Remplissage et contour semi-transparents : on devine les noms de villes et les étoiles voisines. */
   .map { --opacite-etoile: 0.55; }
   .map :global(.pdv-etoile path) {
     fill: var(--c);
     fill-opacity: var(--opacite-etoile);
     stroke: #fff;
     stroke-opacity: 0.8;
-    stroke-width: 5; /* ≈ 2px à 40px de large */
+    stroke-width: 6; /* ≈ 1,7px à 32px de large */
     stroke-linejoin: round;
     transition: fill 0.2s ease, fill-opacity 0.2s ease, stroke-opacity 0.2s ease;
   }
-  .map :global(.pdv-etoile > span) {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 13px;
-    line-height: 1;
-    color: #fff;
-    /* Ombre renforcée : le chiffre blanc reste lisible sur le remplissage pâle (menthe, bleu ciel). */
-    text-shadow: 0 1px 2px rgba(60, 90, 122, 0.6), 0 0 1px rgba(60, 90, 122, 0.5);
-    padding-top: 7%; /* centre optique de l'étoile à 5 branches, un peu plus bas */
-  }
-  .map :global(.pdv-cluster > span) { font-size: 15px; }
-  /* Pharmacie sélectionnée (liste ou clic sur l'étoile) : agrandie et en bleu nuit. */
-  .map :global(.is-actif .pdv-etoile) { transform: scale(1.15); }
+  /* Pharmacie sélectionnée (liste ou clic sur l'étoile) : agrandie, bleu nuit, au-dessus des autres
+     (z-index posé par le script). */
+  .map :global(.is-actif .pdv-etoile) { transform: scale(1.3); }
   .map :global(.is-actif .pdv-etoile path) { fill: var(--color-blue-night); }
-  /* Étoile active ou survolée : opaque, pour bien lire le chiffre au moment de cliquer. */
+  /* Étoile active ou survolée : opaque. */
   .map :global(.is-actif .pdv-etoile path),
   .map :global(.pdv-pin-icon:hover .pdv-etoile path) { fill-opacity: 1; stroke-opacity: 1; }
   .map :global(.is-actif .pdv-etoile),
   .map :global(.pdv-pin-icon:hover .pdv-etoile) { filter: drop-shadow(0 4px 7px rgba(60, 90, 122, 0.3)); }
   @media (prefers-reduced-motion: no-preference) {
     .map :global(.pdv-pin-icon:hover .pdv-etoile) { transform: rotate(12deg) scale(1.08); }
-    .map :global(.pdv-pin-icon.is-actif:hover .pdv-etoile) { transform: rotate(12deg) scale(1.15); }
+    .map :global(.pdv-pin-icon.is-actif:hover .pdv-etoile) { transform: rotate(12deg) scale(1.3); }
   }
   .map :global(.pdv-infobulle) {
     font-family: var(--font-display);
@@ -1042,6 +945,8 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
 
   @media (min-width: 700px) {
     .selector { grid-template-columns: repeat(2, 1fr); }
+    /* Nombre impair de territoires : la dernière carte prend toute la largeur (pas de trou). */
+    .t-card:last-child:nth-child(odd) { grid-column: 1 / -1; }
   }
 
   @media (min-width: 900px) {
@@ -1056,6 +961,7 @@ const compteur = (n: number) => (n > 0 ? libellePointsDeVente(n) : 'Bientôt dis
   }
 
   @media (min-width: 1100px) {
-    .selector { grid-template-columns: repeat(4, 1fr); }
+    .selector { grid-template-columns: repeat(3, 1fr); }
+    .t-card:last-child:nth-child(odd) { grid-column: auto; }
   }
 </style>
