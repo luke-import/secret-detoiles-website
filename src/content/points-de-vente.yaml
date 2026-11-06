@@ -178,3 +178,10 @@ points:
     codePostal: "97438"
     ville: SAINTE MARIE
     telephone: "0262535350"
+  - territoire: reunion
+    nom: Pharmacie Roche Maigre
+    type: pharmacie
+    adresse: 20B Rue Leconte de Lisle
+    codePostal: "97450"
+    ville: Saint-Louis
+    telephone: "0262262204"
